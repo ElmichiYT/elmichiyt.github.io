@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nexus Trading Simulator MXN</title>
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --card: #151c2c;
+            --accent: #007bff;
+            --up: #00f2fe;
+            --down: #ff007c;
+            --text: #e1e1e1;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            height: 600px;
+        }
+
+        /* Lado Izquierdo: Gráfica */
+        #chart-container {
+            background: var(--card);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #232d45;
+        }
+
+        /* Lado Derecho: Panel de Control */
+        .panel {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #232d45;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .balance-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .balance-label { font-size: 0.8rem; color: #6d7891; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-value { font-size: 2rem; font-weight: bold; color: var(--up); }
+
+        .price-live {
+            background: #0a0e17;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #6d7891; }
+        
+        input, select {
+            width: 100%;
+            background: #0a0e17;
+            border: 1px solid #232d45;
+            padding: 12px;
+            color: white;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-buy { background: var(--up); color: #000; }
+        .btn-sell { background: var(--down); color: #fff; }
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .pnl-active {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .gain { background: rgba(0, 242, 254, 0.1); color: var(--up); }
+        .loss { background: rgba(255, 0, 124, 0.1); color: var(--down); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="chart-container">
+            <div id="tradingview_widget" style="height: 100%;"></div>
+        </div>
+
+        <div class="panel">
+            <div class="balance-section">
+                <div class="balance-label">Saldo Disponible (Ficticio)</div>
+                <div id="saldo" class="balance-value">$50,000.00 MXN</div>
+            </div>
+
+            <div class="price-live">
+                <div class="balance-label">BTC / MXN</div>
+                <div id="precio-mxn" style="font-size: 1.4rem; font-weight: bold;">Cargando...</div>
+            </div>
+
+            <div class="input-group">
+                <label>Monto a Invertir (MXN)</label>
+                <input type="number" id="monto-apuesta" value="1000" min="100">
+            </div>
+
+            <div id="status-box" class="pnl-active">
+                P&L: <span id="current-pnl">$0.00</span>
+            </div>
+
+            <div class="actions">
+                <button id="buy-btn" class="btn-buy" onclick="operar('compra')">Comprar</button>
+                <button id="sell-btn" class="btn-sell" onclick="operar('venta')">Vender</button>
+            </div>
+            <p style="font-size: 0.7rem; color: #4e5b78; margin-top: 15px; text-align: center;">
+                *Datos reales de mercado. Dinero simulado.
+            </p>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // Configuración inicial
+        let saldo = 50000;
+        const TIPO_CAMBIO = 17.10; // 1 USD a MXN (puedes actualizarlo)
+        let precioActualMXN = 0;
+        let operacion = { activa: false, tipo: '', precioEntrada: 0, monto: 0 };
+
+        // Inicializar Gráfica
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": "BINANCE:BTCUSDT",
+            "interval": "1",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "es",
+            "container_id": "tradingview_widget",
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "details": true,
+        });
+
+        // Obtener precio real de Binance
+        async function actualizarPrecio() {
+            try {
+                const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+                const data = await response.json();
+                const precioUSD = parseFloat(data.price);
+                precioActualMXN = precioUSD * TIPO_CAMBIO;
+                
+                document.getElementById('precio-mxn').innerText = 
+                    new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(precioActualMXN);
+                
+                calcularGanancia();
+            } catch (e) { console.error("Error de conexión"); }
+        }
+
+        function operar(tipo) {
+            const monto = parseFloat(document.getElementById('monto-apuesta').value);
+            
+            if (!operacion.activa) {
+                if (monto > saldo) return alert("Saldo insuficiente");
+                
+                operacion = {
+                    activa: true,
+                    tipo: tipo,
+                    precioEntrada: precioActualMXN,
+                    monto: monto
+                };
+                
+                document.getElementById('status-box').style.display = 'block';
+                document.getElementById('buy-btn').innerText = "CERRAR POSICIÓN";
+                document.getElementById('sell-btn').disabled = true;
+                document.getElementById('monto-apuesta').disabled = true;
+            } else {
+                cerrarPosicion();
+            }
+        }
+
+        function calcularGanancia() {
+            if (!operacion.activa) return;
+
+            let diff = (precioActualMXN - operacion.precioEntrada) / operacion.precioEntrada;
+            if (operacion.tipo === 'venta') diff = -diff; // Invertir si es apuesta a la baja
+
+            const pnl = operacion.monto * diff;
+            const pnlElement = document.getElementById('current-pnl');
+            const box = document.getElementById('status-box');
+
+            pnlElement.innerText = (pnl >= 0 ? "+" : "") + pnl.toFixed(2) + " MXN";
+            box.className = `pnl-active ${pnl >= 0 ? 'gain' : 'loss'}`;
+        }
+
+        function cerrarPosicion() {
+            let diff = (precioActualMXN - operacion.precioEntrada) / operacion.precioEntrada;
+            if (operacion.tipo === 'venta') diff = -diff;
+            
+            const pnlFinal = operacion.monto * diff;
+            saldo += pnlFinal;
+
+            document.getElementById('saldo').innerText = 
+                new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(saldo);
+            
+            // Reset UI
+            operacion.activa = false;
+            document.getElementById('status-box').style.display = 'none';
+            document.getElementById('buy-btn').innerText = "Comprar";
+            document.getElementById('sell-btn').disabled = false;
+            document.getElementById('monto-apuesta').disabled = false;
+            document.getElementById('buy-btn').className = "btn-buy";
+        }
+
+        setInterval(actualizarPrecio, 1000);
+        actualizarPrecio();
+    </script>
+</body>
+</html>
