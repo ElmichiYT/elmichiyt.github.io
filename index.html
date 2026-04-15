@@ -32,30 +32,10 @@
         </header>
 
         <div class="video-container" id="contenedor-video">
-          <iframe src="loading.png" id="youtube-video" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+          <iframe src="ytloader.html" id="youtube-video" width="560" height="315" frameborder="0" allowfullscreen></iframe>
         </div>
 
-        <script>
-          const API_KEY = 'AIzaSyBYrAa7ysIXDRyhh3FR97hQU4KVX3qZNgA';
-          const PLAYLIST_ID = 'UUpSsnAZGjt9QLz4OoUCv53g';
-
-          async function cargarUltimoVideo() {
-              const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
-
-              try {
-                  const response = await fetch(url);
-                  const data = await response.json();
-                  const videoId = data.items[0].snippet.resourceId.videoId;
-        
-                  // Insertamos el ID en el iframe
-                  document.getElementById('youtube-video').src = `https://www.youtube.com/embed/${videoId}`;
-              } catch (error) {
-                  console.error("Error cargando el video:", error);
-              }
-          }
-
-          cargarUltimoVideo();
-        </script>
+        <script src="src/scripts/youtube.js"></script>
 
 <main class="links">
     <a href="https://youtube.com/@El_michiYouTube" target="_blank" class="link-card youtube-btn"><i class="fab fa-youtube"></i> YouTube</a>
