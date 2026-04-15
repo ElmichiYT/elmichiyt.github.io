@@ -31,9 +31,31 @@
             <p class="subtitle">Creador de Contenido Mexicano</p>
         </header>
 
-        <div class="video-container">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/SWigPmz0nXI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
+        <div class="video-container" id="contenedor-video">
+          <iframe id="youtube-video" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <script>
+          const API_KEY = 'TU_API_KEY';
+          const PLAYLIST_ID = 'TU_ID_DE_PLAYLIST';
+
+          async function cargarUltimoVideo() {
+              const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
+
+              try {
+                  const response = await fetch(url);
+                  const data = await response.json();
+                  const videoId = data.items[0].snippet.resourceId.videoId;
+        
+                  // Insertamos el ID en el iframe
+                  document.getElementById('youtube-video').src = `https://www.youtube.com/embed/${videoId}`;
+              } catch (error) {
+                  console.error("Error cargando el video:", error);
+              }
+          }
+
+          cargarUltimoVideo();
+        </script>
 
 <main class="links">
     <a href="https://youtube.com/@El_michiYouTube" target="_blank" class="link-card youtube-btn"><i class="fab fa-youtube"></i> YouTube</a>
