@@ -1,5 +1,5 @@
 const API_KEY = 'AIzaSyBYrAa7ysIXDRyhh3FR97hQU4KVX3qZNgA';
-const PLAYLIST_ID = 'UUpSsnAZGjt9QLz40oUCv53g';
+const PLAYLIST_ID = 'UUpSsnAZGjt9QLz4OoUCv53g';
 
 async function actualizarUltimoVideo() {
   const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&maxResults=1&key=${API_KEY}`;
