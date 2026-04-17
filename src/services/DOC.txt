@@ -1,0 +1,21 @@
+Se recomiendan anuncios de las siguientes resoluciones:
+
+1. Ads tipo Banner
+=== Computadora ===
+Normal: 728x90
+Grande: 970x90 o 970x250
+
+=== Teléfono ===
+Normal: 320x50
+Grande: 320x100
+
+2. Ads tipo Cuadrado
+=== Universal ===
+Normal: 300x250
+
+=== Cuadrado Puro ===
+Normal: 250x250
+
+=== Para Computadora ===
+  (BARRA LATERAL ALTA)
+Normal: 300x600

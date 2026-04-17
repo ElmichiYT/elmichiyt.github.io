@@ -1,0 +1,2 @@
+imagen="src/images/ads/main.jpg"
+enlace="/docs/ads/"
