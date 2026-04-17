@@ -1,2 +1,5 @@
 imagen="src/images/ads/main.jpg"
 enlace="/docs/ads/"
+
+imagen="src/images/ads/test.png"
+enlace="games/"
