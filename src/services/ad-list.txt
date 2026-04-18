@@ -3,3 +3,6 @@ enlace="/docs/ads/"
 
 imagen="src/images/ads/neon_dash_ads.webp
 enlace="https://pizzaclap43.github.io/Neon-Dash"
+
+imagen="src/images/ads/new_telegram_channel_elmichiyt.png"
+enlace="https://t.me/El_michiYouTube"
