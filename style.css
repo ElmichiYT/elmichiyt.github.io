@@ -12,6 +12,7 @@ body {
     display: flex;
     justify-content: center;
     min-height: 100vh;
+	text-align: center;
 }
 
 /* --- INTEGRACIÓN DE IMAGEN DE FONDO --- */
@@ -170,7 +171,4 @@ footer {
 }
 a {
 	color: white;
-}
-.ads {
-	text-align: center;
 }
