@@ -1,25 +1,94 @@
 <!DOCTYPE html>
-<html lang="es_MX">
+<html lang="es">
 <head>
-  <title>Oops!</title>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="https://elmichiyt.github.io/404_icon.png">
-  <link rel="stylesheet" href="https://elmichiyt.github.io/src/404.css">
-  <meta name="description" content="Página no encontrada.">
-  <style>
-    body {
-	  margin: 0px;
-	}
-  </style>
+    <meta charset="UTF-8">
+    <title>ERROR 404 | ElmichiYT</title>
+    <style>
+        body {
+            background-color: #0078D7;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+		
+        .wrapper {
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        .sad-face {
+            font-size: 120px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 24px;
+            line-height: 1.4;
+            font-weight: 300;
+        }
+
+        .percentage {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .qr-image {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            padding: 5px;
+        }
+
+        .tech-info {
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        .stop-code {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+		
+		a {
+		    color: white;
+		}
+    </style>
 </head>
 <body>
-  <div class="center">
-    <h1>Error 404</h1>
-    <hr>
-    <p>Archivo o página no encontrada</p>
-    <small>Si esta página funcionaba anteriormente, es posible que haya sido removida o exista un error.</small>
-    <br>
-    <a class="btn" href="https://elmichiyt.github.io">Ir a la página principal</a>
-  </div>
+
+    <div class="wrapper">
+        <div class="sad-face">:(</div>
+        
+        <div class="message">
+            Parece que esta página no existe. Usa una URL válida o inténtalo de nuevo más tarde. Puedes ir a la <a href="https://elmichiyt.github.io/">página principal</a>
+        </div>
+        
+        <div class="percentage">100% completado</div>
+
+        <div class="footer">
+            <img class="qr-image" src="qr_404.png" alt="QR">
+            
+            <div class="tech-info">
+                Para obtener más información sobre este problema y las posibles soluciones, visita<br>
+                https://elmichiyt.github.io/docs/help.html#error-404<br><br>
+                Si llamas a soporte técnico, facilítales esta información:<br>
+                Código de detención: <span class="stop-code">PAGE_NOT_FOUND</span>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
