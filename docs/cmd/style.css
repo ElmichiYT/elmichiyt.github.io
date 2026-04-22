@@ -1,0 +1,13 @@
+body {
+	font-family: Arial, Roboto;
+	margin: 0;
+	padding: 8px;
+}
+
+a {
+	color: #5c92ed
+}
+
+.copyright {
+	font-size: 16px;
+}
