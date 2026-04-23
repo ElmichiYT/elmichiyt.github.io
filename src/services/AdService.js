@@ -1,9 +1,10 @@
+// Copyright 2026 ElmichiYT
+// Código no Open Source
 async function cargarAnuncioDesdeTexto() {
     const contenedor = document.getElementById('ad-container');
     if (!contenedor) return;
 
     try {
-        // Al estar en src/services/AdService.js, busca el txt en esa misma carpeta
         const respuesta = await fetch('https://elmichiyt.github.io/src/services/ad-list.txt'); 
         const contenido = await respuesta.text();
 
@@ -32,7 +33,7 @@ async function cargarAnuncioDesdeTexto() {
             link.target = "_blank";
 
             const image = document.createElement('img');
-            image.src = randomAd.img; // Esta ruta vendrá del .txt
+            image.src = randomAd.img;
             image.style.maxWidth = "100%";
             image.style.height = "auto";
             image.style.display = "block";
