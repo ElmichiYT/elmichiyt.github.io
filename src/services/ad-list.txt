@@ -1,8 +1,8 @@
-imagen="src/images/ads/main.jpg"
-enlace="/docs/ads/"
+imagen="https://elmichiyt.github.io/src/images/ads/main.jpg"
+enlace="https://elmichiyt.github.io/docs/ads/"
 
 imagen="src/images/ads/neon_dash_ads.webp
-enlace="https://pizzaclap43.github.io/Neon-Dash"
+enlace="https://elmichiyt.github.io/src/images/ads/Neon-Dash"
 
-imagen="src/images/ads/new_telegram_channel_elmichiyt.png"
+imagen="https://elmichiyt.github.io/src/images/ads/new_telegram_channel_elmichiyt.png"
 enlace="https://t.me/El_michiYouTube"

@@ -4,7 +4,7 @@ async function cargarAnuncioDesdeTexto() {
 
     try {
         // Al estar en src/services/AdService.js, busca el txt en esa misma carpeta
-        const respuesta = await fetch('src/services/ad-list.txt'); 
+        const respuesta = await fetch('https://elmichiyt.github.io/src/services/ad-list.txt'); 
         const contenido = await respuesta.text();
 
         const bloques = contenido.split(/\n\s*\n/);
@@ -41,7 +41,7 @@ async function cargarAnuncioDesdeTexto() {
             contenedor.appendChild(link);
         }
     } catch (error) {
-        console.error("Error cargando la lista de anuncios:", error);
+        console.error("Error al cargar el anuncio:", error);
     }
 }
 
