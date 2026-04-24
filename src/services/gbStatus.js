@@ -1,8 +1,6 @@
 async function updateStatus() {
-    // CAMBIA ESTA URL POR LA DE TU PROPIO CLOUDFLARE WORKER
     const target = "https://cc-server-proxy.elmichiyt.workers.dev/";
     
-    // Función para formatear el uptime (segundos a días, horas, mins, segs)
     function formatUptime(seconds) {
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);
@@ -17,7 +15,6 @@ async function updateStatus() {
     }
 
     try {
-        // Hacemos la petición directamente a tu worker (sin el proxy externo de terceros)
         const response = await fetch(target);
         if (!response.ok) throw new Error("Error en el servidor");
         
@@ -52,8 +49,6 @@ async function updateStatus() {
     }
 }
 
-// Ejecutar inmediatamente al cargar
 updateStatus();
 
-// Actualizar cada 10 segundos (es un tiempo seguro para no saturar tu propio worker)
 setInterval(updateStatus, 15000);

@@ -14,8 +14,9 @@ body {
     margin-right: 5px;
 }
 
-.dot-on { background-color: #53FC18; }
-.dot-off { background-color: #ff4444; }
+.dot-on { background-color: #53FC18; border: 1px solid black; }
+.dot-off { background-color: #ff4444; border: 1px solid black; }
+.dot-na { background-color: gray; border: 1px solid black; }
 
 .data {
     border: 4px solid gray;
