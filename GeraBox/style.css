@@ -1,0 +1,34 @@
+body {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('bg.png');
+	color: #fff;
+    font-family: Arial, Roboto;
+	margin: 0;
+	padding: 0;
+}
+
+.status-dot {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.dot-on { background-color: #53FC18; }
+.dot-off { background-color: #ff4444; }
+
+.data {
+    border: 4px solid gray;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: rgba(50,50,50,0.7);
+}
+
+.down-banner {
+	background-color: #333;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
