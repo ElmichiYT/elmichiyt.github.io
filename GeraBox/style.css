@@ -17,6 +17,7 @@ body {
 .dot-on { background-color: #53FC18; border: 1px solid black; }
 .dot-off { background-color: #ff4444; border: 1px solid black; }
 .dot-na { background-color: gray; border: 1px solid black; }
+.dot-war { background-color: #FFFF50; border: 1px solid black }
 
 .data {
     border: 4px solid gray;
@@ -28,7 +29,6 @@ body {
 
 .down-banner {
 	background-color: #333;
-    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;

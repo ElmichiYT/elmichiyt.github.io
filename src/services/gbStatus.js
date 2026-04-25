@@ -45,7 +45,12 @@ async function updateStatus() {
     } catch (error) {
         console.error('Error:', error);
         const st = document.getElementById('status-text');
-        if (st) st.innerHTML = "Error de conexión";
+		const dot = document.getElementById('status-indicator')
+        if (st && dot) {
+			dot.className = 'status-dot dot-war';
+			st.style.color = '#FFFF50';
+			st.innerHTML = "Error de conexión";
+		}
     }
 }
 
