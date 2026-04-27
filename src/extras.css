@@ -2,8 +2,13 @@
 	display: inline-block;
 	margin-top: 20px;
 	padding: 15px 20px;
-	background: teal;
+	background: #060;
 	color: white;
 	text-decoration: none;
 	border-radius: 8px;
+	transition: 0.2s;
+}
+
+.btn:hover {
+	background: #080;
 }
