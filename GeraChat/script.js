@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getDatabase, ref, set, onValue, push, onDisconnect, query, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+import { getDatabase, ref, set, onValue, push, onDisconnect, query, orderByChild, equalTo, get, update } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyC__aSrA3MNqUfLsSq-S4Jt-eN1lqSyhTw",
@@ -14,10 +14,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Variables globales mínimas
 let player = { id: Date.now(), x: 400, y: 250, color: '#3498db', name: "Invitado" };
 
-// Exponer funciones al window para el HTML
+// --- MOVIMIENTO Y CHAT ---
 window.navegar = (idA, idB) => {
     document.getElementById(`menu-${idA}`).classList.remove('active');
     document.getElementById(`menu-${idB}`).classList.add('active');
@@ -46,7 +45,7 @@ async function iniciarJuego(nombre) {
     document.getElementById('ui-layer').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
     
-    // Iniciar listeners
+    // Listeners
     onValue(ref(db, 'jugadores'), (snap) => {
         const ctx = document.getElementById('gameCanvas').getContext('2d');
         ctx.clearRect(0, 0, 800, 500);
@@ -59,4 +58,29 @@ async function iniciarJuego(nombre) {
             ctx.fillText(p.name, p.x, p.y - 30);
         });
     });
+
+    onValue(ref(db, 'mensajes'), (snap) => {
+        const chat = document.getElementById('chat-display');
+        chat.innerHTML = "";
+        snap.forEach(c => { const m = c.val(); chat.innerHTML += `<div><b>${m.nombre}:</b> ${m.texto}</div>`; });
+    });
 }
+
+// CORRECCIÓN: Usamos 'update' para mover y 'push' para chat
+window.onkeydown = (e) => {
+    if (document.activeElement.id === 'chat-input') return;
+    if(e.key.startsWith('Arrow')) {
+        if(e.key === 'ArrowUp') player.y -= 10;
+        if(e.key === 'ArrowDown') player.y += 10;
+        if(e.key === 'ArrowLeft') player.x -= 10;
+        if(e.key === 'ArrowRight') player.x += 10;
+        update(ref(db, 'jugadores/' + player.id), { x: player.x, y: player.y });
+    }
+};
+
+document.getElementById('chat-input').onkeypress = (e) => {
+    if (e.key === 'Enter') {
+        push(ref(db, 'mensajes'), { nombre: player.name, texto: e.target.value });
+        e.target.value = "";
+    }
+};
