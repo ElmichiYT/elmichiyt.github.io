@@ -1,0 +1,95 @@
+<!--
+    Esta página fue creada por ElmichiYT.
+	Cualquiera que use esta página tiene que poner el lugar de donde la sacó (https://elmichiyt.github.io) y el propietario del código (ElmichiYT).
+
+    Todo lo que haya en el sitio elmichiyt.github.io está bajo una licencia Creative Commons. -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Edad del Servidor GeraBox</title>
+    <link rel="shortcut icon" href="https://files.catbox.moe/4ymgpa.ico">
+    <style>
+        body {
+            cursor: url("https://files.catbox.moe/btjy8g.png"), auto;
+            margin: 0;
+            background: #0e0f12;
+            font-family: "Inter", Arial, sans-serif;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: #1a1d23;
+            border: 1px solid #2c313a;
+            padding: 35px 45px;
+            border-radius: 16px;
+            width: 340px;
+            text-align: center;
+            box-shadow: 0 0 15px #0007;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #edad {
+            font-size: 1.15rem;
+            line-height: 1.6rem;
+            color: #cdd3dd;
+        }
+
+        b {
+            color: #7aa2ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Edad del Servidor GeraBox</h1>
+        <div id="edad">Calculando...</div>
+        <p>© Copyright 2026 ElmichiYT</p>
+    </div>
+
+    <script>
+        // Fecha del server en horario MX
+        const nacimiento = new Date("2025-09-21T18:44:42-06:00");
+
+        function actualizarEdad() {
+            const ahora = new Date();
+            let diff = ahora - nacimiento;
+
+            let segundos = Math.floor(diff / 1000);
+            let minutos = Math.floor(segundos / 60);
+            let horas = Math.floor(minutos / 60);
+            let dias = Math.floor(horas / 24);
+
+            // Calculo de años
+            let años = Math.floor(dias / 365);
+            dias %= 365;
+
+            segundos %= 60;
+            minutos %= 60;
+            horas %= 24;
+
+            document.getElementById("edad").innerHTML =
+                `<b>${años}</b> años<br>` +
+                `<b>${dias}</b> días<br>` +
+                `<b>${horas}</b> horas<br>` +
+                `<b>${minutos}</b> minutos<br>` +
+                `<b>${segundos}</b> segundos`;
+        }
+
+        setInterval(actualizarEdad, 1000);
+        actualizarEdad();
+    </script>
+
+</body>
+</html>

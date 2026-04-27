@@ -14,7 +14,7 @@
       }
 
       .d {
-        fill: #ffffff;
+        fill: #fff;
       }
     </style>
   </defs>
