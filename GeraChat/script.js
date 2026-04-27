@@ -13,16 +13,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 let player = { id: Date.now(), x: 400, y: 250, color: '#3498db', name: "Invitado" };
 
-// Navegación entre menús
 window.navegar = (idA, idB) => {
     document.getElementById(`menu-${idA}`).classList.remove('active');
     document.getElementById(`menu-${idB}`).classList.add('active');
 };
 
-// Botón Unirse
 document.getElementById('btn-unirse').onclick = async () => {
     const nombre = document.getElementById('username').value.trim();
     if(!nombre) return;
@@ -46,7 +43,6 @@ async function iniciarJuego(nombre) {
     document.getElementById('ui-layer').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
     
-    // Listener de otros jugadores
     onValue(ref(db, 'jugadores'), (snap) => {
         const ctx = document.getElementById('gameCanvas').getContext('2d');
         ctx.clearRect(0, 0, 800, 500);
@@ -62,25 +58,15 @@ async function iniciarJuego(nombre) {
         });
     });
 
-    // Listener de mensajes con auto-scroll inteligente
     onValue(ref(db, 'mensajes'), (snap) => {
         const chat = document.getElementById('chat-display');
-        // Calculamos si el scroll está cerca del fondo
         const isAtBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 50;
-        
         chat.innerHTML = "";
-        snap.forEach(c => { 
-            const m = c.val(); 
-            chat.innerHTML += `<div><b>${m.nombre}:</b> ${m.texto}</div>`; 
-        });
-
-        if (isAtBottom) {
-            chat.scrollTop = chat.scrollHeight;
-        }
+        snap.forEach(c => { const m = c.val(); chat.innerHTML += `<div><b>${m.nombre}:</b> ${m.texto}</div>`; });
+        if (isAtBottom) chat.scrollTop = chat.scrollHeight;
     });
 }
 
-// Movimiento del jugador
 window.onkeydown = (e) => {
     if (document.activeElement.id === 'chat-input') return;
     if(e.key.startsWith('Arrow')) {
@@ -92,10 +78,17 @@ window.onkeydown = (e) => {
     }
 };
 
-// Enviar mensaje
 document.getElementById('chat-input').onkeypress = (e) => {
     if (e.key === 'Enter') {
         push(ref(db, 'mensajes'), { nombre: player.name, texto: e.target.value });
         e.target.value = "";
     }
 };
+
+const volSlider = document.getElementById('vol-slider');
+volSlider.oninput = () => {
+    document.getElementById('volVal').innerText = volSlider.value + '%';
+    localStorage.setItem('geraChatVol', volSlider.value);
+};
+volSlider.value = localStorage.getItem('geraChatVol') || 50;
+document.getElementById('volVal').innerText = volSlider.value + '%';

@@ -1,41 +1,13 @@
 body, html { margin: 0; padding: 0; height: 100%; background: #222; font-family: sans-serif; overflow: hidden; }
 #ui-layer { position: relative; width: 100vw; height: 100vh; }
-
-.screen {
-    position: absolute; width: 100%; height: 100%;
-    display: flex; flex-direction: column; align-items: flex-start;
-    padding-left: 100px; justify-content: center;
-    transition: transform 0.5s, opacity 0.5s;
-    transform: translateX(100%); opacity: 0; color: white;
-}
+.screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: flex-start; padding-left: 100px; justify-content: center; transition: transform 0.5s, opacity 0.5s; transform: translateX(100%); opacity: 0; color: white; }
 .screen.active { transform: translateX(0); opacity: 1; }
-.screen.exit { transform: translateX(-100%); opacity: 0; }
 .center-screen { align-items: center !important; padding-left: 0 !important; }
-
-.logo { width: 300px; margin-bottom: 30px; }
-.button-group { display: flex; flex-direction: column; align-items: flex-start; }
 button { background: #333; border: 2px solid #fff; padding: 15px 30px; margin: 5px 0; color: white; cursor: pointer; text-align: left; width: 200px; }
-
 .screen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; }
 .progress-bar-container { width: 300px; height: 15px; background: #333; margin-top: 10px; }
-#progress-bar { width: 0%; height: 100%; background: #2ecc71; transition: width 0.3s; }
-canvas { background: #000; border: 1px solid #555; display: block; margin: 50px auto; }
-
+#progress-bar { width: 0%; height: 100%; background: #2ecc71; }
 #game-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-
-#game-ui { 
-    position: absolute; bottom: 50px; left: 50px; 
-    width: 300px; 
-}
-
-#chat-display { 
-    height: 150px; overflow-y: auto; 
-    background: rgba(0,0,0,0.6); color: white; 
-    padding: 10px; border-radius: 5px; margin-bottom: 5px;
-    font-size: 14px;
-}
-
-#chat-input { 
-    width: 100%; padding: 8px; border-radius: 3px; 
-    border: none; background: #fff; box-sizing: border-box;
-}
+#game-ui { position: absolute; bottom: 50px; left: 50px; width: 300px; }
+#chat-display { height: 150px; overflow-y: auto; background: rgba(0,0,0,0.6); color: white; padding: 10px; border-radius: 5px; margin-bottom: 5px; font-size: 14px; }
+#chat-input { width: 100%; padding: 8px; border-radius: 3px; border: none; background: #fff; box-sizing: border-box; }

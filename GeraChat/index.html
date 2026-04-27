@@ -26,6 +26,22 @@
             <button class="back-btn" onclick="navegar('jugar-pre', 'inicio')">Volver</button>
             <p id="error-msg" style="color: #e74c3c;"></p>
         </div>
+        <div id="menu-config" class="screen">
+            <h2>Configuración</h2>
+            <div class="option">
+                <label>Volumen: <span id="volVal">50%</span></label>
+                <input type="range" id="vol-slider" min="0" max="100" value="50">
+            </div>
+            <button class="back-btn" onclick="navegar('config', 'inicio')">Volver</button>
+        </div>
+        <div id="menu-creditos" class="screen">
+            <h2>Créditos</h2>
+            <div id="lista-creditos">
+                <p><b>Creador:</b> ElmichiYT</p>
+                <p><b>Servidor:</b> Firebase Realtime</p>
+            </div>
+            <button class="back-btn" onclick="navegar('creditos', 'inicio')">Volver</button>
+        </div>
         <div id="loading-screen" class="screen-overlay">
             <div class="loading-content">
                 <h1 id="loading-msg">Iniciando...</h1>
