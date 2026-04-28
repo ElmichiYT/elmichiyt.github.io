@@ -10,21 +10,21 @@
         .hidden { display: none !important; }
         .error-text { color: #ff4d4d; font-size: 0.8em; display: none; font-weight: bold; margin-top: 5px; }
         
-        /* Login */
         #login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 100; background: var(--cc-bg); }
         .auth-card { background: white; padding: 20px; border-radius: 5px; width: 90%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         
-        /* Chat */
         header { background: var(--cc-blue); color: white; padding: 12px; text-align: center; font-weight: bold; position: relative; }
         .btn-logout { position: absolute; right: 10px; top: 8px; background: #cc0000; color: white; border: none; padding: 5px 10px; font-size: 0.7em; cursor: pointer; border-radius: 3px; }
-        #chat { flex: 1; overflow-y: auto; padding: 15px; background: white; display: flex; flex-direction: column; gap: 10px; }
-        .msg { border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .msg b { color: var(--cc-blue); font-size: 0.9em; }
-        .msg small { color: #999; font-size: 0.7em; margin-left: 8px; }
-        .msg p { margin: 2px 0 0 0; word-break: break-all; }
-        .msg a { color: #004a99; text-decoration: underline; }
         
-        /* Input */
+        #chat { flex: 1; overflow-y: auto; padding: 15px; background: white; position: relative; }
+        .msg { border-bottom: 1px solid #eee; padding: 8px 0; position: relative; }
+        .msg:hover .actions { display: block; }
+        .actions { display: none; position: absolute; right: 5px; top: 5px; background: white; border: 1px solid #ccc; }
+        .actions button { cursor: pointer; padding: 2px 5px; }
+        
+        #new-messages-toast { position: absolute; bottom: 80px; width: 100%; text-align: center; z-index: 10; }
+        #typing-area { font-size: 0.8em; color: #555; padding: 5px 15px; background: #eee; font-style: italic; }
+        #replying-to { background: #d0eaff; padding: 5px 15px; font-size: 0.85em; border-bottom: 1px solid #b3d7ff; }
         #input-area { padding: 10px; background: #ddd; display: flex; gap: 5px; }
         input { flex: 1; padding: 8px; border: 1px solid #999; }
         button { padding: 8px 15px; background: var(--cc-blue); color: white; border: none; cursor: pointer; }
@@ -34,7 +34,7 @@
 
     <div id="login-screen">
         <div class="auth-card">
-            <h2 style="margin-top:0">ClassiCube Messenger</h2>
+            <h2>ClassiCube Messenger</h2>
             <input type="text" id="nickname" placeholder="Apodo">
             <input type="email" id="email" placeholder="Correo">
             <input type="password" id="pass" placeholder="Contraseña">
@@ -44,11 +44,16 @@
         </div>
     </div>
 
-    <header>
-        CLASSICUBE GLOBAL CHAT
-        <button id="btnSalir" class="btn-logout hidden">Cerrar Sesión</button>
-    </header>
+    <header>CLASSICUBE GLOBAL CHAT<button id="btnSalir" class="btn-logout hidden">Salir</button></header>
+    
     <div id="chat"></div>
+    <div id="new-messages-toast" class="hidden">
+        <button id="btnScroll" style="background: var(--cc-blue); color: white; border-radius: 20px; padding: 5px 15px;">↓ Nuevos mensajes</button>
+    </div>
+    
+    <div id="typing-area"></div>
+    <div id="replying-to" class="hidden"></div>
+    
     <div id="input-area" class="hidden">
         <input type="text" id="mensaje" placeholder="Escribe un mensaje..." autocomplete="off">
         <button id="btnEnviar">Enviar</button>
@@ -56,80 +61,74 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, push, onChildAdded, onValue, update, remove, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o",
-            authDomain: "classicube-messenger.firebaseapp.com",
-            projectId: "classicube-messenger",
-            storageBucket: "classicube-messenger.firebasestorage.app",
-            messagingSenderId: "113987340884",
-            appId: "1:113987340884:web:81d8a03a9ac557f4897bc1",
-            measurementId: "G-26V9M0KKDY"
-        };
-
+        const firebaseConfig = { apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", authDomain: "classicube-messenger.firebaseapp.com", projectId: "classicube-messenger", storageBucket: "classicube-messenger.firebasestorage.app", messagingSenderId: "113987340884", appId: "1:113987340884:web:81d8a03a9ac557f4897bc1", measurementId: "G-26V9M0KKDY" };
         const auth = getAuth(initializeApp(firebaseConfig));
         const db = getDatabase();
         const chatRef = ref(db, 'mensajes_cc');
-        const errDiv = document.getElementById('error-msg');
+        const chat = document.getElementById('chat');
+        const toast = document.getElementById('new-messages-toast');
+        let replyData = null;
+        let newMsgsCount = 0;
 
-        const mostrarError = (msg) => { errDiv.textContent = msg; errDiv.style.display = 'block'; };
-
-        // Sanitizar + Detectar Links
-        const procesarTexto = (str) => {
+        const mostrarError = (msg) => { const e = document.getElementById('error-msg'); e.textContent = msg; e.style.display = 'block'; };
+        const sanitizar = (str) => {
             const div = document.createElement('div');
             div.textContent = str;
-            const allowed = ['video', 'audio', 'img', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'small'];
-            let html = div.innerHTML.replace(/&lt;(\/?)([^&gt;]+)&gt;/g, (m, slash, tag) => {
-                return allowed.includes(tag.split(' ')[0]) ? `<${slash}${tag}>` : '';
-            });
-            // Regex para links
-            return html.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+            return div.innerHTML.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
         };
+        const isAtBottom = () => (chat.scrollHeight - chat.scrollTop - chat.clientHeight) < 100;
 
-        document.getElementById('btnSalir').onclick = () => signOut(auth).then(() => location.reload());
-
-        document.getElementById('btnEntrar').onclick = () => {
-            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value)
-            .catch(e => {
-                if(e.code === 'auth/invalid-credential') mostrarError("Usuario y/o contraseña incorrectos.");
-                else mostrarError("Error: " + e.code);
-            });
+        window.responder = (id, user) => {
+            replyData = { id, user };
+            document.getElementById('replying-to').innerHTML = `Respondiendo a <b>${user}</b> <button onclick="replyData=null; document.getElementById('replying-to').classList.add('hidden')">X</button>`;
+            document.getElementById('replying-to').classList.remove('hidden');
         };
-
-        document.getElementById('btnRegistro').onclick = async () => {
-            const p = document.getElementById('pass').value;
-            if(p.length < 6) { mostrarError("La contraseña debe tener 6+ caracteres."); return; }
-            try {
-                const cred = await createUserWithEmailAndPassword(auth, document.getElementById('email').value, p);
-                await updateProfile(cred.user, { displayName: document.getElementById('nickname').value });
-            } catch(e) {
-                if(e.code === 'auth/email-already-in-use') mostrarError("Este mail ya está registrado.");
-                else mostrarError(e.message);
-            }
+        window.borrar = (id) => remove(ref(db, 'mensajes_cc/' + id));
+        window.editar = (id) => {
+            const nuevoTexto = prompt("Edita tu mensaje:");
+            if(nuevoTexto) update(ref(db, 'mensajes_cc/' + id), { texto: sanitizar(nuevoTexto), editado: true });
         };
 
         const enviar = () => {
             const input = document.getElementById('mensaje');
-            if(input.value.trim()) {
-                push(chatRef, { nombre: auth.currentUser.displayName, texto: procesarTexto(input.value), timestamp: Date.now() });
-                input.value = "";
-            }
+            if(!input.value.trim()) return;
+            push(chatRef, { uid: auth.currentUser.uid, nombre: auth.currentUser.displayName, texto: sanitizar(input.value), timestamp: Date.now(), replyTo: replyData ? replyData.user : null });
+            input.value = "";
+            replyData = null;
+            document.getElementById('replying-to').classList.add('hidden');
+            remove(ref(db, 'typing/' + auth.currentUser.uid));
         };
 
         document.getElementById('btnEnviar').onclick = enviar;
-        document.getElementById('mensaje').onkeypress = (e) => { if(e.key === 'Enter') enviar(); };
+        document.getElementById('mensaje').onkeypress = (e) => { 
+            if(e.key === 'Enter') enviar(); 
+            else set(ref(db, 'typing/' + auth.currentUser.uid), auth.currentUser.displayName); 
+        };
 
         onChildAdded(chatRef, (snap) => {
             const d = snap.val();
-            const date = new Date(d.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const div = document.createElement('div');
             div.className = 'msg';
-            div.innerHTML = `<b>${d.nombre}</b><small>${date}</small><p>${d.texto}</p>`;
-            const chat = document.getElementById('chat');
+            div.innerHTML = `${d.replyTo ? `<small>En respuesta a: <b>${d.replyTo}</b></small><br>` : ''}<b>${d.nombre}</b> <small>${new Date(d.timestamp).toLocaleTimeString()}</small> ${d.editado ? '<small>(editado)</small>' : ''}<p>${d.texto}</p><div class="actions"><button onclick="responder('${snap.key}', '${d.nombre}')">Responder</button>${d.uid === auth.currentUser.uid ? `<button onclick="editar('${snap.key}')">Editar</button><button onclick="borrar('${snap.key}')">Borrar</button>` : ''}</div>`;
+            
+            const atBottom = isAtBottom();
             chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
+            if (atBottom) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+            else { newMsgsCount++; toast.classList.remove('hidden'); toast.querySelector('button').textContent = `↓ ${newMsgsCount} mensaje(s) nuevo(s)`; }
+        });
+
+        document.getElementById('btnScroll').onclick = () => { chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); newMsgsCount = 0; toast.classList.add('hidden'); };
+        chat.onscroll = () => { if (isAtBottom()) { newMsgsCount = 0; toast.classList.add('hidden'); } };
+
+        onValue(ref(db, 'typing'), (snap) => {
+            const typing = snap.val();
+            const div = document.getElementById('typing-area');
+            if(!typing) { div.textContent = ''; return; }
+            const users = Object.values(typing).filter(n => n !== auth.currentUser?.displayName);
+            div.textContent = users.length > 0 ? users.join(', ') + (users.length === 1 ? ' está escribiendo...' : ' están escribiendo...') : '';
         });
 
         onAuthStateChanged(auth, (user) => {
@@ -139,6 +138,13 @@
                 document.getElementById('btnSalir').classList.remove('hidden');
             }
         });
+        
+        document.getElementById('btnEntrar').onclick = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => mostrarError("Credenciales incorrectas"));
+        document.getElementById('btnRegistro').onclick = async () => {
+            try { await updateProfile((await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value)).user, { displayName: document.getElementById('nickname').value }); }
+            catch(e) { mostrarError(e.message); }
+        };
+        document.getElementById('btnSalir').onclick = () => signOut(auth).then(() => location.reload());
     </script>
 </body>
 </html>
