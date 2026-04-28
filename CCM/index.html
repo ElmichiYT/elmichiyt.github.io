@@ -2,25 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClassiCube Messenger</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style id="theme-style">
+    <style>
         :root { --cc-blue: #b07ecf; --cc-bg: #e2e2e2; --text: #000; --card: #fff; }
         body.dark { --cc-bg: #1a1a1a; --text: #fff; --card: #2d2d2d; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--cc-bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; transition: background 0.3s; }
-        
+        body { font-family: 'Segoe UI', sans-serif; background: var(--cc-bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
         #login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 100; background: var(--cc-bg); }
         .auth-card { background: var(--card); padding: 20px; border-radius: 5px; width: 90%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        
         header { background: var(--cc-blue); color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
         #chat { flex: 1; overflow-y: auto; padding: 15px; background: var(--card); }
         .msg { border-bottom: 1px solid #777; padding: 8px 0; }
-        .msg img { max-width: 200px; display: block; margin-top: 5px; }
-        
-        #input-area { padding: 10px; background: #ddd; display: flex; gap: 5px; }
+        .msg img { max-width: 200px; display: block; margin-top: 5px; border-radius: 4px; }
+        #input-area { padding: 10px; background: #ddd; display: flex; gap: 5px; align-items: center; }
         input { flex: 1; padding: 8px; border: 1px solid #999; }
         button { padding: 8px 15px; background: var(--cc-blue); color: white; border: none; cursor: pointer; }
         .hidden { display: none !important; }
+		a { color: lime; }
     </style>
 </head>
 <body>
@@ -32,7 +31,7 @@
             <input type="email" id="email" placeholder="Correo">
             <input type="password" id="pass" placeholder="Contraseña">
             <button id="btnEntrar">Iniciar Sesión</button>
-            <button id="btnRegistro">Crear Cuenta</button>
+            <button id="btnRegistro">Crear Cuenta (Verifica tu correo)</button>
         </div>
     </div>
 
@@ -49,10 +48,7 @@
     </header>
 
     <div id="chat"></div>
-    
     <div id="input-area" class="hidden">
-        <input type="file" id="fileInput" class="hidden">
-        <button onclick="document.getElementById('fileInput').click()">+</button>
         <input type="text" id="mensaje" placeholder="Escribe un mensaje..." autocomplete="off">
         <button id="btnEnviar">Enviar</button>
     </div>
@@ -60,81 +56,71 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, push, onChildAdded, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", authDomain: "classicube-messenger.firebaseapp.com", projectId: "classicube-messenger", storageBucket: "classicube-messenger.firebasestorage.app", messagingSenderId: "113987340884", appId: "1:113987340884:web:81d8a03a9ac557f4897bc1" };
+        // CONFIGURA TUS DATOS AQUÍ
+        const firebaseConfig = { apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", authDomain: "classicube-messenger.firebaseapp.com", projectId: "classicube-messenger", databaseURL: "https://classicube-messenger-default-rtdb.firebaseio.com/", messagingSenderId: "113987340884", appId: "1:113987340884:web:81d8a03a9ac557f4897bc1" };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
-        const storage = getStorage(app);
-        
-        // Función maestra de envío
-        const enviar = async (textoPersonalizado = null) => {
+
+        // Sonido sintético (no requiere archivos externos)
+        const playSound = () => {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            osc.connect(ctx.destination);
+            osc.start(); osc.stop(ctx.currentTime + 0.1);
+        };
+
+        const enviar = () => {
             const input = document.getElementById('mensaje');
-            const texto = textoPersonalizado || input.value;
-            if(!texto.trim()) return;
-            
-            push(ref(db, 'mensajes_cc'), { 
-                nombre: auth.currentUser.displayName, 
-                texto: texto, 
-                timestamp: Date.now() 
-            });
+            if(!input.value.trim()) return;
+            push(ref(db, 'mensajes_cc'), { nombre: auth.currentUser.displayName, texto: input.value, timestamp: Date.now() });
             input.value = "";
         };
 
-        // Eventos de teclado y click
-        document.getElementById('btnEnviar').onclick = () => enviar();
+        document.getElementById('btnEnviar').onclick = enviar;
         document.getElementById('mensaje').onkeydown = (e) => { if(e.key === 'Enter') enviar(); };
 
-        // Archivos
-        document.getElementById('fileInput').onchange = async (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            const snapshot = await uploadBytes(sRef(storage, 'uploads/' + Date.now() + file.name), file);
-            const url = await getDownloadURL(snapshot.ref);
-            enviar(`![Archivo](${url})`);
-        };
-
-        // Tema
-        const aplicarTema = (tema) => {
-            if (tema === 'dark' || (tema === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.body.classList.add('dark');
-            else document.body.classList.remove('dark');
-        };
-
-        document.getElementById('theme-selector').onchange = (e) => {
-            const tema = e.target.value;
-            aplicarTema(tema);
-            if(auth.currentUser) set(ref(db, 'users_config/' + auth.currentUser.uid), { theme: tema });
-        };
-
-        // Renderizado
         onChildAdded(ref(db, 'mensajes_cc'), (snap) => {
             const d = snap.val();
             const div = document.createElement('div');
             div.className = 'msg';
             div.innerHTML = `<b>${d.nombre}</b> <p>${marked.parse(d.texto)}</p>`;
-            div.querySelectorAll('img').forEach(img => img.onerror = () => img.src = 'no-disponible.png');
-            const chat = document.getElementById('chat');
-            chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
+            document.getElementById('chat').appendChild(div);
+            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+
+            if (document.hidden) {
+                playSound();
+                if (Notification.permission === 'granted') new Notification(`Nuevo mensaje de ${d.nombre}`, { body: d.texto });
+            }
         });
 
-        // Auth
         onAuthStateChanged(auth, (user) => {
             if(user) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('input-area').classList.remove('hidden');
-                onValue(ref(db, 'users_config/' + user.uid), (s) => { if(s.val()) { document.getElementById('theme-selector').value = s.val().theme; aplicarTema(s.val().theme); } });
             }
         });
 
+        // Temas y Auth
         document.getElementById('btnEntrar').onclick = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert(e.message));
         document.getElementById('btnRegistro').onclick = async () => {
-            try { await updateProfile((await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value)).user, { displayName: document.getElementById('nickname').value }); }
-            catch(e) { alert(e.message); }
+            const user = (await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value)).user;
+            await updateProfile(user, { displayName: document.getElementById('nickname').value });
+            await sendEmailVerification(user);
+            alert("Cuenta creada. Verifica tu correo.");
         };
+        
+        document.getElementById('theme-selector').onchange = (e) => {
+            const t = e.target.value;
+            if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.body.classList.add('dark');
+            else document.body.classList.remove('dark');
+        };
+        
         document.getElementById('btnSalir').onclick = () => signOut(auth).then(() => location.reload());
+        Notification.requestPermission();
     </script>
 </body>
 </html>
