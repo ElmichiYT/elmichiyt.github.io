@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClassiCube Messenger</title>
     <style>
-        :root { --cc-blue: #007acc; --cc-bg: #e2e2e2; }
+        :root { --cc-blue: #b07ecf; --cc-bg: #e2e2e2; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--cc-bg); margin: 0; height: 100vh; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
         .error-text { color: #ff4d4d; font-size: 0.8em; display: none; font-weight: bold; margin-top: 5px; }
@@ -31,6 +31,8 @@
     </style>
 </head>
 <body>
+
+    <audio id="notif-sound" src="notificacion.wav" preload="auto"></audio>
 
     <div id="login-screen">
         <div class="auth-card">
@@ -61,7 +63,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onChildAdded, onValue, update, remove, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, push, onChildAdded, onValue, update, remove, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", authDomain: "classicube-messenger.firebaseapp.com", projectId: "classicube-messenger", storageBucket: "classicube-messenger.firebasestorage.app", messagingSenderId: "113987340884", appId: "1:113987340884:web:81d8a03a9ac557f4897bc1", measurementId: "G-26V9M0KKDY" };
@@ -70,8 +72,13 @@
         const chatRef = ref(db, 'mensajes_cc');
         const chat = document.getElementById('chat');
         const toast = document.getElementById('new-messages-toast');
+        const sound = document.getElementById('notif-sound');
+        const tituloOriginal = document.title;
         let replyData = null;
         let newMsgsCount = 0;
+        let primerNoLeido = null;
+
+        if (Notification.permission !== 'granted') Notification.requestPermission();
 
         const mostrarError = (msg) => { const e = document.getElementById('error-msg'); e.textContent = msg; e.style.display = 'block'; };
         const sanitizar = (str) => {
@@ -80,6 +87,13 @@
             return div.innerHTML.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
         };
         const isAtBottom = () => (chat.scrollHeight - chat.scrollTop - chat.clientHeight) < 100;
+
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) {
+                if (primerNoLeido) primerNoLeido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                newMsgsCount = 0; primerNoLeido = null; document.title = tituloOriginal; toast.classList.add('hidden');
+            }
+        });
 
         window.responder = (id, user) => {
             replyData = { id, user };
@@ -96,10 +110,7 @@
             const input = document.getElementById('mensaje');
             if(!input.value.trim()) return;
             push(chatRef, { uid: auth.currentUser.uid, nombre: auth.currentUser.displayName, texto: sanitizar(input.value), timestamp: Date.now(), replyTo: replyData ? replyData.user : null });
-            input.value = "";
-            replyData = null;
-            document.getElementById('replying-to').classList.add('hidden');
-            remove(ref(db, 'typing/' + auth.currentUser.uid));
+            input.value = ""; replyData = null; document.getElementById('replying-to').classList.add('hidden'); remove(ref(db, 'typing/' + auth.currentUser.uid));
         };
 
         document.getElementById('btnEnviar').onclick = enviar;
@@ -114,14 +125,22 @@
             div.className = 'msg';
             div.innerHTML = `${d.replyTo ? `<small>En respuesta a: <b>${d.replyTo}</b></small><br>` : ''}<b>${d.nombre}</b> <small>${new Date(d.timestamp).toLocaleTimeString()}</small> ${d.editado ? '<small>(editado)</small>' : ''}<p>${d.texto}</p><div class="actions"><button onclick="responder('${snap.key}', '${d.nombre}')">Responder</button>${d.uid === auth.currentUser.uid ? `<button onclick="editar('${snap.key}')">Editar</button><button onclick="borrar('${snap.key}')">Borrar</button>` : ''}</div>`;
             
-            const atBottom = isAtBottom();
             chat.appendChild(div);
-            if (atBottom) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
-            else { newMsgsCount++; toast.classList.remove('hidden'); toast.querySelector('button').textContent = `↓ ${newMsgsCount} mensaje(s) nuevo(s)`; }
+            if (document.hidden) {
+                newMsgsCount++;
+                if (!primerNoLeido) primerNoLeido = div;
+                sound.play();
+                document.title = `(${newMsgsCount}) ClassiCube Messenger`;
+                if (Notification.permission === 'granted') new Notification(`Tienes ${newMsgsCount} mensajes sin leer en ClassiCube Messenger`, { body: `${d.nombre}: ${d.texto.replace(/<[^>]*>/g, '')}` });
+            } else if (isAtBottom()) {
+                chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+            } else {
+                newMsgsCount++; toast.classList.remove('hidden'); toast.querySelector('button').textContent = `↓ ${newMsgsCount} mensaje(s) nuevo(s)`; document.title = `(${newMsgsCount}) ClassiCube Messenger`;
+            }
         });
 
-        document.getElementById('btnScroll').onclick = () => { chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); newMsgsCount = 0; toast.classList.add('hidden'); };
-        chat.onscroll = () => { if (isAtBottom()) { newMsgsCount = 0; toast.classList.add('hidden'); } };
+        document.getElementById('btnScroll').onclick = () => { chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); newMsgsCount = 0; toast.classList.add('hidden'); document.title = tituloOriginal; };
+        chat.onscroll = () => { if (isAtBottom()) { newMsgsCount = 0; toast.classList.add('hidden'); document.title = tituloOriginal; } };
 
         onValue(ref(db, 'typing'), (snap) => {
             const typing = snap.val();
@@ -132,11 +151,7 @@
         });
 
         onAuthStateChanged(auth, (user) => {
-            if(user) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('input-area').classList.remove('hidden');
-                document.getElementById('btnSalir').classList.remove('hidden');
-            }
+            if(user) { document.getElementById('login-screen').classList.add('hidden'); document.getElementById('input-area').classList.remove('hidden'); document.getElementById('btnSalir').classList.remove('hidden'); }
         });
         
         document.getElementById('btnEntrar').onclick = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => mostrarError("Credenciales incorrectas"));
