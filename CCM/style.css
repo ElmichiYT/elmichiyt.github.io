@@ -1,0 +1,16 @@
+:root { --cc-blue: #b07ecf; --cc-bg: #e2e2e2; --text: #000; --card: #fff; }
+body.dark { --cc-bg: #1a1a1a; --text: #fff; --card: #2d2d2d; }
+body { font-family: 'Segoe UI', sans-serif; background: var(--cc-bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
+
+#login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 100; background: var(--cc-bg); }
+.auth-card { background: var(--card); padding: 20px; border-radius: 5px; width: 90%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+
+header { background: var(--cc-blue); color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
+#chat { flex: 1; overflow-y: auto; padding: 15px; background: var(--card); }
+.msg { border-bottom: 1px solid #777; padding: 8px 0; }
+.msg img { max-width: 200px; display: block; margin-top: 5px; border-radius: 4px; }
+
+#input-area { padding: 10px; background: #ddd; display: flex; gap: 5px; align-items: center; }
+textarea { flex: 1; resize: none; min-height: 40px; padding: 10px; border: 1px solid #999; }
+button { padding: 8px 15px; background: var(--cc-blue); color: white; border: none; cursor: pointer; }
+.hidden { display: none !important; }
