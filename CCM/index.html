@@ -4,56 +4,354 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClassiCube Messenger</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary: #b07ecf; /* Morado ClassiCube */
+            --primary-hover: #9b6ab8;
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #e0e0e0;
+            --msg-other: #2c2c2c;
+            --radius: 20px;
+        }
+
+        body.light {
+            --bg: #f4f4f9;
+            --card: #ffffff;
+            --text: #202020;
+            --msg-other: #e8e8e8;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- UI DE LOGIN --- */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .auth-card {
+            background: var(--card);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+        .auth-card input {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            outline: none;
+        }
+        .auth-card button {
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--card);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        /* --- CHAT AREA --- */
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+        .msg.own { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 4px; }
+        .msg.other { align-self: flex-start; background: var(--msg-other); border-bottom-left-radius: 4px; }
+        
+        /* --- MULTIMEDIA LIMITS (512px) --- */
+        .msg img, .msg video {
+            max-width: 512px;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 8px;
+            display: block;
+        }
+        .msg audio { width: 100%; max-width: 512px; margin-top: 8px; }
+
+        /* --- INPUT AREA --- */
+        #input-container {
+            background: var(--card);
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Toolbar Multimedia Integrada */
+        #media-bar {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.3s ease;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+        #media-bar.active { max-height: 60px; padding: 10px; margin-bottom: 10px; }
+        #media-bar input {
+            flex: 1;
+            background: transparent;
+            border: 1px solid #444;
+            color: var(--text);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .input-bar { display: flex; gap: 12px; align-items: center; }
+        textarea {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 10px 18px;
+            color: var(--text);
+            resize: none;
+            outline: none;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .btn-icon:hover { color: var(--primary); }
+        .btn-send { background: var(--primary); color: white; width: 42px; height: 42px; border-radius: 50%; justify-content: center; }
+
+        #typing-indicator { font-size: 0.75rem; height: 18px; padding-left: 55px; color: var(--primary); }
+        .hidden { display: none !important; }
+    </style>
 </head>
-<body>
+<body class="dark">
+
     <audio id="notif-sound" src="noti.mp3" preload="auto"></audio>
 
     <div id="login-screen">
         <div class="auth-card">
-            <h1>Bienvenido</h1>
-            <input type="text" id="nickname" placeholder="Apodo">
+            <i class="fa-solid fa-cubes-stacked" style="font-size: 3rem; color: var(--primary);"></i>
+            <h1>ClassiCube Messenger</h1>
+            <input type="text" id="nickname" placeholder="Tu Apodo">
             <input type="email" id="email" placeholder="Correo">
             <input type="password" id="pass" placeholder="Contraseña">
             <button id="btnEntrar">Entrar</button>
-            <button id="btnRegistro" class="secondary">Crear cuenta</button>
+            <button id="btnRegistro" style="background:none; color:gray; font-size: 0.8rem;">Crear cuenta</button>
         </div>
     </div>
 
     <header>
-        <div class="header-content">
-            <b>CLASSICUBE GLOBAL</b>
-            <div class="actions">
-                <select id="theme-selector">
-                    <option value="system">Sistema</option>
-                    <option value="light">Claro</option>
-                    <option value="dark">Oscuro</option>
-                </select>
-                <button id="btnSalir">Salir</button>
-            </div>
+        <div style="font-weight: bold; color: var(--primary); display: flex; gap: 8px; align-items: center;">
+            <i class="fa-solid fa-comments"></i> ClassiCube Messenger
+        </div>
+        <div style="display:flex; gap:15px; align-items:center;">
+            <select id="theme-selector" style="background:transparent; color:inherit; border:1px solid #444; border-radius:5px;">
+                <option value="dark">🌙 Dark</option>
+                <option value="light">☀️ Light</option>
+            </select>
+            <button id="btnSalir" class="btn-icon"><i class="fa-solid fa-door-open"></i></button>
         </div>
     </header>
 
     <main id="chat"></main>
 
     <div id="input-container" class="hidden">
-        <div id="typing-area"></div>
+        <div id="typing-indicator"></div>
+        <div id="media-bar">
+            <input type="text" id="media-url" placeholder="Pega la URL aquí...">
+            <button class="btn-icon" id="btnSendMedia"><i class="fa-solid fa-check"></i></button>
+            <button class="btn-icon" onclick="toggleMedia()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="input-bar">
-            <div class="dropdown">
-                <button id="btnMenu" type="button">+</button>
-                <div id="fileMenu" class="dropdown-content">
-                    <button onclick="promptMedia('video')">📹 Video (URL)</button>
-                    <button onclick="promptMedia('audio')">🎵 Audio (URL)</button>
-                    <button onclick="promptMedia('image')">🖼️ Imagen (URL)</button>
-                    <button onclick="promptMedia('other')">📁 Archivo (URL)</button>
-                </div>
-            </div>
-            <textarea id="mensaje" placeholder="Escribe... (Shift+Enter salto)" rows="1"></textarea>
-            <button id="btnEnviar">➤</button>
+            <button class="btn-icon" onclick="toggleMedia()"><i class="fa-solid fa-paperclip"></i></button>
+            <textarea id="mensaje" placeholder="Escribe un mensaje..." rows="1"></textarea>
+            <button id="btnEnviar" class="btn-icon btn-send"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
-    <script type="module" src="main.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", 
+            authDomain: "classicube-messenger.firebaseapp.com", 
+            projectId: "classicube-messenger", 
+            databaseURL: "https://classicube-messenger-default-rtdb.firebaseio.com",
+            appId: "1:113987340884:web:81d8a03a9ac557f4897bc1" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const chatRef = ref(db, 'mensajes_cc');
+
+        const chat = document.getElementById('chat');
+        const input = document.getElementById('mensaje');
+        const mediaBar = document.getElementById('media-bar');
+        const mediaUrlInput = document.getElementById('media-url');
+
+        let unreadCount = 0;
+        const originalTitle = "ClassiCube Messenger";
+
+        // --- TÍTULO DE PESTAÑA INTELIGENTE ---
+        window.addEventListener('focus', () => {
+            unreadCount = 0;
+            document.title = originalTitle;
+        });
+
+        // --- AUTOSCROLL INTELIGENTE ---
+        const shouldScroll = () => {
+            // Si el usuario está a menos de 150px del fondo, consideramos que quiere autoscroll
+            return (chat.scrollHeight - chat.scrollTop - chat.clientHeight) < 150;
+        };
+
+        const scrollToBottom = () => {
+            chat.scrollTop = chat.scrollHeight;
+        };
+
+        // --- MULTIMEDIA ---
+        window.toggleMedia = () => {
+            mediaBar.classList.toggle('active');
+            if(mediaBar.classList.contains('active')) mediaUrlInput.focus();
+        };
+
+        const enviar = (manualText = null) => {
+            const texto = manualText || input.value.trim();
+            if(!texto || !auth.currentUser) return;
+            push(chatRef, { nombre: auth.currentUser.displayName, uid: auth.currentUser.uid, texto, timestamp: Date.now() });
+            if(!manualText) input.value = ""; else { mediaUrlInput.value = ""; mediaBar.classList.remove('active'); }
+            remove(ref(db, `typing/${auth.currentUser.uid}`));
+        };
+
+        document.getElementById('btnSendMedia').onclick = () => {
+            const url = mediaUrlInput.value.trim();
+            if(!url) return;
+            const ext = url.split('.').pop().toLowerCase();
+            let tag = `[📁 Archivo](${url})`;
+            if(['jpg','png','gif','webp','jpeg'].includes(ext)) tag = `![img](${url})`;
+            else if(['mp4','webm','ogg'].includes(ext)) tag = `@@VIDEO:${url}`;
+            else if(['mp3','wav'].includes(ext)) tag = `@@AUDIO:${url}`;
+            enviar(tag);
+        };
+
+        input.onkeydown = (e) => {
+            if(e.key === 'Enter' && !e.shiftKey && !(/Android|iPhone/i.test(navigator.userAgent))) {
+                e.preventDefault();
+                enviar();
+            }
+        };
+
+        document.getElementById('btnEnviar').onclick = () => enviar();
+
+        // --- RENDERIZADO Y NOTIFICACIONES ---
+        onChildAdded(chatRef, (snap) => {
+            const d = snap.val();
+            const isOwn = d.uid === auth.currentUser?.uid;
+            const userWasAtBottom = shouldScroll();
+
+            const div = document.createElement('div');
+            div.className = `msg ${isOwn ? 'own' : 'other'}`;
+            
+            let html = d.texto;
+            if(html.startsWith("@@VIDEO:")) html = `<video controls src="${html.replace("@@VIDEO:","")}"></video>`;
+            else if(html.startsWith("@@AUDIO:")) html = `<audio controls src="${html.replace("@@AUDIO:","")}"></audio>`;
+            else html = marked.parse(d.texto);
+
+            div.innerHTML = `<small style="font-size:0.7em; opacity:0.8; display:block;">${d.nombre}</small>${html}`;
+            
+            chat.appendChild(div);
+
+            // Ejecutar autoscroll solo si el usuario ya estaba abajo
+            if(isOwn || userWasAtBottom) {
+                setTimeout(scrollToBottom, 50); // Delay pequeño para esperar el render de imágenes
+            }
+
+            // Notificaciones y conteo en título
+            if(document.hidden && !isOwn) {
+                unreadCount++;
+                document.title = `(${unreadCount}) ${originalTitle}`;
+                document.getElementById('notif-sound').play().catch(()=>{});
+            }
+        });
+
+        // --- ESTADO "ESCRIBIENDO" ---
+        input.oninput = () => {
+            if(auth.currentUser) set(ref(db, `typing/${auth.currentUser.uid}`), auth.currentUser.displayName);
+        };
+        onValue(ref(db, 'typing'), (snap) => {
+            const users = Object.values(snap.val() || {}).filter(n => n !== auth.currentUser?.displayName);
+            document.getElementById('typing-indicator').textContent = users.length > 0 ? `${users.join(', ')} escribiendo...` : '';
+        });
+
+        // --- AUTH ---
+        onAuthStateChanged(auth, (user) => {
+            if(user) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('input-container').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('btnEntrar').onclick = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value);
+        document.getElementById('btnRegistro').onclick = async () => {
+            const cred = await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value);
+            await updateProfile(cred.user, { displayName: document.getElementById('nickname').value });
+            alert("Cuenta creada.");
+        };
+        document.getElementById('btnSalir').onclick = () => signOut(auth).then(() => location.reload());
+        document.getElementById('theme-selector').onchange = (e) => document.body.className = e.target.value;
+    </script>
 </body>
 </html>
