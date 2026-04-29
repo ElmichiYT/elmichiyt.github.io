@@ -12,46 +12,46 @@
 
     <div id="login-screen">
         <div class="auth-card">
-            <h1>ClassiCube Messenger</h1>
+            <h1>Bienvenido</h1>
             <input type="text" id="nickname" placeholder="Apodo">
-            <input type="email" id="email" placeholder="Correo electrónico">
+            <input type="email" id="email" placeholder="Correo">
             <input type="password" id="pass" placeholder="Contraseña">
-            <div id="error-msg" class="error-text"></div>
-            <button id="btnEntrar">Iniciar Sesión</button>
-            <button id="btnRegistro">Crear Cuenta (Verifica correo)</button>
+            <button id="btnEntrar">Entrar</button>
+            <button id="btnRegistro" class="secondary">Crear cuenta</button>
         </div>
     </div>
 
     <header>
-        <span class="logo">CLASSICUBE CHAT</span>
-        <div class="header-actions">
-            <select id="theme-selector">
-                <option value="light">Claro</option>
-                <option value="dark">Oscuro</option>
-                <option value="system">Sistema</option>
-            </select>
-            <button id="btnSalir" class="btn-logout">Salir</button>
+        <div class="header-content">
+            <b>CLASSICUBE GLOBAL</b>
+            <div class="actions">
+                <select id="theme-selector">
+                    <option value="system">Sistema</option>
+                    <option value="light">Claro</option>
+                    <option value="dark">Oscuro</option>
+                </select>
+                <button id="btnSalir">Salir</button>
+            </div>
         </div>
     </header>
 
-    <main id="chat-container">
-        <div id="chat"></div>
-        
-        <div id="new-messages-toast" class="hidden">
-            <button id="btnScroll">↓ Nuevos mensajes</button>
+    <main id="chat"></main>
+
+    <div id="input-container" class="hidden">
+        <div id="typing-area"></div>
+        <div class="input-bar">
+            <div class="dropdown">
+                <button id="btnMenu" type="button">+</button>
+                <div id="fileMenu" class="dropdown-content">
+                    <button onclick="promptMedia('video')">📹 Video (URL)</button>
+                    <button onclick="promptMedia('audio')">🎵 Audio (URL)</button>
+                    <button onclick="promptMedia('image')">🖼️ Imagen (URL)</button>
+                    <button onclick="promptMedia('other')">📁 Archivo (URL)</button>
+                </div>
+            </div>
+            <textarea id="mensaje" placeholder="Escribe... (Shift+Enter salto)" rows="1"></textarea>
+            <button id="btnEnviar">➤</button>
         </div>
-    </main>
-
-    <div id="typing-area"></div>
-
-    <div id="replying-to" class="hidden">
-        <span id="reply-text"></span>
-        <button id="cancel-reply">X</button>
-    </div>
-
-    <div id="input-area" class="hidden">
-        <textarea id="mensaje" placeholder="Escribe un mensaje... (Shift+Enter para salto)" rows="1"></textarea>
-        <button id="btnEnviar">Enviar</button>
     </div>
 
     <script type="module" src="main.js"></script>
