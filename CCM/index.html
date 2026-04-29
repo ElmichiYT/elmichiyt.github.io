@@ -8,32 +8,49 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
+    <audio id="notif-sound" src="noti.mp3" preload="auto"></audio>
+
     <div id="login-screen">
         <div class="auth-card">
-            <h2>ClassiCube Messenger</h2>
+            <h1>ClassiCube Messenger</h1>
             <input type="text" id="nickname" placeholder="Apodo">
-            <input type="email" id="email" placeholder="Correo">
+            <input type="email" id="email" placeholder="Correo electrónico">
             <input type="password" id="pass" placeholder="Contraseña">
+            <div id="error-msg" class="error-text"></div>
             <button id="btnEntrar">Iniciar Sesión</button>
             <button id="btnRegistro">Crear Cuenta (Verifica correo)</button>
         </div>
     </div>
 
     <header>
-        <span>CLASSICUBE CHAT</span>
-        <div>
+        <span class="logo">CLASSICUBE CHAT</span>
+        <div class="header-actions">
             <select id="theme-selector">
                 <option value="light">Claro</option>
                 <option value="dark">Oscuro</option>
                 <option value="system">Sistema</option>
             </select>
-            <button id="btnSalir">Salir</button>
+            <button id="btnSalir" class="btn-logout">Salir</button>
         </div>
     </header>
 
-    <div id="chat"></div>
+    <main id="chat-container">
+        <div id="chat"></div>
+        
+        <div id="new-messages-toast" class="hidden">
+            <button id="btnScroll">↓ Nuevos mensajes</button>
+        </div>
+    </main>
+
+    <div id="typing-area"></div>
+
+    <div id="replying-to" class="hidden">
+        <span id="reply-text"></span>
+        <button id="cancel-reply">X</button>
+    </div>
+
     <div id="input-area" class="hidden">
-        <textarea id="mensaje" placeholder="Escribe... (Shift+Enter para salto)" rows="1"></textarea>
+        <textarea id="mensaje" placeholder="Escribe un mensaje... (Shift+Enter para salto)" rows="1"></textarea>
         <button id="btnEnviar">Enviar</button>
     </div>
 
