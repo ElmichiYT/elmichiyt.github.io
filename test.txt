@@ -1,2 +1,6 @@
+echo off
+cls
 echo Hola!
 pause >nul
+echo on
+cls
