@@ -1,16 +1,1 @@
-echo off
-chcp 65001 >nul
-cls
-echo Creando archivos...
-timeout -t 3 /nobreak >nul
-echo MSG.txt
-echo ==================== >> MSG.txt
-echo   ESTO FUE ESCRITO   >> MSG.txt
-echo  DESDE UN SCRIPT EN  >> MSG.txt
-echo  UN SERVIDOR WEB XD  >> MSG.txt
-echo ==================== >> MSG.txt
-echo LELELELELELELELELELE >> MSG.txt
-echo Listo.
-timeout -t 3 /nobreak >nul
-echo on
-cls
+exit
