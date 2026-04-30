@@ -1,6 +1,2 @@
-echo off
-cls
-echo Hola!
+echo ekisde
 pause >nul
-echo on
-cls
