@@ -9,7 +9,6 @@
     <style>
         :root {
             --primary: #b07ecf; 
-            --primary-hover: #9b6ab8;
             --bg: #121212;
             --card: #1e1e1e;
             --text: #e0e0e0;
@@ -24,7 +23,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg);
             color: var(--text);
             margin: 0;
@@ -32,53 +31,22 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: 0.3s;
         }
 
-        /* --- LOGIN --- */
-        #login-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+        /* --- PANTALLA DE CARGA --- */
+        #splash-screen {
+            position: fixed; inset: 0; background: var(--bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 3000; transition: 0.5s;
         }
-        .auth-card {
-            background: var(--card);
-            padding: 40px;
-            border-radius: var(--radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: 90%;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            text-align: center;
-        }
-        .auth-card input {
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            background: rgba(255,255,255,0.05);
-            color: var(--text);
-            outline: none;
-        }
-        .auth-card button {
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            background: var(--primary);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        #splash-screen img.logo { width: 100px; margin-bottom: 20px; }
+        #splash-screen img.loader { width: 40px; margin-bottom: 15px; }
+        #loading-msg { color: var(--primary); font-size: 0.9rem; font-style: italic; text-align: center; max-width: 80%; }
 
         /* --- HEADER --- */
         header {
             background: var(--card);
-            padding: 12px 20px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -93,142 +61,117 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
+
         .msg {
             max-width: 80%;
             padding: 12px 16px;
             border-radius: var(--radius);
             font-size: 0.95rem;
             word-wrap: break-word;
-            white-space: pre-wrap; /* Mantiene saltos de línea */
+            white-space: pre-wrap;
         }
         .msg.own { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 4px; }
         .msg.other { align-self: flex-start; background: var(--msg-other); border-bottom-left-radius: 4px; }
         
-        .msg img, .msg video {
-            max-width: 512px;
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin-top: 8px;
-            display: block;
-        }
+        .msg-info { font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; color: var(--primary); display: block; }
+        .msg.own .msg-info { color: #eee; }
+        .msg-time { font-size: 0.6rem; opacity: 0.7; margin-top: 6px; display: block; text-align: right; }
 
-        /* --- MODAL RELEASES --- */
-        #modal-releases {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: var(--card);
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            border-radius: var(--radius);
-            padding: 25px;
-            overflow-y: auto;
-            position: relative;
-        }
-        .close-modal { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 1.5rem; }
+        .msg img, .msg video { max-width: 512px; width: 100%; border-radius: 12px; margin-top: 8px; display: block; }
 
-        /* --- INPUT --- */
-        #input-container { background: var(--card); padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .input-bar { display: flex; gap: 12px; align-items: center; }
+        /* --- INPUT & MEDIA --- */
+        #input-container { background: var(--card); padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .input-bar { display: flex; gap: 12px; align-items: center; max-width: 1000px; margin: auto; }
+        
         textarea {
             flex: 1;
             background: rgba(255,255,255,0.05);
             border: 1px solid #333;
-            border-radius: 20px;
-            padding: 10px 18px;
+            border-radius: 25px;
+            padding: 10px 20px;
             color: var(--text);
             resize: none;
             outline: none;
-            max-height: 150px;
         }
-        
+
         #media-bar {
             max-height: 0; overflow: hidden; transition: 0.3s;
             display: flex; gap: 10px; align-items: center;
-            background: rgba(0,0,0,0.2); border-radius: 12px;
         }
-        #media-bar.active { max-height: 60px; padding: 10px; margin-bottom: 10px; }
-        #media-bar input { flex: 1; background: transparent; border: 1px solid #444; color: var(--text); padding: 8px; border-radius: 8px; }
+        #media-bar.active { max-height: 60px; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        #media-bar input { flex: 1; background: transparent; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 8px; }
 
-        .btn-icon { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+        .btn-icon { background: none; border: none; color: var(--text); font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
         .btn-icon:hover { color: var(--primary); }
-        .btn-send { background: var(--primary); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .btn-send { color: var(--primary); font-size: 1.5rem; }
+
+        /* --- MODALES --- */
+        #modal-releases {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            display: none; align-items: center; justify-content: center; z-index: 2000;
+        }
+        .modal-content { background: var(--card); padding: 30px; border-radius: var(--radius); width: 90%; max-width: 550px; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; cursor: pointer; color: var(--primary); font-size: 1.5rem; }
 
         .hidden { display: none !important; }
-        #loading-old { text-align: center; font-size: 0.8rem; padding: 10px; color: var(--primary); }
+        #loading-status { text-align: center; color: var(--primary); font-size: 0.8rem; padding: 10px; font-weight: bold; }
     </style>
 </head>
 <body class="dark">
 
     <audio id="notif-sound" src="noti.mp3" preload="auto"></audio>
 
-    <div id="modal-releases" onclick="closeReleases(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="closeReleases()">&times;</span>
-            <div id="release-body">Cargando actualizaciones...</div>
-        </div>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <img src="logo.png" class="logo">
+        <img src="loader.gif" class="loader">
+        <div id="loading-msg">Iniciando sistema...</div>
     </div>
 
-    <div id="login-screen">
-        <div class="auth-card">
-            <i class="fa-solid fa-cubes-stacked" style="font-size: 3rem; color: var(--primary);"></i>
-            <h1>ClassiCube Messenger</h1>
-            <input type="text" id="nickname" placeholder="Apodo">
-            <input type="email" id="email" placeholder="Correo">
-            <input type="password" id="pass" placeholder="Contraseña">
-            <button id="btnEntrar">Entrar</button>
-            <button id="btnRegistro" style="background:none; color:gray; font-size: 0.8rem;">Crear cuenta</button>
+    <!-- Modal Releases -->
+    <div id="modal-releases" onclick="this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="document.getElementById('modal-releases').style.display='none'">&times;</span>
+            <div id="release-body">Cargando novedades...</div>
         </div>
     </div>
 
     <header>
-        <div style="font-weight: bold; color: var(--primary); display: flex; gap: 8px; align-items: center;">
-            <i class="fa-solid fa-comments"></i> ClassiCube
+        <div style="font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-cube"></i> ClassiCube Messenger
         </div>
-        <div style="display:flex; gap:12px; align-items:center;">
-            <button class="btn-icon" onclick="openReleases()" title="Actualizaciones">
-                <i class="fa-solid fa-rocket"></i> <span style="font-size: 0.8rem; margin-left:5px;">Releases</span>
-            </button>
-            <select id="theme-selector" style="background:transparent; color:inherit; border:1px solid #444; border-radius:5px; padding:3px;">
-                <option value="dark">🌙 Dark</option>
-                <option value="light">☀️ Light</option>
+        <div style="display:flex; gap:15px; align-items:center;">
+            <button class="btn-icon" onclick="openReleases()"><i class="fa-solid fa-rocket"></i></button>
+            <select id="theme-selector" onchange="document.body.className = this.value">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
             </select>
             <button id="btnSalir" class="btn-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
     </header>
 
     <main id="chat">
-        <div id="loading-old" class="hidden">Cargando mensajes anteriores...</div>
+        <div id="loading-status" class="hidden"></div>
     </main>
 
     <div id="input-container" class="hidden">
-        <div id="typing-indicator" style="font-size: 0.7rem; color: var(--primary); height: 15px; margin-bottom: 5px; margin-left: 50px;"></div>
         <div id="media-bar">
-            <input type="text" id="media-url" placeholder="URL de imagen, video o audio...">
-            <button class="btn-icon" id="btnSendMedia"><i class="fa-solid fa-check"></i></button>
-            <button class="btn-icon" onclick="toggleMedia()"><i class="fa-solid fa-xmark"></i></button>
+            <input type="text" id="media-url" placeholder="Enlace de imagen, video o audio...">
+            <button class="btn-icon" id="btnSendMedia" style="color: var(--primary);"><i class="fa-solid fa-check"></i></button>
         </div>
         <div class="input-bar">
-            <button class="btn-icon" onclick="toggleMedia()"><i class="fa-solid fa-paperclip"></i></button>
-            <textarea id="mensaje" placeholder="Escribe un mensaje... (Shift+Enter para saltos)" rows="1"></textarea>
+            <button class="btn-icon" onclick="document.getElementById('media-bar').classList.toggle('active')"><i class="fa-solid fa-paperclip"></i></button>
+            <textarea id="mensaje" placeholder="Escribe un mensaje..." rows="1"></textarea>
             <button id="btnEnviar" class="btn-icon btn-send"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onChildAdded, query, limitToLast, orderByKey, get, endBefore, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded, query, limitToLast, orderByKey, get, endBefore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", 
@@ -244,162 +187,136 @@
         const chatRef = ref(db, 'mensajes_cc');
 
         const chat = document.getElementById('chat');
-        const input = document.getElementById('mensaje');
-        const notiAudio = document.getElementById('notif-sound');
-        
+        const inputMsg = document.getElementById('mensaje');
         let oldestKey = null;
         let isBatchLoading = false;
-        let unreadCount = 0;
-        const originalTitle = "ClassiCube Messenger";
+        let allLoaded = false;
 
-        marked.setOptions({ breaks: true }); // Respetar saltos de línea en Markdown
+        marked.setOptions({ breaks: true });
 
-        // --- GESTIÓN DE RELEASES ---
+        // --- SPLASH MESSAGES ---
+        async function initSplash() {
+            try {
+                const res = await fetch('messages.txt');
+                if(res.ok) {
+                    const lines = (await res.text()).split('\n').filter(l => l.trim());
+                    document.getElementById('loading-msg').textContent = lines[Math.floor(Math.random() * lines.length)];
+                }
+            } catch(e) {}
+        }
+        initSplash();
+
+        // --- RELEASES ---
         window.openReleases = async () => {
             document.getElementById('modal-releases').style.display = 'flex';
-            try {
-                const res = await fetch('release.html');
-                const html = await res.text();
-                document.getElementById('release-body').innerHTML = html;
-            } catch (e) {
-                document.getElementById('release-body').innerHTML = "No se pudo cargar el archivo release.html";
-            }
+            const res = await fetch('release.html');
+            document.getElementById('release-body').innerHTML = res.ok ? await res.text() : "No hay notas de versión.";
         };
-        window.closeReleases = () => document.getElementById('modal-releases').style.display = 'none';
 
-        // --- AUDIO UNLOCK ---
-        const unlockAudio = () => {
-            notiAudio.play().then(() => { notiAudio.pause(); notiAudio.currentTime = 0; });
-            window.removeEventListener('click', unlockAudio);
-        };
-        window.addEventListener('click', unlockAudio);
+        function format12h(ts) {
+            return new Date(ts).toLocaleDateString() + " - " + new Date(ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: true});
+        }
 
-        // --- CARGA DE MENSAJES (DISCORD STYLE) ---
         const renderMessage = (d, prepend = false) => {
             const isOwn = d.uid === auth.currentUser?.uid;
             const div = document.createElement('div');
             div.className = `msg ${isOwn ? 'own' : 'other'}`;
             
-            let html = d.texto;
-            if(html.startsWith("@@VIDEO:")) html = `<video controls src="${html.split(':')[1]}"></video>`;
-            else if(html.startsWith("@@AUDIO:")) html = `<audio controls src="${html.split(':')[1]}"></audio>`;
-            else html = marked.parse(d.texto);
+            let content = d.texto;
+            if(content.startsWith("@@VIDEO:")) content = `<video controls src="${content.split(':')[1]}"></video>`;
+            else if(content.startsWith("@@AUDIO:")) content = `<audio controls src="${content.split(':')[1]}"></audio>`;
+            else content = marked.parse(d.texto);
 
-            div.innerHTML = `<small style="font-size:0.7em; opacity:0.8; display:block;">${d.nombre}</small>${html}`;
+            div.innerHTML = `<span class="msg-info">${d.nombre}</span>${content}<span class="msg-time">${format12h(d.timestamp)}</span>`;
             
-            if(prepend) {
-                const reference = document.getElementById('loading-old').nextSibling;
-                chat.insertBefore(div, reference);
-            } else {
-                chat.appendChild(div);
-            }
+            if(prepend) chat.insertBefore(div, document.getElementById('loading-status').nextSibling);
+            else chat.appendChild(div);
             return div;
         };
 
-        const loadMessages = (batchSize = 15) => {
-            let q;
-            if (!oldestKey) {
-                q = query(chatRef, limitToLast(batchSize));
-            } else {
-                q = query(chatRef, orderByKey(), endBefore(oldestKey), limitToLast(batchSize));
-            }
+        const loadBatch = async () => {
+            if (allLoaded || isBatchLoading) return;
+            isBatchLoading = true;
+            const status = document.getElementById('loading-status');
+            status.classList.remove('hidden');
+            status.textContent = "Cargando mensajes anteriores...";
 
-            get(q).then((snap) => {
-                const data = snap.val();
-                if (!data) return;
+            let q = oldestKey 
+                ? query(chatRef, orderByKey(), endBefore(oldestKey), limitToLast(15))
+                : query(chatRef, limitToLast(15));
 
+            const snap = await get(q);
+            const data = snap.val();
+
+            if (!data || Object.keys(data).length < 15) {
+                allLoaded = true;
+                status.textContent = "¡Ya no hay más mensajes qué cargar!";
+                status.classList.remove('hidden');
+            } else { status.classList.add('hidden'); }
+
+            if (data) {
                 const keys = Object.keys(data).sort();
-                const scrollHeightBefore = chat.scrollHeight;
-
-                keys.reverse().forEach((key, index) => {
-                    if (index === keys.length - 1) oldestKey = key;
+                const oldHeight = chat.scrollHeight;
+                keys.reverse().forEach((key, i) => {
+                    if (i === keys.length - 1) oldestKey = key;
                     renderMessage(data[key], true);
                 });
-
-                if (!oldestKey) scrollToBottom();
-                else chat.scrollTop = chat.scrollHeight - scrollHeightBefore;
-                
-                isBatchLoading = false;
-                document.getElementById('loading-old').classList.add('hidden');
-            });
+                chat.scrollTop = chat.scrollHeight - oldHeight;
+            }
+            isBatchLoading = false;
+            document.getElementById('splash-screen').style.opacity = '0';
+            setTimeout(() => document.getElementById('splash-screen').style.display='none', 500);
         };
 
-        // Escuchar nuevos mensajes en tiempo real
+        chat.onscroll = () => { if(chat.scrollTop <= 5) loadBatch(); };
+
         onChildAdded(query(chatRef, limitToLast(1)), (snap) => {
-            if (isBatchLoading) return;
+            if (document.getElementById(snap.key)) return;
             const d = snap.val();
-            // Evitar duplicados si ya se cargó por get()
-            if (document.getElementById(snap.key)) return; 
-            
-            const isOwn = d.uid === auth.currentUser?.uid;
             const atBottom = (chat.scrollHeight - chat.scrollTop - chat.clientHeight) < 100;
-            
             const div = renderMessage(d);
             div.id = snap.key;
-
-            if (isOwn || atBottom) scrollToBottom();
-
-            if (document.hidden && !isOwn) {
-                unreadCount++;
-                document.title = `(${unreadCount}) ${originalTitle}`;
-                notiAudio.play().catch(e => console.log("Audio bloqueado"));
-            }
+            if (atBottom || d.uid === auth.currentUser?.uid) chat.scrollTop = chat.scrollHeight;
         });
 
-        chat.onscroll = () => {
-            if (chat.scrollTop <= 10 && !isBatchLoading && oldestKey) {
-                isBatchLoading = true;
-                document.getElementById('loading-old').classList.remove('hidden');
-                loadMessages(15);
-            }
+        const enviar = (t) => {
+            const val = t || inputMsg.value.trim();
+            if(!val) return;
+            push(chatRef, { nombre: auth.currentUser.displayName, uid: auth.currentUser.uid, texto: val, timestamp: Date.now() });
+            if(!t) inputMsg.value = "";
         };
 
-        const scrollToBottom = () => { setTimeout(() => chat.scrollTop = chat.scrollHeight, 50); };
-
-        // --- ENVÍO ---
-        const enviar = (txt = null) => {
-            const texto = txt || input.value.trim();
-            if(!texto || !auth.currentUser) return;
-            push(chatRef, { nombre: auth.currentUser.displayName, uid: auth.currentUser.uid, texto, timestamp: Date.now() });
-            if(!txt) { input.value = ""; input.style.height = 'auto'; }
-            else { document.getElementById('media-url').value = ""; toggleMedia(); }
-            remove(ref(db, `typing/${auth.currentUser.uid}`));
-        };
-
-        input.onkeydown = (e) => {
-            if(e.key === 'Enter' && !e.shiftKey && !/Android|iPhone/i.test(navigator.userAgent)) {
+        // EVENTOS DE ENTRADA
+        inputMsg.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 enviar();
             }
-        };
+        });
+
         document.getElementById('btnEnviar').onclick = () => enviar();
 
-        // --- TOOLS ---
-        window.toggleMedia = () => document.getElementById('media-bar').classList.toggle('active');
         document.getElementById('btnSendMedia').onclick = () => {
             const url = document.getElementById('media-url').value.trim();
             if(!url) return;
             const ext = url.split('.').pop().toLowerCase();
             let tag = `[Archivo](${url})`;
-            if(['jpg','png','gif','webp','jpeg'].includes(ext)) tag = `![img](${url})`;
+            if(['jpg','png','gif','jpeg','webp'].includes(ext)) tag = `![img](${url})`;
             else if(['mp4','webm'].includes(ext)) tag = `@@VIDEO:${url}`;
             else if(['mp3','wav'].includes(ext)) tag = `@@AUDIO:${url}`;
             enviar(tag);
+            document.getElementById('media-url').value = "";
+            document.getElementById('media-bar').classList.remove('active');
         };
-
-        window.addEventListener('focus', () => { unreadCount = 0; document.title = originalTitle; });
 
         onAuthStateChanged(auth, (user) => {
             if(user) {
-                document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('input-container').classList.remove('hidden');
-                loadMessages(15);
+                loadBatch();
             }
         });
 
-        document.getElementById('btnEntrar').onclick = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value);
         document.getElementById('btnSalir').onclick = () => signOut(auth).then(() => location.reload());
-        document.getElementById('theme-selector').onchange = (e) => document.body.className = e.target.value;
     </script>
 </body>
 </html>

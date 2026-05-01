@@ -15,6 +15,11 @@ body {
 	text-align: center;
 }
 
+footer {
+	user-select: none;
+	-webkit-user-drag: none;
+}
+
 /* --- INTEGRACIÓN DE IMAGEN DE FONDO --- */
 .background-overlay {
     position: fixed;
