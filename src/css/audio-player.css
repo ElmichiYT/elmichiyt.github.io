@@ -1,0 +1,53 @@
+/* 1. El Contenedor: Le da el contexto estético */
+.reproductor-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(200, 200, 200, 0);
+  border-radius: 20px;
+  width: fit-content;
+}
+
+/* 2. Estilizando la etiqueta <audio> */
+audio {
+  width: 400px;
+  height: 50px;
+  filter: invert(100%) hue-rotate(180deg) brightness(1.5); /* Hack de color */
+}
+
+/* 3. Selectores de Webkit (Solo funcionan en Chrome, Edge, Safari) */
+
+/* El fondo del panel interno */
+audio::-webkit-media-controls-panel {
+  background-color: rgba(200, 200, 200, 0.5);
+  backdrop-filter: blur(15px);
+}
+
+/* El botón de Play */
+audio::-webkit-media-controls-play-button {
+  background-color: #1DB954; /* Verde Spotify */
+  border-radius: 50%;
+  transform: scale(1.1);
+  transition: all 0.1s
+}
+
+audio::-webkit-media-controls-play-button:hover {
+  background-color: #00ff5a;
+  transform: scale(1.2);
+}
+
+/* La barra de tiempo transcurrido */
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
+  color: #000;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+}
+
+/* La barra de progreso (Timeline) */
+audio::-webkit-media-controls-timeline {
+  background-color: #c8c8c8;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
