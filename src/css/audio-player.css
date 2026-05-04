@@ -20,7 +20,7 @@ audio {
 /* El fondo del panel interno */
 audio::-webkit-media-controls-panel {
   background-color: rgba(200, 200, 200, 0.5);
-  backdrop-filter: blur(15px);
+  /* backdrop-filter: blur(15px); */
 }
 
 /* El botón de Play */
