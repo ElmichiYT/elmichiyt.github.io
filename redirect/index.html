@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirigiendo...</title>
+    <script>
+        // CONFIGURACIÓN: Cambia estas URLs por las tuyas
+        const URL_HOME = "https://elmichiyt.github.io/";
+        const URL_ERROR = "https://elmichiyt.github.io/redirect/error.html";
+
+        async function procesarRedireccion() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idBuscado = urlParams.get('dl');
+
+            // 1. Si no hay ID o está en blanco, a la Home
+            if (!idBuscado || idBuscado.trim() === "") {
+                window.location.href = URL_HOME;
+                return;
+            }
+
+            try {
+                const response = await fetch('dl.txt');
+                if (!response.ok) throw new Error();
+
+                const data = await response.text();
+                const lineas = data.split(/\r?\n/);
+                
+                let urlFinal = null;
+
+                for (let linea of lineas) {
+                    const index = linea.indexOf('=');
+                    if (index === -1) continue;
+
+                    const id = linea.substring(0, index).trim();
+                    const url = linea.substring(index + 1).trim();
+
+                    if (id === idBuscado) {
+                        urlFinal = url;
+                        break;
+                    }
+                }
+
+                // 2. Si se encontró el ID, redirección inmediata
+                if (urlFinal) {
+                    window.location.replace(urlFinal);
+                } else {
+                    // 3. ID no existente
+                    window.location.href = URL_ERROR;
+                }
+
+            } catch (err) {
+                // En caso de que falle la lectura del txt, enviar a error
+                window.location.href = URL_ERROR;
+            }
+        }
+
+        // Ejecución inmediata
+        procesarRedireccion();
+    </script>
+    <style>
+        /* Estética mínima por si la conexión es lenta y llega a verse algo */
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #fff; color: #666; }
+    </style>
+</head>
+<body>
+    <p>Redirigiendo al servidor de descarga...</p>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Círculo de fondo azul -->
+  <circle cx="12" cy="12" r="10" fill="#2196F3"/>
+  
+  <!-- Punto de la 'i' -->
+  <circle cx="12" cy="8" r="1.2" fill="#FFFFFF"/>
+  
+  <!-- Cuerpo de la 'i' -->
+  <rect x="11" y="11" width="2" height="6" rx="1" fill="#FFFFFF"/>
+</svg>
