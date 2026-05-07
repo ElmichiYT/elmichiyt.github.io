@@ -19,7 +19,7 @@ async function updateStatus() {
         if (!response.ok) throw new Error("Error en el servidor");
         
         const data = await response.json();
-        const myServer = data.servers.find(s => s.hash === 'f22ee9510fff1405ce378a2c5fbb27b3');
+        const myServer = data.servers.find(s => s.hash === 'TU_HASH_AQUÍ');
         
         const dot = document.getElementById('status-indicator');
         const text = document.getElementById('status-text');
