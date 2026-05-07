@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Blog</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; max-width: 750px; margin: auto; padding: 20px; line-height: 1.6; color: #222; }
+        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .post { margin-bottom: 70px; }
+        .post h1 { margin-bottom: 5px; cursor: pointer; transition: 0.2s; }
+        .post h1:hover { color: #007bff; }
+        .reactions { display: flex; gap: 15px; margin-top: 15px; }
+        .reactions button { background: #f8f9fa; border: 1px solid #ddd; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.9em; }
+        .reactions button:hover { background: #e2e6ea; }
+        .pagination { display: flex; justify-content: center; gap: 20px; margin-top: 50px; }
+        .search-box { border: 1px solid #ccc; padding: 8px 15px; border-radius: 20px; outline: none; width: 180px; }
+        img { max-width: 100%; height: auto; border-radius: 5px; }
+        blockquote { border-left: 4px solid #ddd; padding-left: 15px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="./" style="text-decoration:none; color:inherit; font-weight:bold; font-size:1.4em;">BLOG</a>
+    <input type="text" id="busqueda" class="search-box" placeholder="Buscar..." onkeyup="if(event.key==='Enter') ejecutarBusqueda()">
+</nav>
+
+<div id="main-content">Cargando...</div>
+<div id="paginacion" class="pagination"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, updateDoc, increment } 
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+	
+	const firebaseConfig = {
+      apiKey: "AIzaSyCJGuCxeNseBRZiPrixcUfnqxBEJe0mbNw",
+      authDomain: "elmichiyt-blogs.firebaseapp.com",
+      databaseURL: "https://elmichiyt-blogs-default-rtdb.firebaseio.com",
+      projectId: "elmichiyt-blogs",
+      storageBucket: "elmichiyt-blogs.firebasestorage.app",
+      messagingSenderId: "315689247064",
+      appId: "1:315689247064:web:bf5970046ff7ffa9bdc52d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const postsRef = collection(db, "posts");
+
+    const params = new URLSearchParams(window.location.search);
+    let page = parseInt(params.get('page')) || 1;
+    let search = params.get('search')?.replace(/-/g, ' ') || null;
+    let postSlug = params.get('post')?.replace(/-/g, ' '); // Permitir leer slug con guiones
+
+    // Limpiar URL si page=1
+    if (params.get('page') === '1') {
+        const url = new URL(window.location);
+        url.searchParams.delete('page');
+        window.history.replaceState({}, '', url.pathname + url.search);
+    }
+
+    async function cargarContenido() {
+        const container = document.getElementById('main-content');
+        container.innerHTML = "";
+
+        // 1. VER POST INDIVIDUAL
+        if (postSlug) {
+            const q = query(postsRef, where("slug", "==", postSlug.replace(/\s+/g, '-')));
+            const snap = await getDocs(q);
+            if (snap.empty) { container.innerHTML = "<h2>El post no existe.</h2>"; return; }
+            renderPost(snap.docs[0], true);
+            return;
+        }
+
+        // 2. BÚSQUEDA O LISTA
+        let q;
+        if (search) {
+            // Búsqueda por prefijo (Firestore es sensible a mayúsculas/minúsculas)
+            q = query(postsRef, where("title", ">=", search), where("title", "<=", search + '\uf8ff'));
+        } else {
+            // Paginación simple: traemos (page * 10) y cortamos los últimos 10
+            q = query(postsRef, orderBy("date", "desc"), limit(page * 10));
+        }
+
+        const snap = await getDocs(q);
+        const docs = snap.docs.slice((page - 1) * 10);
+
+        if (docs.length === 0) {
+            container.innerHTML = "<h2>No hay nada por aquí.</h2>";
+            return;
+        }
+
+        docs.forEach(d => renderPost(d, false));
+        if (!search) renderPaginacion(snap.size >= page * 10);
+    }
+
+    function renderPost(d, isFull) {
+        const data = d.data();
+        const div = document.createElement('div');
+        div.className = 'post';
+        div.innerHTML = `
+            <h1 onclick="irA('post', '${data.slug}')">${data.title}</h1>
+            <div class="markdown-body">${marked.parse(data.content)}</div>
+            <div class="reactions">
+                <button onclick="votar('${d.id}', 'likes')">👍 <span>${data.likes || 0}</span></button>
+                <button onclick="votar('${d.id}', 'dislikes')">👎 <span>${data.dislikes || 0}</span></button>
+            </div>
+        `;
+        document.getElementById('main-content').appendChild(div);
+    }
+
+    function renderPaginacion(tieneMas) {
+        const nav = document.getElementById('paginacion');
+        if (page > 1) {
+            const btn = document.createElement('button');
+            btn.innerText = "← Anterior";
+            btn.onclick = () => irA('page', page - 1);
+            nav.appendChild(btn);
+        }
+        if (tieneMas) {
+            const btn = document.createElement('button');
+            btn.innerText = "Siguiente →";
+            btn.onclick = () => irA('page', page + 1);
+            nav.appendChild(btn);
+        }
+    }
+
+    window.irA = (tipo, valor) => {
+        const url = new URL(window.location.origin + window.location.pathname);
+        if (valor && valor != "1") {
+            // Convertir espacios a guiones para la URL
+            const formateado = valor.toString().replace(/\s+/g, '-');
+            url.searchParams.set(tipo, formateado);
+        }
+        window.location.href = url.href;
+    };
+
+    window.ejecutarBusqueda = () => {
+        const val = document.getElementById('busqueda').value.trim();
+        irA('search', val || null);
+    };
+
+    window.votar = async (id, tipo) => {
+        if (localStorage.getItem('v_' + id)) return alert("Ya has reaccionado.");
+        const ref = doc(db, "posts", id);
+        await updateDoc(ref, { [tipo]: increment(1) });
+        localStorage.setItem('v_' + id, '1');
+        location.reload();
+    };
+
+    cargarContenido();
+</script>
+</body>
+</html>
