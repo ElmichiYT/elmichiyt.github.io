@@ -10,7 +10,7 @@
 
         async function procesarRedireccion() {
             const urlParams = new URLSearchParams(window.location.search);
-            const idBuscado = urlParams.get('dl');
+            const idBuscado = urlParams.get('id');
 
             // 1. Si no hay ID o está en blanco, a la Home
             if (!idBuscado || idBuscado.trim() === "") {
@@ -19,7 +19,7 @@
             }
 
             try {
-                const response = await fetch('dl.txt');
+                const response = await fetch('ids.txt');
                 if (!response.ok) throw new Error();
 
                 const data = await response.text();

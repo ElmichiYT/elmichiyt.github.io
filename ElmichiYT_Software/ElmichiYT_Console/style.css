@@ -1,0 +1,47 @@
+body {
+	background: #303030;
+	font-family: Arial, Roboto;
+	color: white;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+.banner {
+	background: #3D8BFF;
+}
+
+a {
+	color: #4FDFFF;
+	text-decoration: none;
+	transition: 0.1s;
+}
+
+a:hover {
+	color: #00738C;
+	text-decoration: underline;
+}
+
+.btn {
+	background: #00C700;
+	text-decoration: none;
+	color: white;
+	width: 10%;
+}
+
+.btn:hover {
+	background: #00FF00;
+	color: white;
+	scale: 1.1;
+}
+
+.copyright {
+	background: #202020;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.release {
+	padding: 8px;
+}
