@@ -1,0 +1,19 @@
+body {
+    background: #333;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    margin: 0;
+    padding: 12px;
+}
+
+.header {
+    background: rgb(111, 173, 253);
+    text-align: center;
+}
+
+.copyright {
+	background: #202020;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}

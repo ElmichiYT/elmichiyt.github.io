@@ -1,0 +1,55 @@
+# Reglas del servidor
+**Reglas para el servidor de ClassiCube**
+
+### 1. No ofender ni acosar a otras personas
+Si vez que están ofendiendo o acosando a otra persona, repórtalo en el
+servidor de Discord. Si hay un moderador en línea, decírselo por privado.
+(usa @usuario para enviarle mensaje privado.)
+La persona que rompa esta regla tendrá un ban de 1 semana
+
+### 2. No decir ni construir cosas de tendencias basura de Internet.
+Está prohibido decir cosas de tendencias basura moderna. Por ejemplo:
+Brainrots, Six seven, etc.  
+El que rompa esta regla tendrá un mute de una semana.
+
+### 3. No grifear/destruir o modificar construcciones de otros sin su permiso.  
+No destruyas construcciones de otros en freebuilds, pixelarts ni en los minijuegos
+sin que te lo permita. De lo contrario, tendrá 1 warn.
+
+A los 3 warns acomulados, será baneado por 3 días.
+
+### 4. Mantén un chat limpio
+No hagas spam ni flood en el chat. Mantén el chat limpio.
+De lo contrario, tendrás un mute de 24 horas.
+
+### 5. No arregles grifeos
+No intentes arreglar grifeos en freebuilds ni pixelarts.
+De lo contrario, tendrás un baneo de 1 día.
+
+Si quieres ayudar, usa el comando **/b** y haz clic en el bloque basura
+o donde quitaron el bloque. Después, usa el comando **/report [usuario] [razón]**
+para reportarlo. Nuestro *Equipo de Staff* se hará cargo.
+
+Para hacer válido tu reporte, la razón tiene que contener lo siguiente:  
++ Tener las coordenadas del lugar (aparecen arriba a la izquierda de la pantalla)
++ Tener un texto corto pero entendible
+
+Si haces un reporte falso, serás baneado por 1 día.
+
+### 6. No doxxear gente (ubicación, nombre real, etc.) sin su autorización
+Si filtras información de otros usuarios, tendrás un baneo permanente.  
+O bien, si alguien más filtra información personal de otros sin su permiso,
+también será permabaneado.
+
+### No filtrar información del servidor
+Está prohibido que un usuario, tenga el rango que tenga, filtre información del
+servidor sin permiso. De lo contrario, un permaban será el castigo.}
+
+### Prohibido el uso de clientes modificados con hacks (o plugins molestos)
+Queda prohibido el uso de hacks en este servidor. Tampoco se permiten plugins
+como CEF (Chromium Embebed Framework).
+
+PD: ese plugin te permite tener un navegador flotante en tu juego.
+Solo los que tienen el plugin pueden ver lo que tu vez.
+
+# Gracias por leer hasta abajo!

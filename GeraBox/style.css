@@ -40,6 +40,12 @@ body {
 
 iframe {
 	border: none;
+    border-radius: 10px;
 	width: 128;
 	height: 128;
+}
+
+a {
+    color: cyan;
+    text-decoration: none;
 }
