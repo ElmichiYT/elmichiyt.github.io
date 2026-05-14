@@ -5,35 +5,50 @@ document.getElementById('fetch-btn').addEventListener('click', function() {
 
     if (!username) return;
 
-    // La URL de la API
+    // URL de la API de ClassiCube
     const url = `https://www.classicube.net/api/player/${username}`;
 
     fetch(url)
-        .then(response => {
-            if (!response.ok) throw new Error('Error en la red');
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                showError();
+            // Si la API devuelve un error o el usuario no existe
+            if (data.error && data.error !== "") {
+                showError(data.error);
             } else {
-                // Llenar los datos en el HTML
+                // 1. Nombre y Forum Title
                 document.getElementById('res-name').innerText = data.username;
-                document.getElementById('res-id').innerText = data.id;
-                document.getElementById('res-registered').innerText = new Date(data.registered * 1000).toLocaleDateString();
-                document.getElementById('res-flags').innerText = data.flags || "Usuario estándar";
                 
+                // 2. ID de usuario
+                document.getElementById('res-id').innerText = data.id;
+
+                // 3. Convertir Timestamp a fecha legible
+                const date = new Date(data.registered * 1000);
+                document.getElementById('res-registered').innerText = date.toLocaleDateString();
+
+                // 4. Manejar Flags (rangos)
+                const flags = data.flags.length > 0 ? data.flags.join(', ') : "Jugador estándar";
+                document.getElementById('res-flags').innerText = flags;
+
+                // 5. Bonus: ¿Es Premium?
+                const premiumStatus = data.premium ? "✅ Sí" : "❌ No";
+                // Si quieres mostrarlo, añade un <span id="res-premium"></span> en tu HTML
+                if(document.getElementById('res-premium')) {
+                    document.getElementById('res-premium').innerText = premiumStatus;
+                }
+
                 resultDiv.classList.remove('hidden');
                 errorMsg.classList.add('hidden');
             }
         })
         .catch(err => {
-            console.error(err);
-            showError();
+            console.error("Error al conectar con la API:", err);
+            showError("Error de conexión (posible bloqueo de CORS)");
         });
 });
 
-function showError() {
+function showError(msg) {
+    const errorMsg = document.getElementById('error-msg');
+    errorMsg.innerText = msg;
     document.getElementById('result').classList.add('hidden');
-    document.getElementById('error-msg').classList.remove('hidden');
+    errorMsg.classList.remove('hidden');
 }
