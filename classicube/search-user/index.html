@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClassiCube Player Stats</title>
+    <title>ClassiCube Player Lookup</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <h1>Extractor de ClassiCube</h1>
+        <h1>ClassiCube Stats</h1>
         <div class="search-box">
-            <input type="text" id="username" placeholder="Escribe el usuario...">
-            <button id="fetch-btn">Buscar</button>
+            <input type="text" id="usernameInput" placeholder="Introduce el usuario...">
+            <button id="searchBtn">Buscar</button>
         </div>
 
-        <div id="result" class="result-card hidden">
-            <h2 id="res-name"></h2>
-            <p><strong>ID:</strong> <span id="res-id"></span></p>
-            <p><strong>Registrado:</strong> <span id="res-registered"></span></p>
-            <p><strong>Estado:</strong> <span id="res-flags"></span></p>
+        <div id="resultCard" class="card hidden">
+            <div class="card-header">
+                <h2 id="res-username"></h2>
+                <span id="res-id" class="badge"></span>
+            </div>
+            <div class="card-body">
+                <p><strong>Estado Premium:</strong> <span id="res-premium"></span></p>
+                <p><strong>Fecha de Registro:</strong> <span id="res-registered"></span></p>
+                <p><strong>Flags:</strong> <span id="res-flags"></span></p>
+            </div>
         </div>
 
-        <p id="error-msg" class="error hidden">Usuario no encontrado o error de API.</p>
+        <p id="errorMsg" class="error hidden"></p>
     </div>
 
     <script src="script.js"></script>

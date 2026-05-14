@@ -1,54 +1,54 @@
-document.getElementById('fetch-btn').addEventListener('click', function() {
-    const username = document.getElementById('username').value.trim();
-    const resultDiv = document.getElementById('result');
-    const errorMsg = document.getElementById('error-msg');
+document.getElementById('searchBtn').addEventListener('click', fetchPlayer);
+
+// Permitir buscar al presionar "Enter"
+document.getElementById('usernameInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') fetchPlayer();
+});
+
+async function fetchPlayer() {
+    const username = document.getElementById('usernameInput').value.trim();
+    const card = document.getElementById('resultCard');
+    const errorMsg = document.getElementById('errorMsg');
 
     if (!username) return;
 
-    // URL de la API de ClassiCube
-    const url = `https://www.classicube.net/api/player/${username}`;
+    try {
+        // En un entorno real, si la API tiene CORS bloqueado, 
+        // podrías necesitar un proxy como https://cors-anywhere.herokuapp.com/
+        const response = await fetch(`https://www.classicube.net/api/player/${username}`);
+        const data = await response.json();
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            // Si la API devuelve un error o el usuario no existe
-            if (data.error && data.error !== "") {
-                showError(data.error);
-            } else {
-                // 1. Nombre y Forum Title
-                document.getElementById('res-name').innerText = data.username;
-                
-                // 2. ID de usuario
-                document.getElementById('res-id').innerText = data.id;
+        if (data.error) {
+            showError("Usuario no encontrado o error en la API.");
+            return;
+        }
 
-                // 3. Convertir Timestamp a fecha legible
-                const date = new Date(data.registered * 1000);
-                document.getElementById('res-registered').innerText = date.toLocaleDateString();
+        // Llenar los datos [cite: 1]
+        document.getElementById('res-username').textContent = data.username;
+        document.getElementById('res-id').textContent = `ID: ${data.id}`;
+        document.getElementById('res-premium').textContent = data.premium ? "Sí ✅" : "No ❌";
+        
+        // Convertir Timestamp a fecha legible [cite: 1]
+        const date = new Date(data.registered * 1000);
+        document.getElementById('res-registered').textContent = date.toLocaleDateString();
 
-                // 4. Manejar Flags (rangos)
-                const flags = data.flags.length > 0 ? data.flags.join(', ') : "Jugador estándar";
-                document.getElementById('res-flags').innerText = flags;
+        // Manejar los flags (si están vacíos) [cite: 1]
+        document.getElementById('res-flags').textContent = data.flags.length > 0 ? data.flags.join(', ') : "Ninguno";
 
-                // 5. Bonus: ¿Es Premium?
-                const premiumStatus = data.premium ? "✅ Sí" : "❌ No";
-                // Si quieres mostrarlo, añade un <span id="res-premium"></span> en tu HTML
-                if(document.getElementById('res-premium')) {
-                    document.getElementById('res-premium').innerText = premiumStatus;
-                }
+        // Mostrar tarjeta y ocultar errores
+        card.classList.remove('hidden');
+        errorMsg.classList.add('hidden');
 
-                resultDiv.classList.remove('hidden');
-                errorMsg.classList.add('hidden');
-            }
-        })
-        .catch(err => {
-            console.error("Error al conectar con la API:", err);
-            showError("Error de conexión (posible bloqueo de CORS)");
-        });
-});
+    } catch (error) {
+        showError("Hubo un problema al conectar con la API.");
+        console.error(error);
+    }
+}
 
 function showError(msg) {
-    const errorMsg = document.getElementById('error-msg');
-    errorMsg.innerText = msg;
-    document.getElementById('result').classList.add('hidden');
+    const errorMsg = document.getElementById('errorMsg');
+    const card = document.getElementById('resultCard');
+    errorMsg.textContent = msg;
     errorMsg.classList.remove('hidden');
+    card.classList.add('hidden');
 }
