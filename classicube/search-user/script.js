@@ -1,54 +1,76 @@
-document.getElementById('searchBtn').addEventListener('click', fetchPlayer);
+const searchBtn = document.getElementById('searchBtn');
+const usernameInput = document.getElementById('usernameInput');
+const card = document.getElementById('resultCard');
+const errorMsg = document.getElementById('errorMsg');
 
-// Permitir buscar al presionar "Enter"
-document.getElementById('usernameInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') fetchPlayer();
-});
+const PROXY_URL = "https://proxy.elmichiyt.workers.dev/"; // TU URL AQUÍ
+
+searchBtn.addEventListener('click', fetchPlayer);
+usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchPlayer(); });
 
 async function fetchPlayer() {
-    const username = document.getElementById('usernameInput').value.trim();
-    const card = document.getElementById('resultCard');
-    const errorMsg = document.getElementById('errorMsg');
+    const user = usernameInput.value.trim();
+    if (!user) return;
 
-    if (!username) return;
+    // Estado inicial
+    card.style.display = "none";
+    errorMsg.style.display = "none";
+    searchBtn.disabled = true;
+    searchBtn.innerText = "Buscando...";
+
+    const targetApi = `https://www.classicube.net/api/player/${encodeURIComponent(user)}`;
 
     try {
-        // En un entorno real, si la API tiene CORS bloqueado, 
-        // podrías necesitar un proxy como https://cors-anywhere.herokuapp.com/
-        const response = await fetch(`https://www.classicube.net/api/player/${username}`);
+        const response = await fetch(`${PROXY_URL}?url=${encodeURIComponent(targetApi)}`);
+        
+        if (!response.ok) throw new Error("Error en la conexión con el proxy.");
+        
         const data = await response.json();
 
-        if (data.error) {
-            showError("Usuario no encontrado o error en la API.");
+        // Validar si la API de ClassiCube devolvió un error (campo error en el JSON)
+        if (data.error && data.error !== "") {
+            showError(`Error de ClassiCube: ${data.error}`);
             return;
         }
+		
+		// --- NUEVA LÓGICA PARA EL AVATAR ---
+        const avatarImg = document.getElementById('res-avatar');
+        const playerUsername = data.username || user; // Usamos el nombre exacto de la API
 
-        // Llenar los datos [cite: 1]
-        document.getElementById('res-username').textContent = data.username;
-        document.getElementById('res-id').textContent = `ID: ${data.id}`;
-        document.getElementById('res-premium').textContent = data.premium ? "Sí ✅" : "No ❌";
+        avatarImg.src = `https://cdn.classicube.net/face/${playerUsername}.png`;
+        avatarImg.style.display = "block";
+        // ----------------------------------
+
+        // Renderizar datos del JSON proporcionado 
+        document.getElementById('res-username').innerText = data.username || "N/A";
+        document.getElementById('res-id').innerText = `ID: ${data.id}`;
         
-        // Convertir Timestamp a fecha legible [cite: 1]
-        const date = new Date(data.registered * 1000);
-        document.getElementById('res-registered').textContent = date.toLocaleDateString();
+        // Premium
+        document.getElementById('res-premium').innerText = data.premium ? "true" : "false";
+        
+        // Fecha de registro (Unix Timestamp)
+        if (data.registered) {
+            const date = new Date(data.registered * 1000);
+            document.getElementById('res-registered').innerText = date.toLocaleDateString();
+        }
 
-        // Manejar los flags (si están vacíos) [cite: 1]
-        document.getElementById('res-flags').textContent = data.flags.length > 0 ? data.flags.join(', ') : "Ninguno";
+        // Flags
+        const flags = (data.flags && data.flags.length > 0) ? data.flags.join(', ') : "null";
+        document.getElementById('res-flags').innerText = flags;
 
-        // Mostrar tarjeta y ocultar errores
-        card.classList.remove('hidden');
-        errorMsg.classList.add('hidden');
+        // Mostrar resultado
+        card.style.display = "block";
 
-    } catch (error) {
-        showError("Hubo un problema al conectar con la API.");
-        console.error(error);
+    } catch (err) {
+        showError("No se pudo obtener la información. Verifica la URL del Worker o el usuario.");
+        console.error(err);
+    } finally {
+        searchBtn.disabled = false;
+        searchBtn.innerText = "Buscar";
     }
 }
 
-function showError(msg) {
-    const errorMsg = document.getElementById('errorMsg');
-    const card = document.getElementById('resultCard');
-    errorMsg.textContent = msg;
-    errorMsg.classList.remove('hidden');
-    card.classList.add('hidden');
+function showError(text) {
+    errorMsg.innerText = text;
+    errorMsg.style.display = "block";
 }

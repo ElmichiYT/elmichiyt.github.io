@@ -3,32 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClassiCube Player Lookup</title>
+    <title>ClassiCube Player Stats</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>ClassiCube Stats</h1>
-        <div class="search-box">
-            <input type="text" id="usernameInput" placeholder="Introduce el usuario...">
+    <header>
+        <h1>ClassiCube Player Lookup</h1>
+        <div class="search-area">
+            <input type="text" id="usernameInput" placeholder="Nombre de usuario...">
             <button id="searchBtn">Buscar</button>
         </div>
+    </header>
 
-        <div id="resultCard" class="card hidden">
-            <div class="card-header">
+    <main id="mainContent">
+        <p id="errorMsg" class="error-text" style="display: none;"></p>
+
+        <section id="resultCard" class="info-card" style="display: none;">
+            <div class="info-header">
+        		<img id="res-avatar" src="" alt="" class="player-face" style="display: none;">
                 <h2 id="res-username"></h2>
-                <span id="res-id" class="badge"></span>
+                <span id="res-id" class="id-tag"></span>
             </div>
-            <div class="card-body">
-                <p><strong>Estado Premium:</strong> <span id="res-premium"></span></p>
-                <p><strong>Fecha de Registro:</strong> <span id="res-registered"></span></p>
-                <p><strong>Flags:</strong> <span id="res-flags"></span></p>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Cuenta Premium</label>
+                    <span id="res-premium"></span>
+                </div>
+                <div class="info-item">
+                    <label>Fecha de registro</label>
+                    <span id="res-registered"></span>
+                </div>
+                <div class="info-item">
+                    <label>Flags</label>
+                    <span id="res-flags"></span>
+                </div>
             </div>
-        </div>
-
-        <p id="errorMsg" class="error hidden"></p>
-    </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
