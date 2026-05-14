@@ -45,9 +45,25 @@ iframe {
 	height: 128;
 }
 
-a {
+.footer-btn {
     color: cyan;
     text-decoration: none;
+}
+
+.cc {
+	display: inline-block;
+	margin-top: 20px;
+	padding: 15px 20px;
+	background: #AB4BE3;
+	color: white;
+	text-decoration: none;
+	border-radius: 8px;
+	transition: 0.2s;
+}
+
+.cc:hover {
+	background: #78369E;
+	scale: 1.05;
 }
 
 /* made with Notepad++ */
