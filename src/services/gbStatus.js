@@ -29,14 +29,14 @@ async function updateStatus() {
 
         if (myServer && dot) {
             dot.className = 'status-dot dot-on';
-            text.innerHTML = `En línea`;
+            text.innerHTML = `Encendido`;
             text.style.color = '#53FC18';
             name.innerHTML = myServer.name;
             uptime.innerHTML = formatUptime(myServer.uptime);
             players.innerHTML = `${myServer.players}/${myServer.maxplayers}`;
         } else if (dot) {
             dot.className = 'status-dot dot-off';
-            text.innerHTML = `Fuera de línea`;
+            text.innerHTML = `Apagado`;
             text.style.color = '#ff4444';
             name.innerHTML = 'Desconocido';
             uptime.innerHTML = '0 s';

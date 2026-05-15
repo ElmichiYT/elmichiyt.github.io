@@ -1,0 +1,26 @@
+body {
+	background-color: #222;
+	margin: 0;
+	padding: 0;
+	color: white;
+	text-align: center;
+}
+
+@font-face {
+    font-family: 'ClassiCube';
+    src:url('..\cdn\fonts\ClassiCube.otf')
+}
+
+h1, h2, h3, p, small, i {
+	font-family: 'ClassiCube';
+}
+
+.header {
+	background-color: #9873ac;
+}
+
+.header2 {
+	background-image: url("bg.png");
+}
+
+a { color: #9873ac; }
