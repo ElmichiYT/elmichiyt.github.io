@@ -1,0 +1,35 @@
+body {
+	background: #333;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Roboto;
+	color: white;
+	text-align: center;
+}
+
+.header {
+	background-color: #9873ac;
+}
+
+.title {
+	color: white;
+	text-decoration: none;
+}
+
+.title:hover {
+	color: gray;
+}
+
+/* Esta parte fue tomada de bluesmods.com */
+.type, .creator, .info {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: 999px; font-size: 12px; color: white;;
+  border: 1px solid #555; background: color-mix(in srgb, #444 30%, transparent);
+}
+
+.data { padding: 8px; }
+.link { color: white; text-decoration: none; }
+.link { color: gray; }
+
+img { border-radius: 8px; image-rendering: pixelated; transition: 0.2s; }
+img:hover { scale: 1.03; }
