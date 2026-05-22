@@ -1,0 +1,28 @@
+body {
+	background-color: #333;
+	font-family: Arial, Roboto;
+	color: white;
+	margin: 0;
+	padding: 0;
+}
+
+.header {
+    background: rgb(111, 173, 253);
+}
+
+.main { padding: 16px; }
+
+a {
+	color: #24FFFB;
+	text-decoration: none;
+}
+
+a:hover {
+    color: #009694;
+    text-decoration: underline;
+}
+
+a:active {
+    color: #090;
+    text-decoration: underline;
+}
