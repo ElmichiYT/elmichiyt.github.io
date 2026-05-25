@@ -20,7 +20,7 @@ yendo al siguiente enlace: [https://elmichiyt.github.io/](https://elmichiyt.gith
 
 **¡SUSCRÍBETE A MI CANAL DE YOUTUBE!**
 
-&reg; 2026 &mdash; Pizzaclap43.
+&reg; 2026 &mdash; ElmichiYT.
 Todos los derechos reservados.
 
 <small style="font-size: 12px;"><i>Creado por ElmichiYT</i></small>
