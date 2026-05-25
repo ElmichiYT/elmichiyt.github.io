@@ -7,6 +7,7 @@ footer {
 .footer-contenedor {
     display:flex;
     justify-content:space-around;
+	gap: 40px;
 }
 
 .columna {
@@ -16,12 +17,14 @@ footer {
 
 .columna h3 {
     margin-bottom:10px;
+	text-align: left;
 }
 
 .columna a {
     color:#ccc;
     text-decoration:none;
     margin:4px 0;
+	text-align: left;
 }
 
 .columna a:hover {
