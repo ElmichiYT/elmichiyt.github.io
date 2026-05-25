@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 :root {
     --primary-color: #9b4dff; /* Mantengo el morado, puedes ajustarlo */
     --bg-color: transparent; /* Fondo transparente para ver la imagen */
@@ -39,17 +39,18 @@ footer { user-select: none; webkit-user-drag: none; }
 }
 
 h1 {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Google Sans';
     font-size: 2.2rem; /* Más grande */
     color: white;
     margin: 20px 0 10px;
-    text-shadow: 4px 4px 0px #000; /* Sombra sólida pixelada */
+    text-shadow: 4px 4px 0px #000;
     text-transform: uppercase; /* Todo en mayúsculas para más estilo gamer */
 }
 
 .subtitle {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.7rem; /* Las fuentes pixeladas se ven mejor pequeñas en subtítulos */
+    font-family: 'Google Sans';
+    font-size: 1.3rem; /* Las fuentes pixeladas se ven mejor pequeñas en subtítulos */
+	font-weight: bold;
     color: #eee;
     margin-bottom: 40px;
     text-shadow: 2px 2px 0px #000;
@@ -81,8 +82,9 @@ h1 {
 
 /* --- CONFIGURACIÓN GENERAL --- */
 .link-card {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.8rem;
+    font-family: 'Google Sans';
+    font-size: 1.2rem;
+	font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,7 +111,7 @@ h1 {
 .twitch-btn { background-color: #9146FF !important; }
 .kick-btn { background-color: #53FC18 !important; color: #000000 !important; }
 .discord-btn { background-color: #5865F2 !important; }
-.twitter-btn { background-color: #1DA1F2 !important; }
+.twitter-btn { background-color: #111111 !important; }
 .facebook-btn { background-color: #1877F2 !important; }
 .spotify-btn { background-color: #1DB954 !important; }
 .github-btn { background-color: #24292e !important; color: #ffffff !important; }
