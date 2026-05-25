@@ -18,3 +18,7 @@ h1, h2, h3, p, small, i {
 .link { color: #9873ac; }
 .preview { border: 2px solid black; border-radius: 16px; transition: 0.2s; }
 .preview:hover { scale: 1.03; border-radius: 0px; }
+
+.date { color: cyan; }
+.made { color: lime; }
+.link { color: 9873ac; }
