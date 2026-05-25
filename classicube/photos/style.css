@@ -1,0 +1,20 @@
+body {
+	background-color: #222;
+	margin: 0;
+	padding: 0;
+	color: white;
+	text-align: center;
+}
+
+h1, h2, h3, p, small, i {
+    font-family: "Google Sans", sans-serif;
+    font-style: normal;
+}
+
+.header {
+	background-color: #9873ac;
+}
+
+.link { color: #9873ac; }
+.preview { border: 2px solid black; border-radius: 16px; transition: 0.2s; }
+.preview:hover { scale: 1.03; border-radius: 0px; }
