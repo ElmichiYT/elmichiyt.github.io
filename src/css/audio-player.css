@@ -1,6 +1,6 @@
 /* 1. El Contenedor: Le da el contexto estético */
 .reproductor-container {
-  display: flex;
+  display: block;
   justify-content: center;
   padding: 20px;
   background: rgba(200, 200, 200, 0);
@@ -12,7 +12,7 @@
 audio {
   width: 400px;
   height: 50px;
-  filter: invert(100%) hue-rotate(180deg) brightness(1.5); /* Hack de color */
+  filter: invert(100%) hue-rotate(180deg) brightness(1.5);
 }
 
 /* 3. Selectores de Webkit (Solo funcionan en Chrome, Edge, Safari) */

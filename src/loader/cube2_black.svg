@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
+  <defs>
+    <rect id="cube" width="20" height="20" rx="2" fill="#363636" transform="translate(-10, -10)" />
+  </defs>
+
+  <g transform="translate(100, 50)">
+    
+    <g transform="translate(-60, 0)">
+      <use href="#cube" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="-60 10; -60 -40; -60 10"
+        keyTimes="0; 0.5; 1"
+        dur="0.8s"
+        begin="0s"
+        calcMode="spline"
+        keySplines="0.4 0 0.2 1; 0.8 0 0.6 1"
+        repeatCount="indefinite"
+      />
+      <animateTransform
+        attributeName="transform"
+        type="scale"
+        values="1 1.2; 1 0.8; 1 1.2"
+        keyTimes="0; 0.5; 1"
+        dur="0.8s"
+        begin="0s"
+        calcMode="spline"
+        keySplines="0.4 0 0.2 1; 0.8 0 0.6 1"
+        repeatCount="indefinite"
+        additive="sum"
+      />
+    </g>
+
+    <g transform="translate(0, 0)">
+      <use href="#cube" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="0 10; 0 -40; 0 10"
+        keyTimes="0; 0.5; 1"
+        dur="0.8s"
+        begin="0.2s"
+        calcMode="spline"
+        keySplines="0.4 0 0.2 1; 0.8 0 0.6 1"
+        repeatCount="indefinite"
+      />
+      <animateTransform
+        attributeName="transform"
+        type="scale"
+        values="1 1.2; 1 0.8; 1 1.2"
+        keyTimes="0; 0.5; 1"
+        dur="0.8s"
+        begin="0.2s"
+        calcMode="spline"
+        keySplines="0.4 0 0.2 1; 0.8 0 0.6 1"
+        repeatCount="indefinite"
+        additive="sum"
+      />
+    </g>
+
+    <g transform="translate(60, 0)">
+      <use href="#cube" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="60 10; 60 -40; 60 10"
+        keyTimes="0; 0.5; 1"
+        dur="0.8s"
+        begin="0.4s"
+        calcMode="spline"
+        keySplines="0.4 0 0.2 1; 0.8 0 0.6 1"
+        repeatCount="indefinite"
+      />
+      <animateTransform
+        attributeName="transform"
+        type="scale"
+        values="1 1.2; 1 0.8; 1 1.2"
+        keyTimes="0; 0.5; 1"
+        dur="0.8s"
+        begin="0.4s"
+        calcMode="spline"
+        keySplines="0.4 0 0.2 1; 0.8 0 0.6 1"
+        repeatCount="indefinite"
+        additive="sum"
+      />
+    </g>
+  </g>
+</svg>

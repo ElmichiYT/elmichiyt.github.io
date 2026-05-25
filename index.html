@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<link rel="stylesheet" href="src/extras.css">
 	<link rel="stylesheet" href="src/css/audio-player.css">
+	<link rel="stylesheet" href="src/css/footerplus.css">
 
 	<link rel="stylesheet" href="style.css">
 	<meta name="description" content="Sitio web oficial de ElmichiYT a sus redes sociales y una que otra cosa.">
@@ -29,7 +30,7 @@
 </head>
 <body oncontextmenu="return false;">
     <div class="background-overlay"></div>
-    
+	
     <div class="container">
         <header>
             <div class="profile-container">
@@ -37,8 +38,11 @@
             </div>
             <h1>ElmichiYT</h1>
             <p class="subtitle">Creador de Contenido Mexicano</p>
+			<img class="flag" src="https://lemehost.com/img/flags/mx.svg" width="64">
         </header>
-		<div id="ad-container"></div>
+		<hr>
+		<div align="center" id="ad-container"></div>
+		<hr>
 
         <script src="src/services/AdService.js"></script>
 
@@ -46,9 +50,10 @@
           <iframe src="ytscreen.html" id="youtube-video" width="560" height="315" frameborder="0" allowfullscreen></iframe>
         </div>
         <script src="src/scripts/youtube.js"></script>
-		<p class="subtitle">Último video de ElmichiYT</p>
+		<p class="subtitle">Último contenido de ElmichiYT (en YouTube)</p>
+		<hr>
 		
-		<div class="reproductor-container">
+		<div class="reproductor-container mode">
             <audio controlslist="nodownload noremoteplayback" controls>
                 <source src="src/audio/welcome.mp3" type="audio/mpeg">
             </audio>
@@ -56,30 +61,58 @@
 		
 		<p class="subtitle">Mensaje de ElmichiYT (Audio)</p>
         <hr>
-<main class="links">
-    <p class="subtitle">&mdash; Redes sociales &mdash;</p>
-    <a href="https://youtube.com/@El_michiYouTube" target="_blank" class="link-card youtube-btn"><i class="fab fa-youtube"></i> YouTube</a>
-    <a href="https://discord.com/invite/8uur8SjtQm" target="_blank" class="link-card discord-btn"><i class="fab fa-discord"></i> Discord</a>
-	<a href="https://github.com/ElmichiYT" target="_blank" class="link-card github-btn"><i class="fab fa-github"></i> GitHub</a>
-	<a href="https://x.com/ElmichiYT_" target="_blank" class="link-card twitter-btn"><i class="fab fa-x-twitter"></i> Twitter / X</a>
-	
-	<p class="subtitle">&mdash; Otros enlaces &mdash;</p>
-	<a href="https://elmichiyt.github.io/games/"  class="link-card kick-btn"><i class="fas fa-play"></i> Juegos</a>
-	<a href="https://elmichiyt.carrd.com" target="_blank" class="link-card downloads-btn"><i class="fas fa-cloud"></i> Blog</a>
-    <a href="https://elmichiyt.github.io/GeraBox/" class="link-card gerabox-btn"><i class="fas fa-cube"></i> GeraBox</a>
-	<a href="classicube/photos/" class="link-card photos-btn"><i class="fas fa-camera"></i> Fotos ClassiCube</a>
-	<a class="link-card classicube-btn" href="classicube\"><img src="src/svg/cc-logo.svg" width="20"></img> ClassiCube Hispano</a>
-	<a class="link-card classicube-btn" href="https://elmichiyt.github.io/"><img src="src/svg/cc-logo.svg" width="20"></img> ClassiCube MSG (pronto)</a>
-</main>
+        <main class="links">
+            <p class="subtitle">&mdash; Redes sociales &mdash;</p>
+            <a href="https://youtube.com/@El_michiYouTube" target="_blank" class="link-card youtube-btn"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://discord.com/invite/8uur8SjtQm" target="_blank" class="link-card discord-btn"><i class="fab fa-discord"></i> Discord</a>
+	        <a href="https://github.com/ElmichiYT" target="_blank" class="link-card github-btn"><i class="fab fa-github"></i> GitHub</a>
+	        <a href="https://x.com/ElmichiYT_" target="_blank" class="link-card twitter-btn"><i class="fab fa-x-twitter"></i> Twitter / X</a>
+        </main>
+    	<hr>
+        <main class="links">
+	        <p class="subtitle">&mdash; Otros enlaces &mdash;</p>
+    	    <a href="https://elmichiyt.github.io/games/"  class="link-card kick-btn"><i class="fas fa-play"></i> Juegos</a>
+	        <a href="https://elmichiyt.carrd.com" target="_blank" class="link-card downloads-btn"><i class="fas fa-cloud"></i> Blog</a>
+            <a href="https://elmichiyt.github.io/GeraBox/" class="link-card gerabox-btn"><i class="fas fa-cube"></i> GeraBox</a>
+	        <a href="classicube/photos/" class="link-card photos-btn"><i class="fas fa-camera"></i> Fotos ClassiCube</a>
+	        <a class="link-card classicube-btn" href="classicube\"><img src="src/svg/cc-logo.svg" width="20"></img> ClassiCube Hispano</a>
+        	<a class="link-card classicube-btn" href="https://elmichiyt.github.io/"><img src="src/svg/cc-logo.svg" width="20"></img> ClassiCube MSG (pronto)</a>
+        </main>
 
-    <footer>
-		<img src="https://img.shields.io/github/repo-size/ElmichiYT/elmichiyt.github.io?style=plastic&logo=github&label=Tama%C3%B1o%20total%20del%20sitio%20web&cacheSeconds=15"><br>
-		<img src="https://img.shields.io/youtube/channel/subscribers/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Suscriptores&cacheSeconds=15"><br>
-		<img alt="YouTube Channel Views" src="https://img.shields.io/youtube/channel/views/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Vistas%20totales&cacheSeconds=15">
-		<p class="copyright"><a href="privacidad/">Política de Privacidad</a></p>
-		<p class="copyright">Parte del código de está página fue tomada de <a href="https://pizzaclap43.github.io" target="_blank">pizzaclap43.github.io</a></p>
-		<p class="copyright">© Copyright 2026 ElmichiYT.</p>
-		<p class="copyright">Todos los derechos reservados</p>
-    </footer>
+        <div align="center" class="bottom"><hr color="#777">
+            <footer>
+			    <br>
+	    	    <img src="https://img.shields.io/github/repo-size/ElmichiYT/elmichiyt.github.io?style=plastic&logo=github&label=Tama%C3%B1o%20total%20del%20sitio%20web&cacheSeconds=15"><br>
+		        <img src="https://img.shields.io/youtube/channel/subscribers/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Suscriptores&cacheSeconds=15"><br>
+		        <img alt="YouTube Channel Views" src="https://img.shields.io/youtube/channel/views/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Vistas%20totales&cacheSeconds=15">
+		        <p class="copyright"><a href="privacidad/">Política de Privacidad</a></p>
+		        <p class="copyright">Parte del código de está página fue tomada de <a href="https://pizzaclap43.github.io" target="_blank">pizzaclap43.github.io</a></p>
+			    <p class="copyright">Contacto: <a href="mailto:elmichiyt@proton.me">elmichiyt@proton.me</a></p>
+				
+				<div class="footer-contenedor">
 
-</div> 
+                    <div class="columna">
+                        <h3>Sitio web</h3>
+                        <a href="privacidad/">Política de Privacidad</a>
+                        <a href="docs/help.html">Ayuda</a>
+                        <a href="docs/">Documentación</a>
+                    </div>
+					
+					<div class="columna">
+					    <h3>Otro</h3>
+						<a href="mailto:elmichiyt@proton.me">Contacto</a>
+					</div>
+
+                    <div class="columna">
+                        <h3>Links</h3>
+                        <a class="ficon" href="https://lemehost.com/i/jpdsgP"><img src="https://lemehost.com/favicon.ico" width="16">&#x2002;lemehost</a>
+                        <a class="ficon" href="https://www.cloudflare.com/"><img src="https://elmichiyt.github.io/src/icons/cloudflare.svg" width="16">&#x2002;Cloudflare</a>
+                        <a class="ficon" href="https://t.me/El_michiYouTube"><img src="Telegram</a>
+                    </div>
+
+                </div><br>
+				<p class="copyright">© Copyright 2026 ElmichiYT. Todos los derechos reservados</p>
+            </footer>
+		</div>
+    </div>
+</body>

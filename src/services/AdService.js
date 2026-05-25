@@ -34,7 +34,7 @@ async function cargarAnuncioDesdeTexto() {
 
             const image = document.createElement('img');
             image.src = randomAd.img;
-            image.style.maxWidth = "100%";
+            image.style.maxWidth = "500px";
             image.style.height = "auto";
             image.style.display = "block";
 

@@ -15,7 +15,10 @@ body {
 	text-align: center;
 }
 
-footer { user-select: none; webkit-user-drag: none; }
+footer {
+	user-select: none;
+	webkit-user-drag: none;
+}
 
 /* --- INTEGRACIÓN DE IMAGEN DE FONDO --- */
 .background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -26,7 +29,9 @@ footer { user-select: none; webkit-user-drag: none; }
 .background-overlay::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); /* Capa negra al 40% de opacidad */ z-index: -1; }
 
 /* --- INTEGRACIÓN DE LOGO DE PERFIL --- */
-.container { width: 100%; max-width: 450px; padding: 40px 20px; text-align: center; position: relative; /* Asegura que el contenido esté sobre el fondo */ }
+.container { width: 100%; padding-top: 50px; text-align: center; position: relative; /* Asegura que el contenido esté sobre el fondo */ }
+.mode { max-width: 450px; }
+.mode2 { max-width: 600px; }
 
 .profile-pic {
     width: 120px;
@@ -44,7 +49,6 @@ h1 {
     color: white;
     margin: 20px 0 10px;
     text-shadow: 4px 4px 0px #000;
-    text-transform: uppercase; /* Todo en mayúsculas para más estilo gamer */
 }
 
 .subtitle {
@@ -54,6 +58,15 @@ h1 {
     color: #eee;
     margin-bottom: 40px;
     text-shadow: 2px 2px 0px #000;
+}
+
+.smalled {
+	font-family: 'Google Sans';
+	font-size: 1rem;
+	font-weight: bold;
+	color: #eee;
+	margin-top: 40px;
+	text-shadow: 2px 2px 0px #000;
 }
 
 .video-container {
@@ -99,7 +112,7 @@ h1 {
     box-shadow: 4px 4px 0px #000000; /* Sombra sólida tipo sticker */
     transition: all 0.5s ease;
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -141,8 +154,9 @@ footer {
 }
 
 .copyright {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.55rem; /* Pequeñito para que parezca de créditos de juego */
+    font-family: 'Google Sans';
+    font-size: 0.80rem; /* Pequeñito para que parezca de créditos de juego */
+	font-weight: bold;
     color: white;
     text-align: center;
     text-shadow: 2px 2px 0px #000; /* Sombra negra para que sea legible */
@@ -153,12 +167,20 @@ a {
 	color: white;
 }
 
-.classicube {
-	background-color: #9873ac;
-	border: 2px solid #000;
-	transition: 0.2s;
+.classicube { background-color: #9873ac; border: 2px solid #000; transition: 0.2s; }
+.classicube:hover { background-color: #78369E; }
+.flag { transform: translateY(-32px) }
+
+.reproductor-container {
+	align-items: center;
+	margin: auto;
 }
 
-.classicube:hover {
-	background-color: #78369E;
+.bottom {
+	background-color: #333;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 0;
+	margin: 0;
 }

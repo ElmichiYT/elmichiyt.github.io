@@ -1,0 +1,35 @@
+footer {
+    background:#222;
+    color:white;
+    padding:20px;
+}
+
+.footer-contenedor {
+    display:flex;
+    justify-content:space-around;
+}
+
+.columna {
+    display:flex;
+    flex-direction:column;
+}
+
+.columna h3 {
+    margin-bottom:10px;
+}
+
+.columna a {
+    color:#ccc;
+    text-decoration:none;
+    margin:4px 0;
+}
+
+.columna a:hover {
+    color:white;
+}
+
+.ficon {
+    display:flex;
+    align-items:center;
+    
+}
