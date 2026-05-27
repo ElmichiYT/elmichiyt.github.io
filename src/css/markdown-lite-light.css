@@ -1,0 +1,65 @@
+/*
+    (c) 2026 ElmichiYT. Todos los derechos reservados.
+	
+	Este markdown fue creado por ElmichiYT desde cero.
+	No fue tomado de un sitio web externo o otro método.
+	
+	Este markdown es esclusivo para el sitio web de ElmichiYT y
+	no debería usarse en otros sitios web sin autorización.
+	
+	Es posible que exista una versión libre de este markdown a mano.
+ */
+
+.quote {
+    border-left: 2px solid #0066FF;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: black;
+    background-color: #0066FF55;
+}
+
+.caution {
+    border-left: 2px solid #F20F0F;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: black;
+    background-color: #F20F0F55;
+}
+
+.warning {
+    border-left: 2px solid #FFFF00;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: black;
+    background-color: #FFFF0055;
+}
+
+.tip {
+    border-left: 2px solid #00C73F;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: black;
+    background-color: #00C73F55;
+}
+
+.note {
+    border-left: 2px solid #0066FF;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: black;
+    background-color: #0066FF55;
+	max-width: 100%;
+	min-width: 80px;
+}
+
+.header1

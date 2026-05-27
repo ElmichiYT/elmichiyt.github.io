@@ -1,0 +1,76 @@
+/*
+    (c) 2026 ElmichiYT. Todos los derechos reservados.
+	
+	Este markdown fue creado por ElmichiYT desde cero.
+	No fue tomado de un sitio web externo o otro método.
+	
+	Este markdown es esclusivo para el sitio web de ElmichiYT y
+	no debería usarse en otros sitios web sin autorización.
+	
+	Es posible que exista una versión libre de este markdown a mano.
+*/
+
+.quote {
+    border-left: 3px solid #0066FF;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: white;
+    background-color: #0066FF77;
+	height: auto;
+	max-width: 100%;
+	min-width: 80px;
+}
+
+.caution {
+    border-left: 3px solid #F20F0F;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: white;
+    background-color: #F20F0F77;
+	height: auto;
+	min-width: 80px;
+	max-width: 100%;
+}
+
+.warning {
+    border-left: 3px solid #FFFF00;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: white;
+    background-color: #FFFF0077;
+	height: auto;
+	max-width: 100%;
+	min-width: 80px;
+}
+
+.tip {
+    border-left: 3px solid #00C73F;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: white;
+    background-color: #00C73F77;
+	height: auto;
+	max-width: 100%;
+	min-width: 80px;
+}
+
+.note {
+    border-left: 3px solid #0066FF;
+    padding: 0.6rem 0 0.6rem 1rem;
+    margin: 1.5rem 0;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    color: white;
+    background-color: #0066FF77;
+	height: auto;
+	min-width: 80px;
+	max-width: auto;
+}
