@@ -5,5 +5,8 @@
   ],
   "Otro": [
     "help.html"
+  ],
+  "ClassiCube": [
+    "classicube/API.md"
   ]
 }
