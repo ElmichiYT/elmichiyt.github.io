@@ -47,6 +47,25 @@
             font-weight: 700;
             color: var(--color-accento);
             border-bottom: 1px solid var(--borde);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header a {
+            font-size: 0.85rem;
+            color: var(--texto-muted);
+            text-decoration: none;
+            font-weight: 400;
+            border: 1px solid var(--borde);
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-header a:hover {
+            background-color: #f1f5f9;
+            color: #000;
         }
 
         .sidebar-menu {
@@ -137,7 +156,7 @@
             border-radius: 4px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9em;
-            color: #db2777; /* Rosa para código en línea */
+            color: #db2777;
         }
 
         .articulo-contenedor pre {
@@ -182,7 +201,7 @@
 
     <aside class="sidebar">
         <div class="sidebar-header">
-            📚 ElmichiYT Docs
+            📚 ElmichiYT Docs <a href="..">Volver</a>
         </div>
         <nav class="sidebar-menu" id="menu-lateral">
             </nav>
@@ -201,23 +220,23 @@
         const contenedorContenido = document.getElementById('contenido-doc');
 
         // --- 1. FUNCIÓN PARA CARGAR Y RENDERIZAR UN ARCHIVO .MD ---
-        function cargarMarkdown(ruta, elementoMenu = null) {
+        function cargarMarkdown(ruta, nombreHash = null) {
             fetch(ruta)
                 .then(res => {
                     if (!res.ok) throw new Error(`No se pudo leer el archivo en la ruta: ${ruta}`);
                     return res.text();
                 })
                 .then(markdownCrudo => {
-                    // Traducir Markdown a HTML real
                     contenedorContenido.innerHTML = marked.parse(markdownCrudo);
                     
-                    // Manejo visual de la selección en el menú lateral
+                    // Manejo visual de la selección basándonos en el nombre que está en el Hash
                     document.querySelectorAll('.menu-item').forEach(li => li.classList.remove('activo'));
-                    if (elementoMenu) {
-                        elementoMenu.classList.add('activo');
+                    
+                    if (nombreHash) {
+                        const itemActivo = document.querySelector(`[data-hash="${nombreHash}"]`);
+                        if (itemActivo) itemActivo.classList.add('activo');
                     }
                     
-                    // Resetear el scroll del artículo al inicio
                     document.querySelector('.contenido-principal').scrollTop = 0;
                 })
                 .catch(err => {
@@ -225,13 +244,25 @@
                 });
         }
 
-        // --- 2. ACCIÓN INMEDIATA: Cargar main.md al entrar a la web ---
-        cargarMarkdown('pages/main.md');
+        // --- 2. EVALUAR LA URL ACTUAL (Detección del Hash) ---
+        function procesarRutaActual() {
+            // Obtenemos lo que está después del '#' (ej: #help.md o #main.md)
+            // Quitamos el '#' usando replace
+            let hash = window.location.hash.replace('#', '');
+            
+            if (!hash) {
+                // Si entran a la página limpia sin hash, cargamos main.md por defecto
+                cargarMarkdown('pages/main.md', 'main.md');
+            } else {
+                // Si entran con un hash (ej: #help.md), cargamos esa ruta directa
+                cargarMarkdown(`pages/${hash}`, hash);
+            }
+        }
 
         // --- 3. CARGAR EL MENÚ LATERAL DESDE EL ARCHIVO CONFIGURACIÓN JSON ---
-        fetch('./pages.json')
+        fetch('pages.json')
             .then(response => {
-                if (!response.ok) throw new Error("No se encontró el archivo lista-paginas.json");
+                if (!response.ok) throw new Error("No se encontró el archivo pages.json");
                 return response.json();
             })
             .then(estructura => {
@@ -241,18 +272,14 @@
                     htmlMenu += `<div class="categoria-titulo">${categoria}</div><ul>`;
                     
                     estructura[categoria].forEach(rutaArchivo => {
-                        // Extraer solo el nombre del archivo (quita carpetas y el ".md")
-                        const nombreBase = rutaArchivo.split('/').pop().replace('.md', '');
-                        
-                        // Formatear estéticamente (ej: "mi-guia-rapida" -> "Mi guia rapida")
+                        const nombreBase = rutaArchivo.split('/').pop().replace(/\.(md|html)$/i, '');
                         const nombreFormateado = nombreBase.replace(/[-_]/g, ' ').trim();
                         const nombreMenu = nombreFormateado.charAt(0).toUpperCase() + nombreFormateado.slice(1);
                         
-                        const rutaCompleta = `pages/${rutaArchivo}`;
-
+                        // Guardamos la ruta en un atributo personalizado para que el clic lo use en el Hash
                         htmlMenu += `
-                            <li class="menu-item" data-ruta="${rutaCompleta}">
-                                <a href="#">${nombreMenu}</a>
+                            <li class="menu-item" data-hash="${rutaArchivo}">
+                                <a href="#${rutaArchivo}">${nombreMenu}</a>
                             </li>
                         `;
                     });
@@ -260,24 +287,16 @@
                 });
                 menuLateral.innerHTML = htmlMenu;
 
-                // Si 'main.md' está listado en tu JSON, se ilumina automáticamente
-                const itemMain = document.querySelector(`[data-ruta="pages/main.md"]`);
-                if (itemMain) {
-                    itemMain.classList.add('activo');
-                }
+                // Ejecutamos la carga inicial una vez que el menú esté listo en el HTML
+                procesarRutaActual();
             })
             .catch(error => {
                 console.error("Error al construir el menú lateral:", error);
             });
 
-        // --- 4. ESCUCHAR LOS CLICS EN EL MENÚ LATERAL ---
-        menuLateral.addEventListener('click', (e) => {
-            const item = e.target.closest('.menu-item');
-            if (!item) return;
-            e.preventDefault(); // Evita saltos raros en la página
-            
-            cargarMarkdown(item.getAttribute('data-ruta'), item);
-        });
+        // --- 4. ESCUCHAR CUANDO CAMBIE EL HASH DE LA URL (Súper importante) ---
+        // Esto detecta si el usuario le da clic a los enlaces creados arriba o va atrás/adelante en el navegador
+        window.addEventListener('hashchange', procesarRutaActual);
     </script>
 </body>
 </html>

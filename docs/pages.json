@@ -1,8 +1,9 @@
 {
   "Inicio": [
     "main.md",
+	"about.md"
   ],
-  "Test": [
-    "help.md"
+  "Otro": [
+    "help.html"
   ]
 }
