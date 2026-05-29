@@ -24,3 +24,10 @@ h1, h2, h3, p, small, i {
 }
 
 a { color: #9873ac; }
+
+.videos video {
+	border-bottom: 4px solid #f0f0f0;
+	border-radius: 8px;
+	width: 512px;
+	height: auto;
+}
