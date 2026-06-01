@@ -1,0 +1,31 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Google Sans;
+}
+
+.block-main {
+    margin: 0;
+    padding: 0;
+}
+
+.block-card {
+    display: flex;
+    flex-direction: row;
+	justify-content: center;
+    align-items: center;
+    padding-left: 128px;
+	padding-right: 128px;
+    background-color: red;
+	height: 100vh;
+}
+
+.block-icon {
+    width: 384px;
+}
+
+.block-text {
+	padding-left: 32px;
+	color: white;
+	font-size: 24px;
+}
