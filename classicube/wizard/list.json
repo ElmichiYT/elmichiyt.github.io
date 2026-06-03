@@ -1,0 +1,10 @@
+{
+    "MCGalaxy": {
+        "v1.9.5.3": "../download/MCG/1.9.5.3/MCGalaxy.zip"
+    },
+    "ClassiCube": {
+        "1.3.8 (32-bit)": "../download/CC/win32/v1.3.8/ClassiCube.zip",
+        "1.3.8 (64-bit)": "../download/CC/win64/v1.3.8/ClassiCube.zip",
+		"1.3.7 (32-bit)": "../download/CC/win32/v1.3.7/ClassiCube.zip"
+    }
+}

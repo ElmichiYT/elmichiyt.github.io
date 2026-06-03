@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassiCube Wizard</title>
+    <style>
+        /* Paleta ClassiCube ampliada para una página de descargas completa */
+        :root {
+            --bg-main: #14101b;
+            --bg-panel: #211a2b;
+            --bg-inner: #1a1424;
+            --border-color: #523f73;
+            --border-hover: #7d63ab;
+            --text-main: #e3d7f5;
+            --text-muted: #9e8cb3;
+            --text-highlight: #ffffff;
+            --accent-purple: #3f3159;
+            --accent-purple-hover: #554278;
+            --btn-success: #28a745;
+            --btn-success-hover: #218838;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Barra de Navegación superior estilo Portal de Software */
+        .navbar {
+            width: 100%;
+            background-color: var(--bg-panel);
+            border-bottom: 3px solid var(--border-color);
+            padding: 15px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .navbar-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-back-btn {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 2px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-back-btn:hover {
+            color: var(--text-highlight);
+            border-color: var(--border-hover);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .brand {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--text-highlight);
+            text-shadow: 2px 2px #000;
+            letter-spacing: 0.5px;
+        }
+
+        /* Contenedor Principal (Más grande y robusto) */
+        .main-container {
+            max-width: 900px;
+            width: 90%;
+            margin: 40px auto;
+            background-color: var(--bg-panel);
+            border: 3px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        /* Cabecera del Portal */
+        .page-header {
+            background-color: var(--accent-purple);
+            padding: 30px;
+            border-bottom: 3px solid var(--border-color);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+            color: var(--text-highlight);
+            text-shadow: 2px 2px var(--bg-main);
+        }
+
+        .page-header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Barra de progreso de los Pasos (Wizard tracker) */
+        .wizard-steps-tracker {
+            display: flex;
+            background-color: var(--bg-inner);
+            border-bottom: 2px solid var(--border-color);
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tracker-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .tracker-item:last-child {
+            border-right: none;
+        }
+
+        .tracker-item.active {
+            color: var(--text-highlight);
+            background-color: var(--bg-panel);
+        }
+
+        .tracker-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--border-hover);
+        }
+
+        /* Espacio de trabajo de los pasos */
+        .wizard-content {
+            padding: 40px;
+            min-height: 220px;
+        }
+
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.active {
+            display: block;
+            animation: slideUp 0.35s ease-out;
+        }
+
+        /* Títulos internos de cada sección */
+        .step-title {
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-highlight);
+            font-weight: 600;
+        }
+
+        .step-description {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Elementos del Formulario Integrados */
+        .form-group {
+            background-color: var(--bg-inner);
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1.05rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 18px;
+            background-color: var(--bg-main);
+            color: var(--text-highlight);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        select:focus {
+            border-color: var(--border-hover);
+            box-shadow: 0 0 8px rgba(125, 99, 171, 0.4);
+        }
+
+        /* Caja del Resumen Final */
+        .download-summary-card {
+            background-color: var(--bg-inner);
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            padding: 25px;
+            margin-top: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            width: 120px;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        .summary-value {
+            color: var(--text-highlight);
+            font-weight: 600;
+        }
+
+        /* Footer de Control del Wizard */
+        .wizard-action-footer {
+            background-color: var(--bg-inner);
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        /* Botonera */
+        .btn-control {
+            background-color: var(--accent-purple);
+            color: var(--text-highlight);
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #281f38;
+            transition: all 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-control:hover:not(:disabled) {
+            background-color: var(--accent-purple-hover);
+            box-shadow: 0 4px 0 #3b2e54;
+        }
+
+        .btn-control:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-control:disabled {
+            background-color: #2c2538;
+            color: #544b61;
+            box-shadow: 0 4px 0 #1b1724;
+            cursor: not-allowed;
+        }
+
+        .btn-action-download {
+            background-color: var(--btn-success);
+            box-shadow: 0 4px 0 #18662a;
+        }
+
+        .btn-action-download:hover:not(:disabled) {
+            background-color: var(--btn-success-hover);
+            box-shadow: 0 4px 0 #135221;
+        }
+
+        /* Animaciones */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loader para cuando se lee el JSON */
+        .loading-text {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de Navegación Superior -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="brand">ClassiCube Wizard <small style="color: #916FD1;">By ElmichiYT</small></div>
+            <!-- Botón Volver solicitado para regresar en el directorio (..) -->
+            <a href=".." class="nav-back-btn">← Volver</a>
+        </div>
+    </nav>
+
+    <!-- Contenedor del Gestor de Descargas (Grande) -->
+    <main class="main-container">
+        
+        <!-- Cabecera de la Sección -->
+        <header class="page-header">
+            <h1>ClassiCube Wizard</h1>
+            <p>Descargas de Software de ClassiCube. Diferentes versiones y Gratis</p>
+			<p style="color: yellow;">El software que se presenta aquí solo funciona en Microsoft Windows</p>
+        </header>
+
+        <!-- Rastreador de Pasos Visual -->
+        <ul class="wizard-steps-tracker">
+            <li class="tracker-item active" id="track-1">1. Selección de Software</li>
+            <li class="tracker-item" id="track-2">2. Selección de versión</li>
+            <li class="tracker-item" id="track-3">3. Descarga final</li>
+        </ul>
+
+        <!-- Contenido Central Variable -->
+        <div class="wizard-content">
+            <div id="loading-state" class="loading-text">Cargando...</div>
+
+            <!-- PASO 1 -->
+            <section class="step-panel" id="step-1">
+                <h2 class="step-title">Selecciona el Software</h2>
+                <p class="step-description">Elige un software de la lista desplegable inferior.</p>
+                
+                <div class="form-group">
+                    <label for="select-archivo">Software:</label>
+                    <select id="select-archivo">
+                        <option value="" disabled selected>No seleccionado</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- PASO 2 -->
+            <section class="step-panel" id="step-2">
+                <h2 class="step-title">Selecciona la versión</h2>
+                <p class="step-description">Selecciona la versión del software elegido que desea descargar.</p>
+                
+                <div class="form-group">
+                    <label for="select-version">Versión:</label>
+                    <select id="select-version" disabled>
+                        <option value="" disabled selected>No seleccionado</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- PASO 3 -->
+            <section class="step-panel" id="step-3">
+                <h2 class="step-title">Descargar</h2>
+                <p class="step-description">Haz clic en <strong>Descargar</strong> para descargar el software a la versión que hayas elegido.</p>
+				<p class="step-description">Verifica si los datos son correctos.</p>
+                
+                <div class="download-summary-card">
+                    <div class="summary-row">
+                        <div class="summary-label">Software:</div>
+                        <div class="summary-value" id="res-archivo">Ninguno</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Versión:</div>
+                        <div class="summary-value" id="res-version">Ninguna</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label">Estado:</div>
+                        <div class="summary-value" style="color: #28a745;">Listo para descargar</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Acciones Inferiores del Wizard -->
+        <footer class="wizard-action-footer">
+            <button class="btn-control" id="btn-back" disabled>Atrás</button>
+            <button class="btn-control" id="btn-next" disabled>Siguiente</button>
+        </footer>
+
+    </main>
+
+    <script>
+        let baseDatos = {};
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        // Referencias DOM
+        const selectArchivo = document.getElementById('select-archivo');
+        const selectVersion = document.getElementById('select-version');
+        const btnBack = document.getElementById('btn-back');
+        const btnNext = document.getElementById('btn-next');
+        const loadingState = document.getElementById('loading-state');
+
+        // Consumir el archivo JSON independiente e inicializar la aplicación
+        async function inicializarRepositorio() {
+            try {
+                // Fetch del archivo JSON local independiente
+                const response = await fetch('list.json');
+                if (!response.ok) {
+                    throw new Error('No se pudo mapear el archivo JSON independiente.');
+                }
+                baseDatos = await response.json();
+                
+                // Ocultar estado de carga e iniciar
+                loadingState.style.display = 'none';
+                document.getElementById('step-1').classList.add('active');
+                
+                // Inyectar elementos en el primer select
+                for (const archivo in baseDatos) {
+                    const option = document.createElement('option');
+                    option.value = archivo;
+                    option.textContent = archivo;
+                    selectArchivo.appendChild(option);
+                }
+            } catch (error) {
+                loadingState.textContent = `Error crítico en el repositorio: ${error.message}`;
+                loadingState.style.color = '#ff4d4d';
+                console.error(error);
+            }
+        }
+
+        // Evento select del software (Paso 1)
+        selectArchivo.addEventListener('change', () => {
+            selectVersion.innerHTML = '<option value="" disabled selected>No seleccionado</option>';
+            
+            const softwareSeleccionado = selectArchivo.value;
+            const ramificaciones = baseDatos[softwareSeleccionado];
+
+            for (const version in ramificaciones) {
+                const option = document.createElement('option');
+                option.value = ramificaciones[version]; // Setea URL
+                option.textContent = version;           // Setea Nombre de versión
+                selectVersion.appendChild(option);
+            }
+
+            selectVersion.disabled = false;
+            btnNext.disabled = false; 
+        });
+
+        // Evento select de la versión (Paso 2)
+        selectVersion.addEventListener('change', () => {
+            if (currentStep === 2) {
+                btnNext.disabled = false;
+            }
+        });
+
+        // Control de navegación interactiva del Wizard
+        btnNext.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                desplazarPaso(currentStep + 1);
+            } else if (currentStep === totalSteps) {
+                const descargaDirecta = selectVersion.value;
+                window.open(descargaDirecta, '_blank');
+            }
+        });
+
+        btnBack.addEventListener('click', () => {
+            if (currentStep > 1) {
+                desplazarPaso(currentStep - 1);
+            }
+        });
+
+        function desplazarPaso(objetivoPaso) {
+            // Ocultar capa activa previa
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            document.getElementById(`track-${currentStep}`).classList.remove('active');
+            
+            currentStep = objetivoPaso;
+            
+            // Mostrar nueva capa activa
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            document.getElementById(`track-${currentStep}`).classList.add('active');
+
+            // Evaluaciones de estado por paso
+            if (currentStep === 1) {
+                btnBack.disabled = true;
+                btnNext.textContent = "Siguiente";
+                btnNext.className = "btn-control";
+                btnNext.disabled = (selectArchivo.value === "");
+            } 
+            else if (currentStep === 2) {
+                btnBack.disabled = false;
+                btnNext.textContent = "Siguiente";
+                btnNext.className = "btn-control";
+                btnNext.disabled = (selectVersion.value === "");
+            } 
+            else if (currentStep === 3) {
+                btnBack.disabled = false;
+                btnNext.textContent = "Descargar";
+                btnNext.className = "btn-control btn-action-download";
+                btnNext.disabled = false;
+
+                // Actualizar los campos dinámicos en la ficha del resumen
+                document.getElementById('res-archivo').textContent = selectArchivo.value;
+                document.getElementById('res-version').textContent = selectVersion.options[selectVersion.selectedIndex].text;
+            }
+        }
+
+        // Ejecutar al montar la ventana
+        window.onload = inicializarRepositorio;
+    </script>
+</body>
+</html>

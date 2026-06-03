@@ -1,7 +1,7 @@
 body {
-	margin: 0;
-	padding: 0;
-	font-family: Google Sans;
+    margin: 0;
+    padding: 0;
+    font-family: Google Sans;
 }
 
 .block-main {
@@ -12,12 +12,12 @@ body {
 .block-card {
     display: flex;
     flex-direction: row;
-	justify-content: center;
+    justify-content: center;
     align-items: center;
     padding-left: 128px;
-	padding-right: 128px;
+    padding-right: 128px;
     background-color: red;
-	height: 100vh;
+    height: 100vh;
 }
 
 .block-icon {
@@ -25,7 +25,7 @@ body {
 }
 
 .block-text {
-	padding-left: 32px;
-	color: white;
-	font-size: 24px;
+    padding-left: 32px;
+    color: white;
+    font-size: 24px;
 }
