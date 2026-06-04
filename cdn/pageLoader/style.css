@@ -1,30 +1,70 @@
 /* loader.css */
-
-/* El contenedor que cubre toda la pantalla */
 #pantalla-carga {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #ffffff; /* Puedes cambiar el color de fondo aquí */
-  z-index: 99999; /* Asegura que esté por encima de todo */
+  background-color: #121212; /* Fondo oscuro moderno, cámbialo si quieres */
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 99999;
   display: flex;
+  flex-direction: column; /* Alineación vertical */
   justify-content: center;
   align-items: center;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  gap: 20px; /* Espacio entre elementos */
+  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s;
   opacity: 1;
   visibility: visible;
 }
 
-/* Un spinner o indicador de carga simple */
+/* El contenedor de textos */
+.loader-info {
+  text-align: center;
+  max-width: 80%;
+}
+
+#loader-mensaje {
+  font-size: 1.1rem;
+  color: #a0a0a0;
+  font-style: italic;
+  margin-bottom: 5px;
+  min-height: 1.5em; /* Evita saltos si el texto es largo */
+}
+
+#loader-texto {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* El Spinner */
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 50px;
-  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border-left-color: #09f; /* Color del spinner */
+  border-left-color: #2ecc71; /* Verde */
   animation: girar 1s linear infinite;
+}
+
+/* Contenedor de la barra */
+.barra-contenedor {
+  width: 250px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* La barra verde que se llena */
+#barra-progreso {
+  width: 0%; /* Empieza en 0 */
+  height: 100%;
+  background-color: #2ecc71; /* Verde brillante */
+  box-shadow: 0 0 10px #2ecc71;
+  transition: width 0.3s ease-out; /* Movimiento fluido */
 }
 
 @keyframes girar {
@@ -32,9 +72,8 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Clase que aplicará JavaScript para ocultarlo */
 #pantalla-carga.oculto {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none; 
+  pointer-events: none;
 }
