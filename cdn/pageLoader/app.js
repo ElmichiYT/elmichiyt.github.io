@@ -79,8 +79,8 @@ window.addEventListener("load", () => {
   const barra = document.getElementById("barra-progreso");
 
   if (barra) barra.style.width = "100%";
-  if (txtElement) txtElement.textContent = "¡Listo!";
-  if (assetElement) assetElement.textContent = "Todos los archivos cargados.";
+  if (txtElement) txtElement.textContent = "Terminado";
+  if (assetElement) assetElement.textContent = "Assets cargados.";
 
   setTimeout(() => {
     if (loader) {
