@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const barra = document.getElementById("barra-progreso");
 
   // 1. CARGAR MENSAJE ALEATORIO DESDE EL .TXT
-  fetch('mensajes.txt')
+  fetch('cdn/pageLoader/messages.txt')
     .then(response => {
       if (!response.ok) throw new Error();
       return response.text();
