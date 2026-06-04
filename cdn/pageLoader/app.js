@@ -3,18 +3,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const msgElement = document.getElementById("loader-mensaje");
   const txtElement = document.getElementById("loader-texto");
+  const assetElement = document.getElementById("asset-cargado"); // Capturamos el <small>
   const barra = document.getElementById("barra-progreso");
-  const loader = document.getElementById("pantalla-carga");
 
   // 1. CARGAR MENSAJE ALEATORIO DESDE EL .TXT
-  // Cambia 'mensajes.txt' por tu ruta real si está en otra carpeta (ej: '/assets/mensajes.txt')
-  fetch('cdn/pageLoader/messages.txt')
+  fetch('mensajes.txt')
     .then(response => {
       if (!response.ok) throw new Error();
       return response.text();
     })
     .then(text => {
-      // Separamos por líneas y limpiamos espacios vacíos
       const lineas = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
       if (lineas.length > 0) {
         const mensajeAleatorio = lineas[Math.floor(Math.random() * lineas.length)];
@@ -22,39 +20,52 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
     .catch(() => {
-      msgElement.textContent = "Made by ElmichiYT"; // Mensaje de respaldo si falla el fetch
+      msgElement.textContent = ".";
     });
 
-  // 2. CÁLCULO DEL PORCENTAJE REAL DE ASSETS
-  // Buscamos todas las imágenes y scripts en la página
+  // 2. CÁLCULO DEL PORCENTAJE REAL DE ASSETS + NOMBRE DE ARCHIVO
   const assets = Array.from(document.querySelectorAll("img, script[src], link[rel='stylesheet'], audio"));
   let cargados = 0;
   const totalAssets = assets.length;
 
-  function actualizarProgreso() {
+  function actualizarProgreso(elementoElemento) {
     cargados++;
-    // Si no hay assets, protegemos de división por cero
     const porcentaje = totalAssets > 0 ? Math.round((cargados / totalAssets) * 100) : 100;
     
-    // Actualizamos elementos visuales
+    // Actualizamos porcentaje y barra
     if (barra) barra.style.width = `${porcentaje}%`;
     if (txtElement) txtElement.textContent = `Cargando... ${porcentaje}%`;
+
+    // MÁGIA EXTRA: Extraer solo el nombre del archivo
+    if (assetElement && elementoElemento) {
+      // Obtenemos la ruta completa (src para imágenes/scripts, href para estilos)
+      const rutaCompleta = elementoElemento.src || elementoElemento.href || "";
+      
+      if (rutaCompleta) {
+        // 1. Quitamos parámetros de caché si existen (ej: script.js?v=1.2 -> script.js)
+        const rutaLimpia = rutaCompleta.split('?')[0];
+        // 2. Rompemos por las barras '/' y nos quedamos con el último elemento
+        const nombreArchivo = rutaLimpia.split('/').pop();
+        
+        // Lo pintamos en el <small>
+        assetElement.textContent = nombreArchivo;
+      }
+    }
   }
 
   if (totalAssets === 0) {
-    // Si la página es puro texto y no hay assets, forzamos el 100%
     if (barra) barra.style.width = "100%";
     if (txtElement) txtElement.textContent = "Cargando... 100%";
+    if (assetElement) assetElement.textContent = "Completado";
   } else {
-    // Escuchar la carga de cada asset individual
     assets.forEach(asset => {
       if (asset.complete) { 
-        // Si ya estaba en caché del navegador
-        actualizarProgreso();
+        // Pasamos el asset actual a la función
+        actualizarProgreso(asset);
       } else {
-        // Si apenas se va a descargar
-        asset.addEventListener("load", actualizarProgreso);
-        asset.addEventListener("error", actualizarProgreso); // Contar también si falla para no trabar la barra
+        // Pasamos el asset actual a través del evento
+        asset.addEventListener("load", () => actualizarProgreso(asset));
+        asset.addEventListener("error", () => actualizarProgreso(asset)); 
       }
     });
   }
@@ -64,17 +75,17 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("load", () => {
   const loader = document.getElementById("pantalla-carga");
   const txtElement = document.getElementById("loader-texto");
+  const assetElement = document.getElementById("asset-cargado");
   const barra = document.getElementById("barra-progreso");
 
-  // Forzar visualmente el 100% al terminar el evento 'load' general
   if (barra) barra.style.width = "100%";
-  if (txtElement) txtElement.textContent = "Terminado.";
+  if (txtElement) txtElement.textContent = "¡Listo!";
+  if (assetElement) assetElement.textContent = "Todos los archivos cargados.";
 
-  // Esperar un momento breve para que el usuario vea el "100% Terminado" antes de desvanecer
   setTimeout(() => {
     if (loader) {
       loader.classList.add("oculto");
-      setTimeout(() => loader.remove(), 600); // Borra del DOM tras la animación CSS
+      setTimeout(() => loader.remove(), 600);
     }
   }, 400); 
 });

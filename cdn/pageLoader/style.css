@@ -77,3 +77,15 @@
   visibility: hidden;
   pointer-events: none;
 }
+
+/* Añadir esto a tu loader.css */
+#asset-cargado {
+  display: block;
+  font-size: 0.85rem;
+  color: #7f8c8d; /* Gris suave */
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Si el nombre es larguísimo, le pone ... */
+  max-width: 300px; /* Para que no deforme la pantalla */
+}
