@@ -1,0 +1,8 @@
+<svg width="512" height="512" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ícono de error">
+  <!-- Círculo de fondo rojo claro -->
+  <circle cx="32" cy="32" r="30" fill="#F44336" />
+
+  <!-- Cruz blanca -->
+  <line x1="20" y1="20" x2="44" y2="44" stroke="#fff" stroke-width="5" stroke-linecap="round" />
+  <line x1="44" y1="20" x2="20" y2="44" stroke="#fff" stroke-width="5" stroke-linecap="round" />
+</svg>

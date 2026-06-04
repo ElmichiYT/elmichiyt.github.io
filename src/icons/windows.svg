@@ -1,0 +1,8 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Icono de Windows 10 -->
+  <polygon fill="#00adef" points="0,70 220,40 220,240 0,240"/>
+  <polygon fill="#00adef" points="240,37 512,0 512,240 240,240"/>
+  <polygon fill="#00adef" points="0,260 220,260 220,470 0,440"/>
+  <polygon fill="#00adef" points="240,260 512,260 512,512 240,475"/>
+</svg>
