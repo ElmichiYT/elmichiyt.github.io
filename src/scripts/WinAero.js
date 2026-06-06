@@ -1,67 +1,261 @@
-/* WinAero.js - El motor de diálogos retro */
+/* ========================================================================
+   WinAero.js v2.0 - Plugin de Archivo Único (Estilo Windows 7 Aero Glass)
+   ======================================================================== */
 
-const WinAero = {
-    // Método interno para construir el contenedor
-    _create(type, title, message) {
-        // Remover cualquier ventana existente para evitar duplicados
-        const oldOverlay = document.querySelector('.winaero-overlay');
-        if (oldOverlay) oldOverlay.remove();
+(function() {
+    // 1. INYECCIÓN AUTOMÁTICA DEL CSS
+    const aeroStyles = `
+        .winaero-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
 
-        // Determinar el símbolo del icono clásico de Win 7
-        let iconSymbol = '!';
-        if (type === 'info') iconSymbol = 'i';
+        .winaero-overlay.active {
+            opacity: 1;
+        }
 
-        // Crear la estructura HTML
-        const overlay = document.createElement('div');
-        overlay.className = 'winaero-overlay';
-        
-        overlay.innerHTML = `
-            <div class="winaero-window">
-                <div class="winaero-titlebar">
-                    <span>${title}</span>
-                    <div class="winaero-close-btn">✕</div>
-                </div>
-                <div class="winaero-container">
-                    <div class="winaero-content">
-                        <div class="winaero-icon ${type}">${iconSymbol}</div>
-                        <div class="winaero-text">
-                            <h2>${title}</h2>
-                            <p>${message}</p>
+        .winaero-window {
+            width: 420px;
+            background: rgba(235, 243, 253, 0.25);
+            border-radius: 8px;
+            padding: 5px; 
+            backdrop-filter: blur(15px) saturate(140%);
+            -webkit-backdrop-filter: blur(15px) saturate(140%);
+            border: 1px solid rgba(0, 24, 68, 0.35);
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+                0 0 2px 1px rgba(255, 255, 255, 0.6) inset,
+                0 10px 30px rgba(0, 0, 0, 0.4);
+            transform: scale(0.9) translateY(-10px);
+            transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+            font-family: "Segoe UI", Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        .winaero-overlay.active .winaero-window {
+            transform: scale(1) translateY(0);
+        }
+
+        .winaero-titlebar {
+            height: 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px 4px 8px;
+            color: #1e1e1e;
+            font-size: 12px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+            cursor: default;
+            user-select: none;
+        }
+
+        .winaero-close-btn {
+            background: linear-gradient(to bottom, rgba(239,111,83,0.5) 0%, rgba(218,63,33,0.6) 50%, rgba(193,31,7,0.7) 100%);
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset;
+            color: #fff;
+            width: 45px;
+            height: 18px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .winaero-close-btn:hover {
+            background: linear-gradient(to bottom, #ff967d 0%, #ea4f30 50%, #d82309 100%);
+            box-shadow: 0 0 8px rgba(234, 79, 48, 0.8), 0 1px 0 rgba(255,255,255,0.5) inset;
+        }
+
+        .winaero-container {
+            background: linear-gradient(to bottom, #fcfcfc 0%, #f0f0f0 100%);
+            border: 1px solid rgba(0, 24, 68, 0.4);
+            border-radius: 3px;
+            box-shadow: 0 1px 0 #fff inset;
+            overflow: hidden;
+        }
+
+        .winaero-content {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            background-color: #ffffff;
+        }
+
+        .winaero-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            color: #fff;
+            font-weight: bold;
+            font-size: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 1px 0 rgba(255,255,255,0.5) inset;
+        }
+
+        .winaero-icon.info {
+            background: linear-gradient(135deg, #3399ff 0%, #0055cc 100%);
+            border: 2px solid #0044aa;
+            font-family: "Georgia", serif;
+            font-style: italic;
+            font-size: 20px;
+        }
+
+        .winaero-icon.warning {
+            background: linear-gradient(135deg, #ffdb58 0%, #ffbc00 100%);
+            border: 2px solid #d49b00;
+        }
+
+        .winaero-icon.critical {
+            background: linear-gradient(135deg, #ff5555 0%, #cc0000 100%);
+            border: 2px solid #aa0000;
+        }
+
+        .winaero-text {
+            color: #333;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .winaero-text h2 {
+            margin: 0 0 6px 0;
+            color: #003399;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .winaero-action-bar {
+            background-color: #f0f0f0;
+            border-top: 1px solid #dfdfdf;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .winaero-btn {
+            background: linear-gradient(to bottom, #f2f2f2 0%, #ebebeb 50%, #dddddd 51%, #cfcfcf 100%);
+            border: 1px solid #8e8f8f;
+            border-radius: 3px;
+            min-width: 86px;
+            height: 24px;
+            font-size: 12px;
+            color: #222;
+            cursor: pointer;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+        }
+
+        .winaero-btn:hover {
+            background: linear-gradient(to bottom, #eaf6fd 0%, #d9f0fc 50%, #bee6fd 51%, #a7d9f5 100%);
+            border-color: #3c7fb1;
+            box-shadow: 0 0 5px rgba(60, 127, 177, 0.8), 0 1px 0 rgba(255,255,255,0.9) inset;
+        }
+
+        .winaero-btn:active {
+            background: linear-gradient(to bottom, #e1e1e1 0%, #d5d5d5 100%);
+            border-color: #2c628b;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
+        }
+    `;
+
+    // Inyectamos el bloque de estilos dentro del <head> de la página actual
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = aeroStyles;
+    document.head.appendChild(styleSheet);
+
+
+    // 2. LÓGICA DEL MOTOR DE DIÁLOGOS CON COLA DE ESPERA
+    window.WinAero = {
+        _queue: [],
+        _isOpen: false,
+
+        _pushToQueue(type, title, message) {
+            this._queue.push({ type, title, message });
+            if (!this._isOpen) {
+                this._showNext();
+            }
+        },
+
+        _showNext() {
+            if (this._queue.length === 0) {
+                this._isOpen = false;
+                return;
+            }
+
+            this._isOpen = true;
+            const currentData = this._queue.shift();
+
+            let iconSymbol = '!';
+            if (currentData.type === 'info') iconSymbol = 'i';
+
+            const overlay = document.createElement('div');
+            overlay.className = 'winaero-overlay';
+            
+            overlay.innerHTML = `
+                <div class="winaero-window">
+                    <div class="winaero-titlebar">
+                        <span>${currentData.title}</span>
+                        <div class="winaero-close-btn">✕</div>
+                    </div>
+                    <div class="winaero-container">
+                        <div class="winaero-content">
+                            <div class="winaero-icon ${currentData.type}">${iconSymbol}</div>
+                            <div class="winaero-text">
+                                <h2>${currentData.title}</h2>
+                                <p>${currentData.message}</p>
+                            </div>
+                        </div>
+                        <div class="winaero-action-bar">
+                            <button class="winaero-btn">Aceptar</button>
                         </div>
                     </div>
-                    <div class="winaero-action-bar">
-                        <button class="winaero-btn">Aceptar</button>
-                    </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        document.body.appendChild(overlay);
+            document.body.appendChild(overlay);
 
-        // Disparar animaciones de CSS (Aero Effect)
-        setTimeout(() => overlay.classList.add('active'), 10);
+            setTimeout(() => overlay.classList.add('active'), 10);
 
-        // Función de cierre
-        const closeWindow = () => {
-            overlay.classList.remove('active');
-            setTimeout(() => overlay.remove(), 200); // Espera que termine la transición CSS
-        };
+            const closeWindow = () => {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.remove();
+                    this._showNext();
+                }, 200);
+            };
 
-        // Escuchar eventos de cierre (Botón X y Botón Aceptar)
-        overlay.querySelector('.winaero-close-btn').addEventListener('click', closeWindow);
-        overlay.querySelector('.winaero-btn').addEventListener('click', closeWindow);
-    },
+            overlay.querySelector('.winaero-close-btn').addEventListener('click', closeWindow);
+            overlay.querySelector('.winaero-btn').addEventListener('click', closeWindow);
+        },
 
-    // Disparadores Públicos API
-    info(title, message) {
-        this._create('info', title, message);
-    },
-    
-    warning(title, message) {
-        this._create('warning', title, message);
-    },
-    
-    critical(title, message) {
-        this._create('critical', title, message);
-    }
-};
+        // Métodos de acceso públicos globales
+        info(title, message) {
+            this._pushToQueue('info', title, message);
+        },
+        
+        warning(title, message) {
+            this._pushToQueue('warning', title, message);
+        },
+        
+        critical(title, message) {
+            this._pushToQueue('critical', title, message);
+        }
+    };
+})();
