@@ -184,3 +184,11 @@ a {
 	padding: 0;
 	margin: 0;
 }
+
+.button-img {
+	background: #333;
+	border: 2px dashed red;
+	border-radius: 4px;
+	color: white;
+	resize: none;
+}

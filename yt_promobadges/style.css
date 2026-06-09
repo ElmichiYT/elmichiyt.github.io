@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
+body {
+    background-color: #333;
+    font-family: 'Google Sans';
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    margin: 12px;
+}
+
+/* Fast Styles */
+.header { background-color: #09f; text-align: center; }
+.header h1 { padding-bottom: 0; }
+.header p { padding-top: 0; }
+.important { color: #ff0; }
+.A25 { font-weight: bold; margin: 12px;}
+a { color: #09f; }
