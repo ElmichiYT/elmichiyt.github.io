@@ -13,9 +13,10 @@ body {
 }
 
 /* Fast Styles */
-.header { background-color: #09f; text-align: center; }
+.header { background-color: #f00; text-align: center; }
 .header h1 { padding-bottom: 0; }
 .header p { padding-top: 0; }
 .important { color: #ff0; }
 .A25 { font-weight: bold; margin: 12px;}
 a { color: #09f; }
+.footer { text-align: center; font-weight: bold; }
