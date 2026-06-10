@@ -1,7 +1,7 @@
 imagen="https://elmichiyt.github.io/src/images/ads/main.jpg"
 enlace="https://elmichiyt.github.io/docs/ads/"
 
-imagen="src/images/ads/neon_dash_ads.webp
+imagen="https://elmichiyt.github.io/src/images/ads/neon_dash_ads.webp
 enlace="https://pizzaclap43.github.io/Neon-Dash"
 
 imagen="https://elmichiyt.github.io/src/images/ads/new_telegram_channel_elmichiyt.png"

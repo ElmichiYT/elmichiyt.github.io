@@ -1,17 +1,54 @@
 body {
 	font-family: Arial, Roboto;
-	display: flex;
+	margin: 0;
 	padding: 0;
 	color: white;
-	background-color: #111;
+	background-color: #222;
 }
-.copyright {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
+
+.header {
+	text-align: center;
+	background-image: url("https://elmichiyt.github.io/src/svg/d8680b1c1576ecc8.svg");
+	background-size: 100%;
+	background-repeat: no-repeat;
 }
-a {
-	color: lime;
+
+.gamecard {
+	background: #333;
+	width: 80%;
+	border: 2px solid gray;
+	border-radius: 16px;
+	padding: 12px;
+}
+
+.play {
+	background: transparent;
+	border: 2px solid white;
+	border-radius: 16px;
+	padding: 4px 12px 4px 12px;
+	font-size: 24px;
+	color: white;
+	text-decoration: none;
+	transition: 0.2s;
+}
+
+.play:hover {
+	background: white;
+	color: black;
+}
+
+a { color: #09f; }
+
+/* Fast Styles */
+.copyright { text-align: center; }
+.back { text-align: center; }
+.main a { color: white; }
+.main .owner { background: #444;color: #0ff; font-weight: bold; border: 2px solid gray; border-radius: 16px; padding: 4px 4px 4px 4px; }
+
+.main {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	gap: 15px;
+	padding: 25px;
 }
