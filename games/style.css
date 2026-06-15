@@ -57,7 +57,10 @@ a { color: #09f; }
 	padding: 25px;
 }
 
-#ad-container img {	border-radius: 8px; }
+#ad-container img {	
+	border-radius: 8px;
+	width: 400px;
+}
 #ad-container span {
 	background: gray;
 	border: 1px #bbb;
@@ -67,7 +70,7 @@ a { color: #09f; }
 #ad-container {
 	margin: 0 auto;
 	padding: 0;
-	width: 600px;
+	width: 400px;
 }
 
 .copyright p { padding: 4px 4px 4px 4px; margin: 0; }
@@ -78,5 +81,5 @@ a { color: #09f; }
 	background: #555;
 	border-radius: 16px 16px 0 0;
 	width: 50%;
-	height: 30px;
+	height: auto;
 }
