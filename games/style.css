@@ -9,7 +9,7 @@ body {
 .header {
 	text-align: center;
 	background-image: url("https://elmichiyt.github.io/src/svg/d8680b1c1576ecc8.svg");
-	background-size: 100%;
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
@@ -44,7 +44,11 @@ a { color: #09f; }
 .copyright { text-align: center; }
 .back { text-align: center; }
 .main a { color: white; }
-.main .owner { background: #444;color: #0ff; font-weight: bold; border: 2px solid gray; border-radius: 16px; padding: 4px 4px 4px 4px; }
+
+/* Tags */
+.owner { background: #444; color: #0ff; font-weight: bold; border: 2px solid gray; border-radius: 16px; padding: 4px 4px 4px 4px; }
+.IA-Content {background:#f22;color:white;font-weight:bold;border:2px solid #f00;border-radius:16px;padding:4px 4px 4px 4px;}
+.fangame {background:#090; color: white; font-weight: bold; border: 2px solid #0f0; border-radius: 16px; padding: 4px 4px 4px 4px }
 
 .main {
 	display: flex;
@@ -52,4 +56,9 @@ a { color: #09f; }
 	flex-direction: column;
 	gap: 15px;
 	padding: 25px;
+}
+
+#ad-container img{
+	height: 16px;
+	border-radius: 4px;
 }
