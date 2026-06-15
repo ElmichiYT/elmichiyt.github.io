@@ -41,7 +41,6 @@ body {
 a { color: #09f; }
 
 /* Fast Styles */
-.copyright { text-align: center; }
 .back { text-align: center; }
 .main a { color: white; }
 
@@ -58,19 +57,26 @@ a { color: #09f; }
 	padding: 25px;
 }
 
-#ad-container img{
-	border-radius: 8px;
-}
-
+#ad-container img {	border-radius: 8px; }
 #ad-container span {
 	background: gray;
 	border: 1px #bbb;
 	border-radius: 32px;
 	padding: 4px 12px 4px 12px;
 }
-
 #ad-container {
 	margin: 0 auto;
 	padding: 0;
 	width: 600px;
+}
+
+.copyright p { padding: 4px 4px 4px 4px; margin: 0; }
+.copyright {
+	margin: 0 auto;
+	text-align: center;
+	border: 1px solid #bbb;
+	background: #555;
+	border-radius: 16px 16px 0 0;
+	width: 50%;
+	height: 30px;
 }
