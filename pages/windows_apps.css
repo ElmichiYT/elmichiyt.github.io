@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
+body {
+    background: #f0f0f0;
+    font-family: 'Google Sans';
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.title {
+    background: linear-gradient(to right, #09f, #f0f0f0 25%);
+}
+.title p { font-weight: bold; }
+.apps {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.apps a {
+    background: white;
+    border: 2px solid black;
+    border-radius: 4px;
+    padding: 8px 16px 8px 16px;
+    margin: 0 8px 0 8px;
+    font-size: 24px;
+    text-decoration: none;
+    color: black;
+    transition: 500ms;
+}
+.apps a:hover {
+    background: #ccc;
+}
+
+small {font-weight: bold;}
