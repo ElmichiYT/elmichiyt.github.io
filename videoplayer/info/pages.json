@@ -1,0 +1,6 @@
+{
+    "pages": [
+      { "id": "inicio", "title": "🏠 Inicio" },
+      { "id": "install", "title": "📦 Instalación" }
+    ]
+  }

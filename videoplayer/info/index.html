@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player | Documentación</title>
+    <link id="theme-stylesheet" rel="stylesheet" href="desktop.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+</head>
+<body>
+
+    <div id="loading-bar"></div>
+
+    <header class="top-header">
+        <div class="logo">Video Player Docs</div>
+        <button id="open-config-btn">⚙️ Configuración</button>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar-pages" id="sidebar-pages">
+            <nav id="nav-links">
+                </nav>
+        </aside>
+
+        <main class="content-area" id="content-area">
+            <article id="markdown-body" class="markdown-body">
+                </article>
+        </main>
+    </div>
+
+    <div id="config-overlay" class="overlay"></div>
+    <aside id="sidebar-config" class="sidebar-config">
+        <h2>Configuración</h2>
+        <p>Selecciona el tema de la interfaz:</p>
+        <div class="theme-options">
+            <label><input type="radio" name="theme" value="light"> Claro</label>
+            <label><input type="radio" name="theme" value="dark"> Oscuro</label>
+            <label><input type="radio" name="theme" value="auto"> Automático (Sistema)</label>
+        </div>
+        <button id="close-config-btn">Cerrar</button>
+    </aside>
+
+    <script>
+        // --- 1. GESTIÓN DE TEMAS (localStorage + Atributo de Datos) ---
+        const themeStylesheet = document.getElementById('theme-stylesheet');
+        const themeRadios = document.querySelectorAll('input[name="theme"]');
+
+        function applyTheme(theme) {
+            let isDark = false;
+            if (theme === 'auto') {
+                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else {
+                isDark = theme === 'dark';
+            }
+
+            localStorage.setItem('doc-theme', theme);
+            // Inyectamos la variable de entorno en la etiqueta html
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        }
+
+        // Controlar qué archivo CSS se inyecta según la resolución (Requisito)
+        function handleResponsiveStyles() {
+            if (window.innerWidth <= 768) {
+                themeStylesheet.setAttribute('href', 'mobile.css');
+            } else {
+                themeStylesheet.setAttribute('href', 'desktop.css');
+            }
+        }
+
+        // Inicializar preferencia guardada
+        const savedTheme = localStorage.getItem('doc-theme') || 'auto';
+        const activeRadio = document.querySelector(`input[name="theme"][value="${savedTheme}"]`);
+        if (activeRadio) activeRadio.checked = true;
+        applyTheme(savedTheme);
+        handleResponsiveStyles();
+
+        // Eventos de redimensionamiento y clics de configuración
+        window.addEventListener('resize', handleResponsiveStyles);
+        themeRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => applyTheme(e.target.value));
+        });
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if ((localStorage.getItem('doc-theme') || 'auto') === 'auto') applyTheme('auto');
+        });
+
+
+        // --- 2. CONTROLES DEL PANEL LATERAL DE CONFIGURACIÓN ---
+        const configBtn = document.getElementById('open-config-btn');
+        const closeConfigBtn = document.getElementById('close-config-btn');
+        const sidebarConfig = document.getElementById('sidebar-config');
+        const overlay = document.getElementById('config-overlay');
+
+        function toggleConfig(open) {
+            if (open) {
+                sidebarConfig.classList.add('active');
+                overlay.classList.add('active');
+            } else {
+                sidebarConfig.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        }
+        configBtn.addEventListener('click', () => toggleConfig(true));
+        closeConfigBtn.addEventListener('click', () => toggleConfig(false));
+        overlay.addEventListener('click', () => toggleConfig(false));
+
+
+        // --- 3. BARRA DE PROGRESO DE CARGA (Estilo Instagram - Verde) ---
+        const loadingBar = document.getElementById('loading-bar');
+        
+        function startLoading() {
+            loadingBar.style.width = '0%';
+            loadingBar.style.opacity = '1';
+            // Incrementos de carga simulados previos al fetch
+            setTimeout(() => loadingBar.style.width = '35%', 80);
+            setTimeout(() => loadingBar.style.width = '70%', 250);
+        }
+
+        function endLoading() {
+            loadingBar.style.width = '100%';
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+            }, 300);
+        }
+
+
+        // --- 4. ENRUTADOR Y CARGADOR DE MARKDOWN (Headers Interactivos) ---
+        async function loadNavigation() {
+            try {
+                const response = await fetch('pages.json');
+                const data = await response.json();
+                const nav = document.getElementById('nav-links');
+                nav.innerHTML = '';
+
+                data.pages.forEach(page => {
+                    const link = document.createElement('a');
+                    link.href = `?page=${page.id}`;
+                    link.textContent = page.title;
+                    link.classList.add('nav-item');
+                    
+                    // Evento para navegar dinámicamente sin recargar
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.history.pushState(null, '', link.href);
+                        router();
+                    });
+                    nav.appendChild(link);
+                });
+            } catch (err) {
+                console.error("Error cargando el índice de páginas:", err);
+            }
+        }
+
+        async function router() {
+            startLoading();
+            const urlParams = new URLSearchParams(window.location.search);
+            let page = urlParams.get('page');
+            const part = urlParams.get('part');
+
+            if (!page) page = 'inicio'; 
+
+            // Actualizar clase activa en el menú lateral
+            document.querySelectorAll('.nav-item').forEach(el => {
+                const hrefParams = new URLSearchParams(el.getAttribute('href'));
+                if (hrefParams.get('page') === page) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('remove');
+                }
+            });
+
+            try {
+                const response = await fetch(`pages/${page}.md`);
+                if (!response.ok) throw new Error("Página no encontrada");
+                
+                const markdownText = await response.text();
+
+                // Customizar los Encabezados en Marked para volverlos enlaces (?page=...&part=...)
+                const renderer = new marked.Renderer();
+                renderer.heading = function (text, level) {
+                    // Generar un ID limpio (Slugify)
+                    const id = text.toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "") // Quita acentos
+                        .replace(/[^\w\s-]/g, '')       // Quita caracteres raros
+                        .trim()
+                        .replace(/\s+/g, '-');          // Reemplaza espacios por guiones
+
+                    const newUrl = `?page=${page}&part=${id}`;
+
+                    return `
+                        <h${level} id="${id}" class="clickable-header">
+                            <a href="${newUrl}" class="header-anchor" data-part="${id}">
+                                <span class="anchor-icon">#</span>${text}
+                            </a>
+                        </h${level}>
+                    `;
+                };
+
+                marked.setOptions({ renderer: renderer });
+                document.getElementById('markdown-body').innerHTML = marked.parse(markdownText);
+
+                // Agregar el interceptor de clic para los headers modificados
+                document.querySelectorAll('.header-anchor').forEach(anchor => {
+                    anchor.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetUrl = anchor.getAttribute('href');
+                        window.history.pushState(null, '', targetUrl);
+                        
+                        const targetId = anchor.getAttribute('data-part');
+                        document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                    });
+                });
+
+                // Esperar carga completa de imágenes embebidas en el MD
+                await Promise.all(
+                    Array.from(document.querySelectorAll('#markdown-body img')).map(img => {
+                        if (img.complete) return Promise.resolve();
+                        return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                    })
+                );
+
+                // Si viene el parámetro 'part', hacemos scroll suave a su ID correspondiente
+                if (part) {
+                    setTimeout(() => {
+                        const targetElement = document.getElementById(part);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 150);
+                } else {
+                    document.getElementById('content-area').scrollTop = 0;
+                }
+
+            } catch (err) {
+                document.getElementById('markdown-body').innerHTML = `<h1>404</h1><p>La página "${page}" no existe.</p>`;
+            } finally {
+                endLoading();
+            }
+        }
+
+        // Detectar botones adelante/atrás del navegador histórico
+        window.addEventListener('popstate', router);
+
+        // Disparar carga al iniciar la app
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadNavigation();
+            router();
+        });
+    </script>
+</body>
+</html>

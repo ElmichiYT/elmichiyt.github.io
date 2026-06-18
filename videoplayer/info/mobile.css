@@ -1,0 +1,57 @@
+/* Importa todas las variables y estilos base de escritorio */
+@import url('desktop.css');
+
+/* --- CAMBIOS PARA ENTORNOS MÓVILES (Anchuras <= 768px) --- */
+
+.main-container {
+    flex-direction: column; /* Coloca el panel y el contenido en bloque */
+}
+
+/* Reajuste del panel de páginas arriba en vertical */
+.sidebar-pages {
+    width: 100%;
+    height: auto;
+    max-height: 140px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px;
+}
+
+#nav-links {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Scroll de páginas horizontal si son muchas */
+    gap: 8px;
+    padding-bottom: 8px;
+}
+
+#nav-links a {
+    margin-bottom: 0;
+    white-space: nowrap; /* Evita saltos de línea en pestañas */
+    padding: 6px 12px;
+}
+
+/* Área de contenido fluida */
+.content-area {
+    padding: 20px;
+}
+
+.markdown-body {
+    font-size: 15px;
+}
+
+/* --- REQUISITO: CONFIGURACIÓN AL 100% EN TELÉFONOS --- */
+.sidebar-config {
+    left: -100%; /* Desplazado al 100% a la izquierda */
+    width: 100%;
+    border-right: none;
+}
+
+.sidebar-config.active {
+    left: 0;
+}
+
+/* Hacer los iconos anchor '#' visibles por defecto en móvil ya que no hay mouse hover */
+.anchor-icon {
+    opacity: 0.6;
+}

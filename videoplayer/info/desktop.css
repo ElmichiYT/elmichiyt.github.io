@@ -1,0 +1,237 @@
+/* --- VARIABLES GLOBALES Y TEMAS --- */
+:root, html[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-sidebar: #f8f9fa;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --border-color: #e1e4e8;
+    --accent-color: #24292e;
+    --link-color: #0366d6;
+    --code-bg: #f6f8fa;
+}
+
+html[data-theme="dark"] {
+    --bg-primary: #0d1117;
+    --bg-sidebar: #161b22;
+    --text-main: #c9d1d9;
+    --text-muted: #8b949e;
+    --border-color: #30363d;
+    --accent-color: #58a6ff;
+    --link-color: #58a6ff;
+    --code-bg: #1f242c;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* --- BARRA DE CARGA PARPADEANTE (Estilo Instagram) --- */
+#loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    z-index: 9999;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    animation: greenPulse 2s infinite ease-in-out;
+}
+
+@keyframes greenPulse {
+    0% { background-color: #090; box-shadow: 0 0 4px #090; }
+    50% { background-color: #0f0; box-shadow: 0 0 10px #0f0; }
+    100% { background-color: #090; box-shadow: 0 0 4px #090; }
+}
+
+/* --- HEADER SUPERIOR --- */
+.top-header {
+    height: 60px;
+    background-color: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.5px;
+}
+
+#open-config-btn {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+#open-config-btn:hover {
+    background: var(--border-color);
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Panel lateral de páginas (Shields.io layout) */
+.sidebar-pages {
+    width: 280px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    padding: 24px 16px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+#nav-links a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+#nav-links a:hover {
+    background-color: var(--border-color);
+    color: var(--text-main);
+}
+
+#nav-links a.active {
+    background-color: var(--border-color);
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* Área de Lectura de Contenido */
+.content-area {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.markdown-body {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/* --- ENLACES INTERNOS EN ENCABEZADOS (# y ##) --- */
+.clickable-header {
+    position: relative;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+.markdown-body h1.clickable-header { border-bottom: 1px solid var(--border-color); padding-bottom: 8px; font-size: 2em; }
+.markdown-body h2.clickable-header { border-bottom: 1px solid var(--border-color); padding-bottom: 6px; font-size: 1.5em; }
+
+.header-anchor {
+    color: inherit;
+    display: block;
+}
+
+.anchor-icon {
+    color: var(--link-color);
+    opacity: 0;
+    margin-right: 8px;
+    font-weight: 400;
+    transition: opacity 0.15s ease;
+}
+
+.clickable-header:hover .anchor-icon {
+    opacity: 1;
+}
+
+/* Estilos extra para Markdown */
+.markdown-body p { margin-top: 0; margin-bottom: 16px; }
+.markdown-body code {
+    background-color: var(--code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 85%;
+}
+.markdown-body a { color: var(--link-color); text-decoration: none; }
+.markdown-body a:hover { text-decoration: underline; }
+
+/* --- PANEL LATERAL DE CONFIGURACIÓN (40% EN PC) --- */
+.sidebar-config {
+    position: fixed;
+    top: 0;
+    left: -40%; /* Desplazado fuera de pantalla */
+    width: 40%;
+    height: 100%;
+    background-color: var(--bg-sidebar);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+    z-index: 2000;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 40px 30px;
+    box-sizing: border-box;
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar-config.active {
+    left: 0;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1999;
+    display: none;
+}
+.overlay.active {
+    display: block;
+}
+
+.sidebar-config h2 { margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+
+.theme-options label {
+    display: block;
+    margin: 16px 0;
+    font-size: 15px;
+    cursor: pointer;
+}
+.theme-options input { margin-right: 10px; }
+
+#close-config-btn {
+    margin-top: 24px;
+    padding: 10px 20px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+a {
+    text-decoration: none;
+}

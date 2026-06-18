@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElmichiYT Video Player</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #121212;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            user-select: none;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        /* --- CAPA INICIAL GRIS (#999) --- */
+        .initial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #9993;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            cursor: pointer;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .initial-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* --- BOTÓN CENTRAL Y SPINNER --- */
+        .center-btn-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .play-btn-center {
+            width: 64px;
+            height: 64px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ccc;
+            transition: transform 0.2s ease;
+            z-index: 12;
+        }
+
+        .play-btn-center:hover {
+            transform: scale(1.1);
+        }
+
+        .play-btn-center svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+            margin-left: 4px;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            width: 76px;
+            height: 76px;
+            border: 4px solid rgba(204, 204, 204, 0.5);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 11;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- BARRA DE CONTROLES INFERIOR --- */
+        .custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(18, 18, 18, 0.95));
+            display: flex;
+            flex-direction: column;
+            padding: 15px 15px 8px 15px;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 5;
+        }
+
+        .video-wrapper.started:hover .custom-controls {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+            transition: fill 0.2s;
+        }
+
+        /* --- CONTROL DE VOLUMEN (DESLIZABLE) --- */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 0px;
+            height: 4px;
+            background: #444;
+            border-radius: 2px;
+            outline: none;
+            transition: width 0.2s ease;
+            cursor: pointer;
+        }
+
+        .volume-container:hover .volume-slider,
+        .volume-slider:active {
+            width: 60px;
+        }
+
+        /* El dot del volumen solo se dibuja (background blanco) si se hace hover en el contenedor */
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: transparent; 
+            transition: background 0.1s;
+            cursor: pointer;
+        }
+        .volume-container:hover .volume-slider::-webkit-slider-thumb {
+            background: #ffffff;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            transition: background 0.1s;
+            cursor: pointer;
+        }
+        .volume-container:hover .volume-slider::-moz-range-thumb {
+            background: #ffffff;
+        }
+
+        /* --- SELECTOR DE VELOCIDAD --- */
+        .speed-control {
+            position: relative;
+        }
+
+        .speed-btn {
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .speed-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .speed-menu {
+            position: absolute;
+            bottom: 35px;
+            right: 0;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 4px;
+            display: none;
+            flex-direction: column-reverse;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 20;
+        }
+
+        .speed-menu button {
+            background: none;
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: left;
+            width: 70px;
+        }
+
+        .speed-menu button:hover, .speed-menu button.active {
+            background: #333;
+            color: #fff;
+        }
+
+        /* --- BARRA DE PROGRESO CON DOT ESTILO YOUTUBE --- */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #444;
+            cursor: pointer;
+            position: relative;
+            transition: height 0.1s;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-container:hover {
+            height: 6px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #cc0000; 
+            position: relative;
+        }
+
+        /* El indicador redondo (dot) en la punta de la barra */
+        .progress-dot {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            width: 12px;
+            height: 12px;
+            background: #cc0000;
+            border-radius: 50%;
+            transition: transform 0.1s ease;
+            pointer-events: none;
+        }
+
+        /* El dot de progreso de tiempo sólo aparece al hacer hover en el contenedor de la barra */
+        .progress-container:hover .progress-dot {
+            transform: translateY(-50%) scale(1);
+        }
+
+        .time-display {
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .error-msg {
+            color: #ccc;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        a {
+            color: #09f;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-wrapper" id="wrapper">
+        
+        <div class="initial-overlay" id="initialOverlay">
+            <div class="center-btn-container">
+                <div class="loading-spinner" id="initialSpinner" style="display: block;"></div>
+                <div class="play-btn-center">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="center-btn-container" style="position: absolute; pointer-events: none; z-index: 4;">
+            <div class="loading-spinner" id="bufferSpinner"></div>
+        </div>
+
+        <video id="main-player" preload="metadata" playsinline>
+            Tu navegador no soporta video.
+        </video>
+
+        <div class="custom-controls" id="controlsBar">
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-dot" id="progressDot"></div>
+                </div>
+            </div>
+
+            <div class="controls-row">
+                <div class="controls-left">
+                    <button class="control-btn" id="playPauseBtn">
+                        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+
+                    <div class="volume-container">
+                        <button class="control-btn" id="muteBtn">
+                            <svg id="volumeUpIcon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                            <svg id="volumeMuteIcon" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                        </button>
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1">
+                    </div>
+
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                    </div>
+                </div>
+                
+                <div class="controls-right">
+                    <div class="speed-control">
+                        <button class="speed-btn" id="speedBtn">1.0x</button>
+                        <div class="speed-menu" id="speedMenu">
+                            <button data-speed="0.5">0.5x</button>
+                            <button data-speed="1.0" class="active">1.0x</button>
+                            <button data-speed="1.5">1.5x</button>
+                            <button data-speed="2.0">2.0x</button>
+                            <button data-speed="3.0">3.0x</button>
+                            <button data-speed="4.0">4.0x</button>
+                        </div>
+                    </div>
+
+                    <button class="control-btn" id="fullscreenBtn">
+                        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const videoUrl = params.get('vid');
+
+        const wrapper = document.getElementById('wrapper');
+        const player = document.getElementById('main-player');
+        const initialOverlay = document.getElementById('initialOverlay');
+        const initialSpinner = document.getElementById('initialSpinner');
+        const bufferSpinner = document.getElementById('bufferSpinner');
+        
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        
+        const muteBtn = document.getElementById('muteBtn');
+        const volumeUpIcon = document.getElementById('volumeUpIcon');
+        const volumeMuteIcon = document.getElementById('volumeMuteIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        const speedBtn = document.getElementById('speedBtn');
+        const speedMenu = document.getElementById('speedMenu');
+        
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const durationDisplay = document.getElementById('duration');
+
+        let isStarted = false; // Flag para saber si ya se quitó el overlay inicial
+
+        if (videoUrl) {
+            player.src = decodeURIComponent(videoUrl);
+        } else {
+            wrapper.innerHTML = [
+                `<div class="error-msg">
+                    ERROR: Archivo no encontrado.<br>
+                    Vaya a <a href="info.html" target="_blank">Información</a> para saber más sobre el funcionamiento del reproductor.
+                </div>`
+        ];
+        }
+
+        player.addEventListener('canplay', () => {
+            initialSpinner.style.display = 'none';
+        });
+
+        // REPRODUCCIÓN
+        function playVideo() {
+            player.play();
+            initialOverlay.classList.add('hidden');
+            wrapper.classList.add('started');
+            isStarted = true;
+            
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        }
+
+        function pauseVideo() {
+            player.pause();
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        }
+
+        function togglePlay() {
+            if (player.paused) {
+                playVideo();
+            } else {
+                pauseVideo();
+            }
+        }
+
+        initialOverlay.addEventListener('click', playVideo);
+        player.addEventListener('click', togglePlay);
+        playPauseBtn.addEventListener('click', togglePlay);
+
+        // ATADOS DE TECLADO (Keydowns)
+        window.addEventListener('keydown', (e) => {
+            // Impedir scrolls accidentales en la página con barra o flechas
+            if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+                e.preventDefault();
+            }
+
+            // Espacio: Maneja Play/Pausa si ya se inició o simula el clic inicial si no
+            if (e.code === "Space") {
+                if (!isStarted) {
+                    playVideo();
+                } else {
+                    togglePlay();
+                }
+            }
+
+            // Los demás controles solo operan si el video ya cargó e inició
+            if (!isStarted) return;
+
+            if (e.code === "ArrowUp") {
+                let newVol = Math.min(player.volume + 0.05, 1);
+                player.volume = newVol;
+                volumeSlider.value = newVol;
+                player.muted = false;
+                updateVolumeIcons(false, newVol);
+            }
+            else if (e.code === "ArrowDown") {
+                let newVol = Math.max(player.volume - 0.05, 0);
+                player.volume = newVol;
+                volumeSlider.value = newVol;
+                if (newVol === 0) player.muted = true;
+                updateVolumeIcons(player.muted, newVol);
+            }
+            else if (e.code === "ArrowRight") {
+                player.currentTime = Math.min(player.currentTime + 10, player.duration);
+            }
+            else if (e.code === "ArrowLeft") {
+                player.currentTime = Math.max(player.currentTime - 10, 0);
+            }
+        });
+
+        // BUFFERING DINÁMICO
+        player.addEventListener('waiting', () => {
+            bufferSpinner.style.display = 'block';
+        });
+
+        player.addEventListener('playing', () => {
+            bufferSpinner.style.display = 'none';
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        });
+
+        player.addEventListener('ended', () => {
+            pauseVideo();
+            player.currentTime = 0;
+        });
+
+        // MANEJO DE VOLUMEN
+        function updateVolumeIcons(isMuted, currentVolume) {
+            if (isMuted || currentVolume === 0) {
+                volumeUpIcon.style.display = 'none';
+                volumeMuteIcon.style.display = 'block';
+            } else {
+                volumeUpIcon.style.display = 'block';
+                volumeMuteIcon.style.display = 'none';
+            }
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            player.volume = val;
+            player.muted = (val == 0);
+            updateVolumeIcons(player.muted, parseFloat(val));
+        });
+
+        muteBtn.addEventListener('click', () => {
+            player.muted = !player.muted;
+            updateVolumeIcons(player.muted, player.volume);
+            volumeSlider.value = player.muted ? 0 : player.volume;
+        });
+
+        // SELECTOR DE VELOCIDADES
+        speedBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speedMenu.style.display = (speedMenu.style.display === 'flex') ? 'none' : 'flex';
+        });
+
+        speedMenu.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const speed = parseFloat(btn.dataset.speed);
+                player.playbackRate = speed;
+                speedBtn.textContent = speed + 'x';
+                
+                speedMenu.querySelector('button.active').classList.remove('active');
+                btn.classList.add('active');
+                speedMenu.style.display = 'none';
+            });
+        });
+
+        document.addEventListener('click', () => {
+            speedMenu.style.display = 'none';
+        });
+
+        // TIMELINE Y TIEMPOS
+        player.addEventListener('timeupdate', () => {
+            if (player.duration) {
+                const percentage = (player.currentTime / player.duration) * 100;
+                progressBar.style.width = percentage + '%';
+                currentTimeDisplay.textContent = formatTime(player.currentTime);
+            }
+        });
+
+        player.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(player.duration);
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            player.currentTime = (clickX / rect.width) * player.duration;
+        });
+
+        // FULLSCREEN
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                wrapper.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return mins + ":" + (secs < 10 ? '0' : '') + secs;
+        }
+    </script>
+</body>
+</html>
