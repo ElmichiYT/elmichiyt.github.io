@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Mi Clima | ElmichiYT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="MiClima.png">
+    <link rel="stylesheet" href="MiClima.css">
+</head>
+<body>
+    <div class="header">
+        <br>
+        <h1>Mi Clima <img src="MiClima.png"></h1>
+        <p>El clima de donde vive ElmichiYT.</p>
+        <br>
+    </div>
+    <h2>Mi clima actual:</h2>
+    <a class="weatherwidget-io"
+        href="https://forecast7.com/es/22d00n99d00/ciudad-valles/"
+        data-label_1="México, San Luis Potosí."
+        data-label_2="by ElmichiYT"
+        data-font="Arial"
+        data-theme="random_grey"
+        data-textcolor="#ffffff"
+        data-mooncolor="#8ba4b3"
+        data-cloudcolor="#b7b7b7"
+        data-raincolor="#09f"
+        data-snowcolor="#09f">
+        Loading...
+    </a>
+    <p class="comment">Estos datos no son 100% precisos.</p>
+    <a href="MiClima.html">Recargar</a>
+    <br>
+    <br>
+    <h2>Mi hora actual:</h2>
+    <div id="reloj">
+        Cargando...
+    </div>
+    <p class="comment">
+        La hora podría verse afectada si tu dispositivo tiene la hora mal configurada.<br>
+        Por favor verifique la hora y ajustala en caso de estar mal configurada.<br><br>
+        Puede buscar la hora en PiliApp (no patrocinado) desde aquí:
+        <a href="https://es.piliapp.com/time-now/mx/chihuahua/" target="_blank">Buscar la hora</a>.<br>
+        La hora es de Chihuahua pero es igual o similar a la hora de mi ciudad.
+    </p>
+
+
+    <br><br><br>
+
+    <!-- SCRIPTS -->
+    <script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+    </script>
+    <script src="MiClima.js"></script>
+</body>
+</html>

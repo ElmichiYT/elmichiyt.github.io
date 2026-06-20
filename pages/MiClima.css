@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
+body, html {
+    background: #333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: white;
+    font-family: 'Google Sans';
+}
+
+/* Fast Styles */
+a.weatherwidget-io { max-width: 648px; margin: 0 auto; }
+.header img { transform: translateY(4px) }
+a { color: white; }
+
+.header {
+    background: linear-gradient(#09f 70%, #333)
+}
+
+.comment {
+    background: #555;
+    border: 2px solid gray;
+    border-radius: 8px;
+    height: auto;
+    width: fit-content;
+    max-width: 70%;
+    margin: 8px auto;
+    padding: 2px 8px 2px 8px;
+}
+
+#reloj {
+    background: #555;
+    border: 2px solid gray;
+    border-radius: 8px;
+    width: 256px;
+    padding: 32px 0;
+    font-size: 32px;
+    margin: 0 auto;
+}
