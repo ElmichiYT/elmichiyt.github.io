@@ -1,5 +1,5 @@
 // Copyright 2026 ElmichiYT
-// Código no Open Source
+// Código protegido con derechos de autor.
 async function cargarAnuncioDesdeTexto() {
     const contenedor = document.getElementById('ad-container');
     if (!contenedor) return;
@@ -34,7 +34,6 @@ async function cargarAnuncioDesdeTexto() {
 
             const image = document.createElement('img');
             image.src = randomAd.img;
-            image.style.maxWidth = "500px";
             image.style.height = "auto";
             image.style.display = "block";
 

@@ -10,7 +10,7 @@
 
 /* 2. Estilizando la etiqueta <audio> */
 audio {
-  width: 400px;
+  width: 350px;
   height: 50px;
   filter: invert(100%) hue-rotate(180deg) brightness(1.5);
 }

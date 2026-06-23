@@ -17,7 +17,7 @@ body {
 
 footer {
 	user-select: none;
-	webkit-user-drag: none;
+	-webkit-user-drag: none;
 }
 
 /* --- INTEGRACIÓN DE IMAGEN DE FONDO --- */
@@ -73,6 +73,7 @@ h1 {
     margin: 20px auto;
     max-width: 100%;
     width: 400px; /* Misma anchura que tus botones */
+    width: calc(100% - 20px);
     border: 3px solid #000000; /* Borde negro estilo sticker */
     box-shadow: 6px 6px 0px #000000; /* Sombra sólida */
     border-radius: 15px; /* Bordes un poco redondeados */
@@ -112,7 +113,7 @@ h1 {
     box-shadow: 4px 4px 0px #000000; /* Sombra sólida tipo sticker */
     transition: all 0.5s ease;
     width: 100%;
-    max-width: 350px;
+    max-width: 320px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -172,8 +173,9 @@ a {
 .flag { transform: translateY(-32px) }
 
 .reproductor-container {
-	align-items: center;
-	margin: auto;
+    padding: 0;
+    margin: 0 auto;
+    scale: 0.9;
 }
 
 .bottom {
@@ -191,4 +193,10 @@ a {
 	border-radius: 8px;
 	color: white;
 	resize: none;
+    max-width: 100%; /* Evita que rompa el layout en celular */
+    box-sizing: border-box;
+}
+
+#ad-container img {
+    max-width: 340px;
 }

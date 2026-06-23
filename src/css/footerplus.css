@@ -7,6 +7,8 @@ footer {
 .footer-contenedor {
     display:flex;
     justify-content:space-around;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .columna {
@@ -34,4 +36,15 @@ footer {
     display:flex;
     align-items:center;
     
+}
+
+/* Si la pantalla es menor a 768px (teléfonos y tablets verticales) */
+@media (max-width: 768px) {
+    .footer-contenedor {
+        justify-content: left;
+        margin-left: 8px;
+    }
+    .columna h3, .columna a {
+        text-align: left;
+    }
 }
