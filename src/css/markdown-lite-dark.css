@@ -18,10 +18,10 @@
     font-size: 0.95rem;
     color: white;
     background-color: #0066FF77;
-	height: auto;
+    height: auto;
     width: fit-content;
-	max-width: 100%;
-	min-width: 80px;
+    max-width: 100%;
+    min-width: 80px;
 }
 
 .caution {
@@ -32,9 +32,10 @@
     font-size: 0.95rem;
     color: white;
     background-color: #F20F0F77;
-	height: auto;
-	min-width: 80px;
-	max-width: 100%;
+    height: auto;
+    width: fit-content;
+    min-width: 80px;
+    max-width: 100%;
 }
 
 .warning {
@@ -45,9 +46,10 @@
     font-size: 0.95rem;
     color: white;
     background-color: #FFFF0077;
-	height: auto;
-	max-width: 100%;
-	min-width: 80px;
+    height: auto;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 80px;
 }
 
 .tip {
@@ -58,9 +60,10 @@
     font-size: 0.95rem;
     color: white;
     background-color: #00C73F77;
-	height: auto;
-	max-width: 100%;
-	min-width: 80px;
+    height: auto;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 80px;
 }
 
 .note {
@@ -71,7 +74,10 @@
     font-size: 0.95rem;
     color: white;
     background-color: #0066FF77;
-	height: auto;
-	min-width: 80px;
-	max-width: auto;
+    height: auto;
+    width: fit-content;
+    min-width: 80px;
+    max-width: auto;
 }
+
+.header1 { border-bottom: 1px solid gray; }
