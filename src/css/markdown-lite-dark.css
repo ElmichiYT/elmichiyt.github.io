@@ -19,6 +19,7 @@
     color: white;
     background-color: #0066FF77;
 	height: auto;
+    width: fit-content;
 	max-width: 100%;
 	min-width: 80px;
 }
