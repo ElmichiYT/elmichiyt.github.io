@@ -1,40 +1,28 @@
-<!--
-  Hola. Si estás leyendo esto, te quiero decir que si llega un momento
-  en donde no actualizo esta página, es porque tuve problemas.
-  Especialmente familiares.
-  
-  Bueno. creo que solo los que saben abrir esta parte van a poder ver
-  este mensaje, así que... no hay nada más que decir.
-  
-  REFERENCIA: buenos días, buenas tardes y buenas noches.
--->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <title>ElmichiYT - Bienvenido.</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Bienvenido - ElmichiYT</title>
+    <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="https://cdn.classicube.net/face/ElmichiYT.png">
-	<!-- Estilos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-	<link rel="stylesheet" href="src/extras.css">
-	<link rel="stylesheet" href="src/css/audio-player.css">
-	<link rel="stylesheet" href="src/css/footerplus.css">
-	<link rel="stylesheet" href="src/css/markdown-lite-dark.css">
-	<link rel="stylesheet" href="cdn/pageLoader/style.css">
-	
-	<!-- Scripts -->
-	<script src="cdn/pageLoader/app.js"></script>
-	<script src="src/services/AdService.js"></script>
 
-	<link rel="stylesheet" href="style.css">
+    <!-- Estilos en formato plugin -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://elmichiyt.github.io/src/css/footerplus.css">
+    <link rel="stylesheet" href="https://elmichiyt.github.io/src/css/markdown-lite-dark.css">
+    <link rel="stylesheet" href="https://elmichiyt.github.io/cdn/pageLoader/style.css">
+
+    <link rel="stylesheet" href="style.css">
 	<meta name="description" content="Sitio web oficial de ElmichiYT a sus redes sociales y una que otra cosa.">
 	<meta name="keywords" content="ElmichiYT,elmichiyt,classicube,ClassiCube,Dev,youtuber,mexicano,mexican,spanish,español,claudia-es-mierda">
 	<meta name="application-name" content="ElmichiYT Website">
+
+    <!-- Scripts en formato plugin -->
+    <script src="https://elmichiyt.github.io/src/services/AdService.js"></script>
+    <script src="https://elmichiyt.github.io/cdn/pageLoader/app.js"></script>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
     <!-- PANTALLA DE CARGA -->
 	<div id="pantalla-carga">
@@ -50,121 +38,178 @@
     <div class="barra-contenedor">
 		<div id="barra-progreso"></div>  <!-- La barra verde que se llena -->
     </div>
-	<p><strong>Powered by ElmichiYT</strong></p>
+	    <p><strong>Powered by ElmichiYT</strong></p>
 	</div>
 	<!-- ================= -->
 
-    <div class="background-overlay"></div>
-	
-    <div class="container mode">
-        <header>
-            <div class="profile-container">
-                <img src="perfil.png" alt="ElmichiYT" class="profile-pic">
-            </div>
-            <h1>ElmichiYT</h1>
-            <p class="subtitle">Creador de Contenido Mexicano</p>
-			<img class="flag" src="https://lemehost.com/img/flags/mx.svg" width="64">
-        </header>
-		<hr>
-		<div align="center" id="ad-container"></div>
-		<hr>
-
-        <div class="video-container" id="contenedor-video">
-          <iframe src="ytscreen.html" id="youtube-video" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+    <div class="header">
+        <div class="title">
+            <h3>ElmichiYT</h3>
         </div>
-        <script src="src/scripts/youtube.js"></script>
-		<p class="subtitle">Último contenido de ElmichiYT (en YouTube)</p>
-		<hr>
-		
-		<div class="reproductor-container">
-            <audio controlslist="nodownload noremoteplayback" controls>
-                <source src="src/audio/welcome.mp3" type="audio/mpeg">
-            </audio>
+        <div class="urls">
+            <a href="https://elmichiyt-software.github.io/" target="_blank">ElmichiYT Software</a>
+            <a href="#social">Social</a>
         </div>
-		
-		<p class="subtitle">Mensaje de ElmichiYT (Audio)</p>
-        <hr>
-        <main class="links">
-            <p class="subtitle">&mdash; Redes sociales &mdash;</p>
-            <a href="https://youtube.com/@El_michiYouTube" target="_blank" class="link-card youtube-btn"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="https://discord.com/invite/8uur8SjtQm" target="_blank" class="link-card discord-btn"><i class="fab fa-discord"></i> Discord</a>
-	        <a href="https://github.com/ElmichiYT" target="_blank" class="link-card github-btn"><i class="fab fa-github"></i> GitHub</a>
-	        <a href="https://x.com/ElmichiYT_" target="_blank" class="link-card twitter-btn"><i class="fab fa-x-twitter"></i> Twitter / X</a>
-        </main>
-    	<hr>
-        <main class="links">
-	        <p class="subtitle">&mdash; Otros enlaces &mdash;</p>
-    	    <a href="https://elmichiyt.github.io/games/"  class="link-card kick-btn"><i class="fas fa-play"></i> Juegos</a>
-            <a href="https://elmichiyt.github.io/GeraBox/" class="link-card gerabox-btn"><i class="fas fa-cube"></i> GeraBox</a>
-	        <a href="classicube/photos/" class="link-card photos-btn"><i class="fas fa-camera"></i> Fotos ClassiCube</a>
-	        <a class="link-card classicube-btn" href="classicube\"><img src="src/svg/cc-logo.svg" width="20"></img> ClassiCube Hispano</a>
-        	<a class="link-card classicube-btn" href="https://elmichiyt.github.io/"><img src="src/svg/cc-logo.svg" width="20"></img> ClassiCube MSG (pronto)</a>
-        </main>
-
+    </div>
+    <div class="main">
         <br>
-        <div align="center" class="bottom"><hr color="#777">
-            <footer>
-			    <br>
-	    	    <img src="https://img.shields.io/github/repo-size/ElmichiYT/elmichiyt.github.io?style=plastic&logo=github&label=Tama%C3%B1o%20total%20del%20sitio%20web&cacheSeconds=15"><br>
-		        <img src="https://img.shields.io/youtube/channel/subscribers/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Suscriptores&cacheSeconds=15"><br>
-		        <img alt="YouTube Channel Views" src="https://img.shields.io/youtube/channel/views/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Vistas%20totales&cacheSeconds=15">
-		        <p class="copyright">Parte del código de está página fue tomada de <a href="https://pizzaclap43.github.io" target="_blank">pizzaclap43.github.io</a></p>
-				
-				<p class="copyright">Añade mi botón en tu página!</p>
-				<img src="src/images/button.png" alt="button" title="ElmichiYT Website">
-				<br>
+        <div class="welcome">
+            <br>
+            <img src="https://elmichiyt.github.io/perfil.png" width="128px">
+            <h2>Creador de Contenido Mexicano</h2>
+            <div class="tags">
+                <p class="tag">Creador de Contenido</p>
+                <p class="tag">Desarrollador</p>
+                <p class="tag">Editor de videos (no público)</p>
+                <p class="tag">Mexicano</p>
+                <p class="tag">Amante de los carros</p>
+            </div>
+            <br>
+        </div>
+        <h1 class="h1">Introducción</h1>
+        <p>Bienvenido a mi sitio web!</p>
+        <p>
+            Espero encuentres cosas de tu gusto en este lugar.
+            He trabajado y pasado horas escribiendo casi toda la página para ustedes, mis visitantes y espectadores.
+            Para cosas como la Política de Privacidad, Documentación y otras cosas, están hasta abajo.
+        </p>
+        <br>
+        <h1 align="center" style="margin: 0;">CONTENIDO MÁS RECIENTE</h1>
+        <h3 align="center" style="margin: 0;">video o stream más reciente en YouTube</h3>
+        <div class="video-container" id="contenedor-video">
+        <iframe src="https://elmichiyt.github.io/ytscreen.html" id="youtube-video" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+        </div>
+        
+        <script src="https://elmichiyt.github.io/src/scripts/youtube.js"></script>
+        
+        <hr>
 
-				<textarea class="button-img" rows="5" cols="70" readonly onclick="this.select()">&lt;a href="https://elmichiyt.github.io/" target="_blank"&gt;&lt;img src="https://elmichiyt.github.io/src/images/button.png" alt="ElMichiYT Website"&gt;&lt;/a&gt;</textarea>
+        <div class="card">
+            <center>
+                <img src="https://cdn.classicube.net/face/ElmichiYT.png" width="128">
+            </center>
+            <hr>
+            <p>
+                Si eres un suscriptor o un fanático, gracias por ver mis videos.
+                Si estás suscrito, también gracias.
+                Puedes apoyarme con likes y comentarios, para que el algoritmo de YouTube recomiende mis videos.<br><br>
+            </p>
+        </div>
+        <h1 class="h1">¿Qué hizo que fuera creador de contenido?</h1>
+        <p>
+            Lo que hizo que yo fuera creador de contenido, fue que yo veía a otros creadores divertirse jugando y grabando.
+            Con sus miles o millones de vistas muy rápido. En ese entonces tenía como 7-8 años.
+            Creía que ser creador de contenido era fácil porque los creadores apenas subían algo y ya llegaba a las mil
+            vistas en menos de 5 minutos. A lo cuál, como a los 10 o 9 años me hice un canal.
+        </p>
+        <p>
+            Este canal no eran de tanta calidad. Los hacía con el teléfono de mi mamá. Un teléfono ZTE económico de Telcel.
+            Dicho teléfono lo usaba para grabar y subirlo cuando lo tenía disponible. Y pues pasaba hasta 1 hora
+            y solo llegaba entre 5 a 20 vistas. Luego renombré el canal a como lo conocen ahora, y así me quedé.
+        </p>
+        <p>
+            Lamentablemente me iba igual. Pocas vistas, no miraban los videos completos, un desastre.
+            Ser creador de contenido no era fácil. Ser viral significaba <strong>tener suerte</strong>.
+        </p>
+        <p>
+            Y esto lo escribo aquí para que los que se vayan a crear un canal, tengan en mente por el camino
+            que van a pasar y cómo lo pasarán. Porque como dicen: <strong>En La Vida Nada Es Fácil</strong>.
+        </p>
+        <small>Nada fácil...</small>
+        <br>
+        <br>
+        <h1 align="center" class="h1" id="social">Redes sociales</h1>
+        <a href="https://www.youtube.com/channel/UCpSsnAZGjt9QLz4OoUCv53g" target="_blank" class="btn youtube"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="https://discord.com/invite/8uur8SjtQm" target="_blank" class="btn discord"><i class="fab fa-discord"></i> Discord</a>
+	    <a href="https://github.com/ElmichiYT" target="_blank" class="btn github"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://x.com/ElmichiYT_" target="_blank" class="btn twitter"><i class="fab fa-x-twitter"></i> Twitter (X)</i></a>
+        <a href="https://t.me/El_michiYouTube" target="_blank" class="btn telegram"><i class="fab fa-telegram"></i> Canal de Telegram</a>
+        </div>
+        <br>
+
+        <h1 align="center" class="h1">&mdash; Otros enlaces &mdash;</h1>
+    	<a href="https://elmichiyt.github.io/games/"  class="btn games"><i class="fas fa-play"></i> Juegos</a>
+        <a href="https://elmichiyt.github.io/GeraBox/" class="btn gerabox"><i class="fas fa-cube"></i> GeraBox</a>
+        <a href="classicube/photos/" class="btn classicube"><i class="fas fa-camera"></i> Fotos ClassiCube</a>
+        <a href="classicube\" class="btn classicube"><img src="https://elmichiyt.github.io/src/svg/cc-logo.svg" width="20"></img> ClassiCube ESP</a>
+        <a href="https://elmichiyt.github.io/" class="btn classicube"><img src="https://elmichiyt.github.io/src/svg/cc-logo.svg" width="20"></img> ClassiCube MSG<br>(pronto)</a>
+
+
+        <footer>
+            <br>
+            <p class="ad-warn">Publicidad</p><br>
+            <div align="center" id="ad-container"></div>
+			<br>
+	    	<img src="https://img.shields.io/github/repo-size/ElmichiYT/elmichiyt.github.io?style=plastic&logo=github&label=Tama%C3%B1o%20total%20del%20sitio%20web&cacheSeconds=15"><br>
+		    <img src="https://img.shields.io/youtube/channel/subscribers/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Suscriptores&cacheSeconds=15"><br>
+		    <img alt="YouTube Channel Views" src="https://img.shields.io/youtube/channel/views/UCpSsnAZGjt9QLz4OoUCv53g?style=plastic&logo=YouTube&label=Vistas%20totales&cacheSeconds=15">
 				
-				<p class="note">
+			<p class="copyright">Añade mi botón en tu página!</p>
+			<img src="https://elmichiyt.github.io/src/images/button.png" alt="button" title="ElmichiYT Website">
+			<br>
+
+			<textarea class="button-img" rows="5" cols="70" readonly onclick="this.select()">&lt;a href="https://elmichiyt.github.io/" target="_blank"&gt;&lt;img src="https://elmichiyt.github.io/src/images/button.png" alt="ElMichiYT Website"&gt;&lt;/a&gt;</textarea>
+				
+			<p class="note">
 				    Cuando la <strong>Política de Privacidad</strong> sea actualizada, se avisará en el canal de Telegram!
 				    También actualizaciones y otras cosas se avisarán por ahí.<br>Así que únete!
-				</p>
+			</p>
 				
-				<div class="footer-contenedor">
+			<div class="footer-contenedor">
 
-                    <div class="columna">
-                        <h3>Sitio web</h3>
-                        <a href="privacidad/">Política de Privacidad</a>
-                        <a href="docs/help.html">Ayuda</a>
-                        <a href="docs/">Documentación</a>
-                    </div>
+            <div class="columna">
+                <h3>Sitio web</h3>
+                <a href="privacidad/">Política de Privacidad</a>
+                <a href="docs/help.html">Ayuda</a>
+                <a href="docs/">Documentación</a>
+            </div>
 					
-					<div class="columna">
-					    <h3>Cosas mías</h3>
-						<a href="mailto:elmichiyt@proton.me">Contacto (elmichiyt@proton.me)</a>
-						<a href="https://elmichiyt.carrd.com" target="_blank">Sobre mí</a>
-						<a href="https://t.me/El_michiYouTube" target="_blank">Canal de Telegram</a>
-						<a href="https://elmichiyt.blogspot.com" target="_blank">Blogs</a>
-					</div>
+			<div class="columna">
+				<h3>Cosas mías</h3>
+				<a href="mailto:elmichiyt@proton.me">Contacto (elmichiyt@proton.me)</a>
+				<a href="https://elmichiyt.carrd.com" target="_blank">Sobre mí</a>
+				<a href="https://t.me/El_michiYouTube" target="_blank">Canal de Telegram</a>
+                <a href="https://elmichiyt.blogspot.com" target="_blank">Blogs</a>
+    		</div>
 
-					<div class="columna">
-						<h3>Organizaciones</h3>
-						<a href="https://github.com/ElmichiYT-Software">ElmichiYT Software</a>
-					</div>
+			<div class="columna">
+				<h3>Organizaciones</h3>
+				<a href="https://github.com/ElmichiYT-Software">ElmichiYT Software</a>
+			</div>
 
-                    <div class="columna">
-					    <h3>Otro</h3>
-						<a href="classicsaga/" target="_blank">Classic Saga</a>
-						<a href="yt_promobadges/" target="_blank">YouTube PromoBadges</a>
-					</div>
+            <div class="columna">
+				<h3>Otro</h3>
+				<a href="classicsaga/" target="_blank">Classic Saga</a>
+				<a href="yt_promobadges/" target="_blank">YouTube PromoBadges</a>
+			</div>
 					
-					<div class="columna">
-					    <h3>Repositorios recomendados</h3>
-						<a href="https://github.com/ElmichiYT/MCGalaxy-Plugins" target="_blank">MCGalaxy Plugins</a>
-						<a href="https://github.com/ElmichiYT/Classic-Games" target="_blank">Classic Games</a>
-					</div>
+			<div class="columna">
+				<h3>Repositorios recomendados</h3>
+				<a href="https://github.com/ElmichiYT/MCGalaxy-Plugins" target="_blank">MCGalaxy Plugins</a>
+				<a href="https://github.com/ElmichiYT/Classic-Games" target="_blank">Classic Games</a>
+			</div>
 
-                    <div class="columna">
-                        <h3>Tecnologías usadas</h3>
-                        <a class="ficon" href="https://elmichiyt.github.io/redirect?id=lemehost" target="_blank"><img src="https://lemehost.com/favicon.ico" width="16">&#x2002;lemehost</a>
-                        <a class="ficon" href="https://www.cloudflare.com/" target="_blank"><img src="https://elmichiyt.github.io/src/icons/cloudflare.svg" width="16">&#x2002;Cloudflare</a>
-						<a class="ficon" href="https://www.classicube.net/" target="_blank"><img src="src/svg/cc-logo.svg" width="16">&#x2002;ClassiCube API</a>
-                    </div>
+            <div class="columna">
+                <h3>Tecnologías usadas</h3>
+                <a class="ficon" href="https://elmichiyt.github.io/redirect?id=lemehost" target="_blank"><img src="https://lemehost.com/favicon.ico" width="16">&#x2002;lemehost</a>
+                <a class="ficon" href="https://www.cloudflare.com/" target="_blank"><img src="https://elmichiyt.github.io/src/icons/cloudflare.svg" width="16">&#x2002;Cloudflare</a>
+				<a class="ficon" href="https://www.classicube.net/" target="_blank"><img src="https://elmichiyt.github.io/src/svg/cc-logo.svg" width="16">&#x2002;ClassiCube API</a>
+            </div>
 
-                </div><br>
-				<p class="copyright">&copy; Copyright 2026 ElmichiYT. Todos los derechos reservados</p>
-            </footer>
-		</div>
+        
+			<p class="copyright">&copy; Copyright 2026 ElmichiYT. Todos los derechos reservados</p>
+        </footer>
     </div>
+
+    <script>
+        const elementosProtegidos = document.querySelectorAll('img');
+    
+        // Les aplica el bloqueo a cada uno automáticamente
+        elementosProtegidos.forEach(elemento => {
+            elemento.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Bloquea el menú desplegable
+            });
+        });
+    </script>
 </body>
+</html>
