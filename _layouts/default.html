@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'es' }}">
+<head>
+    <title>{{ page.title | default: "Sin título" }} | ElmichiYT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 1. IMPORTANTE: Traemos el CSS por defecto del tema (Jekyll lo compila aquí) -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
+    <!-- 2. Tus estilos personales (se cargan después para convivir con el de GitHub) -->
+    <link rel="stylesheet" href="{{ '/privacidad/desktop.css' | relative_url }}" media="screen and (min-width: 768px)">
+    <link rel="stylesheet" href="{{ '/privacidad/mobile.css' | relative_url }}" media="screen and (max-width: 767px)">
+</head>
+<body>
+
+    <div style="margin-bottom: 20px;">
+        <a class="back" href="/">Página principal</a>
+    </div>
+
+    <!-- 3. Envolvemos el contenido en 'markdown-body' para que actúen los estilos de código de GitHub -->
+    <main class="markdown-body">
+        {{ content }}
+    </main>
+
+    <hr size="1" style="margin-top: 40px;">
+    <footer class="copyright">
+        <p>© Copyright 2026 ElmichiYT. Todos los derechos reservados.</p>
+        <p>Tema de <a href="https://elmichiyt.github.io/" target="_blank">ElmichiYT</a></p>
+    </footer>
+
+    <!-- 4. El script de los anchors que genera los enlaces automáticos en los títulos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+</body>
+</html>
