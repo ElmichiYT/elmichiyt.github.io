@@ -20,7 +20,7 @@ a { color: #0cf; }
 .h1 { border-bottom: 1px solid gray; }
 
 .video-container {
-    margin: 0 auto; width: fit-content; height: 200px; border: 2px solid #000000;
+    margin: 0 auto; width: fit-content; height: auto; border: 2px solid #000000;
     border-radius: 15px; overflow: hidden; line-height: 0;
 }
 
