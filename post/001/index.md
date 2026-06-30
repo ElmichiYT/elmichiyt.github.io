@@ -48,6 +48,6 @@ ___
 <div align="center">
 
   Investigación empezada el 27 de junio y terminado el 29 de junio. 2026.<br>
-  [Página principal](https://elmichiyt.github.io/?utm_source=Post&url_medium=footerlink)
+  [Página principal](https://elmichiyt.github.io)
 
 </div>
