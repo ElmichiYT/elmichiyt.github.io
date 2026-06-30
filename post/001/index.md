@@ -44,6 +44,10 @@ A finales de 2021, Innersloth introdujo de forma oficial los roles en el juego (
 
 Con el paso del tiempo, el juego base estabilizó su cantidad de jugadores y la "fiebre" masiva pasó. Además, Innersloth mejoró sus sistemas antitrampas y cambió el motor de código del juego en varias ocasiones, lo que obligaba a los creadores de SickoMenu a actualizar el código constantemente o causaba que los usuarios tuvieran que "bajar la versión" (downgrade) de su juego para poder seguir usándolo.
 ___
+
 <div align="center">
-  Investigación empezada el 27 de junio y terminado el 29 de junio. 2026.  
+
+  Investigación empezada el 27 de junio y terminado el 29 de junio. 2026.<br>
   [Página principal](https://elmichiyt.github.io/?utm_source=Post&url_medium=footerlink)
+
+</div>
