@@ -2,4 +2,4 @@
 Esta página solo es una prueba.
 
 > [!NOTE]
-quote de prueba
+quote de nota de prueba
