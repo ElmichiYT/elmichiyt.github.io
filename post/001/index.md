@@ -7,7 +7,7 @@ El 18 de Junio del 2026, un usuario llamado **Epic Dashie** subió un video a la
 En el video se puede ver que efectivamente un usuario ha hackeado el juego en sí y entra a salas. En el momento donde entra a una sala, los sonidos del lobby se desaparecen (algunos no) y el chat al envíar un mensaje, no se envía con el servidor.
 
 # El video (Epic Dashie)
-En video de donde me enteré fue https://youtu.be/LRmpfeXGTHI y de ahí es donde ví varias cosas.  
+En video de donde me enteré fue [https://youtu.be/LRmpfeXGTHI](https://youtu.be/LRmpfeXGTHI) y de ahí es donde ví varias cosas.  
 En el video de muestra de que el usuario que graba, envía lo mismo a lo que el atacante dijo, como se muestra en la captura de abajo.
 
 ![IMG1](files/image1.png)
@@ -16,14 +16,14 @@ Esto puede significar que lo que usa el atacante, envía datos no reales para ha
 
 # Investigación del mensaje
 En el mensaje se ven enlaces y el usuario del canal de YouTube del atacante.  
-Lo primero es el canal de YouTube. (https://www.youtube.com/@amogus_user_69420)
+Lo primero es el canal de YouTube. ([https://www.youtube.com/@amogus_user_69420](https://www.youtube.com/@amogus_user_69420))
 
 El canal contiene 5 videos. 3 videos largos y 2 streams.  
 El último video largo se llama `my last attack (this time agaisnt daters i guess)`. Y como dice, es su **último ataque** pero con algo en particular. Algo que tiene que ver **con citas**.
 ___
 Siguiendo, con los enlaces que lleva el mensaje en Among Us, ignorando el insulto a Trump, hay un enlace de invitación a un servidor de Discord. No he entrado a esa invitación.
 
-Luego sigue https://aufil.es que **es una URL simplificada** para ser más corto. Como sospecho que podría tener un recolector de IP y/o recolector de datos del navegador, les doy la URL final: https://au.tntaddict.net/aufiles
+Luego sigue [https://aufil.es](https://aufil.es) que **es una URL simplificada** para ser más corto. Como sospecho que podría tener un recolector de IP y/o recolector de datos del navegador, les doy la URL final: [https://au.tntaddict.net/aufiles](https://au.tntaddict.net/aufiles)
 
 Dicha página es una base de datos pública con supuestos "acosadores y/o depredadores de menores". En la base de datos se muestra:
 - El usuario
@@ -34,7 +34,7 @@ Dicha página es una base de datos pública con supuestos "acosadores y/o depred
 Algunos datos aparecen en blanco.
 
 # Último recurso
-El último recurso lo encontré en un enlace a un repositorio de GitHub: https://github.com/TNTaddicted/aufiles/.  
+El último recurso lo encontré en un enlace a un repositorio de GitHub: [https://github.com/TNTaddicted/aufiles/](https://github.com/TNTaddicted/aufiles/).  
 Es un mensaje de parte del atacante (que se conoce como TNT Addict por alguna razón desconocida) sobre la moderación de Among Us.
 
 # Final
