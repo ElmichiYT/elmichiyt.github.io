@@ -7,9 +7,9 @@ async function updateStatus() {
         const s = seconds % 60;
 
         let parts = [];
-        if (h > 0) parts.push(`${h} h`);
-        if (m > 0 || h > 0) parts.push(`${m} m`);
-        parts.push(`${s} s`);
+        if (h > 0) parts.push(`${h}h`);
+        if (m > 0 || h > 0) parts.push(`${m}m`);
+        parts.push(`${s}s`);
 
         return parts.join(', ');
     }
@@ -19,7 +19,7 @@ async function updateStatus() {
         if (!response.ok) throw new Error("Error en el servidor");
         
         const data = await response.json();
-        const myServer = data.servers.find(s => s.hash === 'f22ee9510fff1405ce378a2c5fbb27b3');
+        const myServer = data.servers.find(s => s.hash === 'c9b700fa781a1c73ce4821e39965ea4c');
         
         const dot = document.getElementById('status-indicator');
         const text = document.getElementById('status-text');
@@ -39,7 +39,7 @@ async function updateStatus() {
             text.innerHTML = `Apagado`;
             text.style.color = '#ff4444';
             name.innerHTML = 'Desconocido';
-            uptime.innerHTML = '0 s';
+            uptime.innerHTML = '0s';
             players.innerHTML = '0/0';
         }
     } catch (error) {
