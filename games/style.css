@@ -50,7 +50,7 @@ a { color: #09f; }
 .fangame {background:#090; color: white; font-weight: bold; border: 2px solid #0f0; border-radius: 16px; padding: 4px 12px 4px 12px }
 
 /* Plataformas */
-.plataform-scratch {background:#aa0;color:white;font-weight:bold;border:2px solid #ff0;border-radius:16px;padding: 4px 12px 4px 12px;}
+.plataform-scratch {background:#aa0;color:white;font-weight:bold;border:2px solid #ff0;border-radius:16px;padding:4px 12px 4px 12px;}
 
 .main {
 	display: flex;
