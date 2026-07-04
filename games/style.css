@@ -53,6 +53,7 @@ a { color: #09f; }
 .plataform-scratch {background:#aa0;color:white;font-weight:bold;border:2px solid #ff0;border-radius:16px;padding:4px 12px 4px 12px;}
 .plataform-windows {background:#0af;color:white;font-weight:bold;border:2px solid #0df;border-radius:16px;padding:4px 12px 4px 12px;}
 .plataform-android {background:#0a0;color:white;font-weight:bold;border:2px solid #0e0;border-radius:16px;padding:4px 12px 4px 12px;}
+.plataform-flash {background:#b00;color:white;font-weight:bold;border:2px solid #f00;border-radius:16px;padding:4px 12px 4px 12px;}
 
 .main {
 	display: flex;
