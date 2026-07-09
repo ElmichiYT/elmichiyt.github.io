@@ -1,0 +1,57 @@
+/*
+    Este es el nuevo tema de fondos para sitios web estáticos y/o activos
+    para que la gente lo pueda utilizar gratuitamente en cualquier sitio.
+
+    Siempre y cuando coloque los respectivos créditos del creador de estos
+    temas para páginas web.
+
+    (C) Copyright 2026 ElmichiYT. Todos los derechos reservados.
+*/
+
+/* Todos los estilos se pueden cambiar colocando sus propias reglas en su style.css de su página */
+
+.backgrounds-cube {
+    background: #111;
+    background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px);
+    background-size: 40px 40px;
+    width: 100%; height: 100%;
+}
+.backgrounds-checkerboard {
+    background-image: linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    background-color: #fff;
+    width: 100%; height: 100%;
+}
+
+/* 1. Modo Terminal Oscura (Líneas finas de código/consola) */
+.backgrounds-dev-terminal {
+    background-color: #0a0e14;
+    background-image: radial-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 0);
+    background-size: 24px 24px;
+    width: 100%;
+    height: 100%;
+}
+
+/* 2. Matriz de Puntos Dev (El clásico fondo de herramientas como GitHub o Figma) */
+.backgrounds-dev-dots {
+    background-color: #0d1117;
+    background-image: radial-gradient(#30363d 1px, transparent 1px);
+    background-size: 16px 16px;
+    width: 100%;
+    height: 100%;
+}
+
+/* 3. Rejilla Cyberpunk / Tech Blueprint */
+.backgrounds-dev-blueprint {
+    background-color: #0f172a;
+    background-image: 
+        linear-gradient(rgba(56, 189, 248, 0.03) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 2px, transparent 2px),
+        linear-gradient(rgba(56, 189, 248, 0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.01) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    width: 100%;
+    height: 100%;
+}
