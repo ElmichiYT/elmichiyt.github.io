@@ -1,0 +1,35 @@
+/*
+    ElmichiYT Fonts: fuentes de texto.
+    Estas fuentes no son de mi propiedad, son extraídas de otras plataformas.
+
+    (C) Copyright 2026 ElmichiYT. Todos los derechos reservados.
+*/
+
+@font-face {
+    font-family: 'ClassiCube';
+    src: url("ClassiCube.otf");
+}
+@font-face {
+    font-family: 'Minecraft PE';
+    src: url("Mojangles.ttf");
+}
+@font-face {
+    font-family: 'Pou';
+    src: url("Pou.ttf");
+}
+@font-face {
+    font-family: '5x5';
+    src: url("5x5.ttf");
+}
+@font-face {
+    font-family: 'GeistPixel';
+    src: url("GeistPixel.ttf");
+}
+@font-face {
+    font-family: 'Inter';
+    src: url("Inter.ttf");
+}
+@font-face {
+    font-family: 'VT323';
+    src: url("VT323.ttf");
+}
