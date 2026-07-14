@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Fanarts</title>
+    <style>
+        /* --- Estilos Globales --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 2px solid #252525;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #ff4757;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            color: #a4b0be;
+            font-size: 1.1rem;
+        }
+
+        /* --- Cuadrícula de la Galería --- */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Tarjetas de Fanart --- */
+        .art-card {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .art-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(255, 71, 87, 0.2);
+        }
+
+        .art-img-wrapper {
+            width: 100%;
+            height: 320px;
+            overflow: hidden;
+        }
+
+        .art-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .art-card:hover .art-img-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .art-info {
+            padding: 15px;
+        }
+
+        .art-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .art-author {
+            font-size: 0.9rem;
+            color: #ff4757;
+        }
+
+        /* --- Ventana Modal (Vista ampliada) --- */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ff4757;
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            .gallery-container {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ElmichiYT Fanarts</h1>
+        <p>Fanarts de fans público</p>
+    </header>
+
+    <!-- Contenedor donde se inyectarán las tarjetas -->
+    <main class="gallery-container" id="gallery"></main>
+
+    <!-- Estructura del Modal -->
+    <div id="artModal" class="modal" onclick="closeModal()">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        const galleryContainer = document.getElementById("gallery");
+
+        // --- Cargar JSON externo usando Fetch API ---
+        async function loadGallery() {
+            try {
+                // Realiza la petición al archivo externo en el mismo directorio
+                const response = await fetch('list.json');
+                
+                if (!response.ok) {
+                    throw new Error(`Error al cargar el JSON: ${response.status}`);
+                }
+                
+                const fanartsData = await response.json();
+                
+                // Renderizar los datos obtenidos del archivo .json
+                fanartsData.forEach(art => {
+                    const card = document.createElement("div");
+                    card.classList.add("art-card");
+                    card.onclick = function() { openModal(this); };
+
+                    card.innerHTML = `
+                        <div class="art-img-wrapper">
+                            <img src="${art.imagen}" alt="${art.titulo}">
+                        </div>
+                        <div class="art-info">
+                            <div class="art-title">${art.titulo}</div>
+                            <div class="art-author">${art.autor}</div>
+                        </div>
+                    `;
+                    galleryContainer.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Hubo un problema al cargar la galería:", error);
+                galleryContainer.innerHTML = `<p style="text-align:center; color:#ff4757; grid-column: 1/-1;">No se pudieron cargar los fanarts. Asegúrate de estar usando un servidor local (como Live Server).</p>`;
+            }
+        }
+
+        // --- Funciones del Modal ---
+        const modal = document.getElementById("artModal");
+        const modalImg = document.getElementById("modalImg");
+
+        function openModal(card) {
+            const imgTarget = card.querySelector('img');
+            modal.style.display = "flex";
+            setTimeout(() => {
+                modal.classList.add("show");
+            }, 10);
+            modalImg.src = imgTarget.src;
+            modalImg.alt = imgTarget.alt;
+        }
+
+        function closeModal() {
+            modal.classList.remove("show");
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        }
+
+        modalImg.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Ejecutar la carga asíncrona cuando el documento esté listo
+        document.addEventListener("DOMContentLoaded", loadGallery);
+    </script>
+
+</body>
+</html>
