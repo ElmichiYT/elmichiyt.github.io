@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClassiCube API Lookup (MichiProxy Edition)</title>
+    <title>ClassiCube API Lookup</title>
     <style>
         :root {
             --bg-color: #121214;
@@ -324,7 +324,7 @@
 
         try {
             // Fusión del plugin original y tu proxy 🤑
-            const proxyBaseUrl = "http://proxy.elmichiyt.workers.dev/?url=";
+            const proxyBaseUrl = "https://proxy.elmichiyt.workers.dev/?url=";
             const targetApiUrl = `https://www.classicube.net/api/player/${userSearch}`;
             
             const response = await fetch(proxyBaseUrl + encodeURIComponent(targetApiUrl));
