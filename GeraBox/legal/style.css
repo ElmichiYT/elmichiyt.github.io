@@ -1,7 +1,7 @@
 @import url("../../../cdn/fonts/file.css");
 
 body {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../bg.png');
+	background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../bg.png');
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
@@ -12,11 +12,12 @@ body {
 	padding: 0;
 }
 
-.data {
+iframe {
     border: 4px solid gray;
     border-radius: 10px;
     width: 95%;
-    max-width: 700px;
+    height: 64vh;
+    max-width: 900px;
     margin: 20px auto;
     background-color: rgba(50,50,50,0.7);
     padding: 8px 16px;
