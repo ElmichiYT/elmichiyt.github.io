@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edad de ElmichiYT</title>
+  <style>
+    /* Estilo limpio, moderno y transparente para que encaje en cualquier parte de tu web */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: transparent; 
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .widget-container {
+      background: rgba(20, 20, 25, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 18px 28px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      min-width: 180px;
+    }
+
+    .title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #a0aec0;
+      margin-bottom: 6px;
+    }
+
+    .age-number {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0f0 0%, white 100%);
+      -webkit-background-clip: text;
+
+      /*
+          Si usas un editor de archivos como Visual Studio y te aparece en el texto
+          de "-webkit-background-clip" subrayado en amarillo,
+          no afecta a la lógica del widget, lo podría afectar visualmente, pero sería mínimo.
+      */
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin: 5px 0;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #a0aec0;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="widget-container">
+    <div class="title">Edad de ElmichiYT</div>
+    <!-- Aquí se actualizará el número al instante -->
+    <div class="age-number" id="real-time-age">--</div>
+    <div class="subtitle">AÑOS</div>
+  </div>
+
+  <script>
+    // Configuración del Widget
+    // Formato: AÑO, MES , DÍA, HORA, MINUTOS
+    const fechaNacimiento = new Date(2011, 4, 15); 
+
+    function calcularEdadExacta() {
+      const ahora = new Date();
+      
+      let edad = ahora.getFullYear() - fechaNacimiento.getFullYear();
+      const mesActual = ahora.getMonth();
+      const diaActual = ahora.getDate();
+      const horaActual = ahora.getHours();
+      const minutoActual = ahora.getMinutes();
+      const segundoActual = ahora.getSeconds();
+
+      const mesNacimiento = fechaNacimiento.getMonth();
+      const diaNacimiento = fechaNacimiento.getDate();
+      const horaNacimiento = fechaNacimiento.getHours();
+      const minutoNacimiento = fechaNacimiento.getMinutes();
+      const segundoNacimiento = fechaNacimiento.getSeconds();
+
+      // Ajustamos la edad si aún no ha llegado el día o la hora exacta de tu cumpleaños este año
+      if (
+        mesActual < mesNacimiento || 
+        (mesActual === mesNacimiento && diaActual < diaNacimiento) ||
+        (mesActual === mesNacimiento && diaActual === diaNacimiento && horaActual < horaNacimiento) ||
+        (mesActual === mesNacimiento && diaActual === diaNacimiento && horaActual === horaNacimiento && minutoActual < minutoNacimiento) ||
+        (mesActual === mesNacimiento && diaActual === diaNacimiento && horaActual === horaNacimiento && minutoActual === minutoNacimiento && segundoActual < segundoNacimiento)
+      ) {
+        edad--;
+      }
+
+      // Evita actualizar el DOM si el número no ha cambiado
+      const elementoEdad = document.getElementById('real-time-age');
+      if (elementoEdad.innerText !== String(edad)) {
+        elementoEdad.innerText = edad;
+      }
+    }
+
+    // Comprueba tu edad inmediatamente al cargar
+    calcularEdadExacta();
+    
+    // Y revisa cada 1 segundo (1000 milisegundos) en segundo plano
+    setInterval(calcularEdadExacta, 1000);
+  </script>
+
+</body>
+</html>
