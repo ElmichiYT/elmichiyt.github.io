@@ -6,25 +6,25 @@
         @import url(../../cdn/fonts/file.css);
         
         body {
-            background: #111;
-            color: #d0d0d0;
+            background: #1f1f1f;
+            color: #ccc;
             font-family: 'Inter';
             margin: 16px;
             padding: 0;
         }
-        .link { color: #09f; text-decoration: none; }
-        .link:hover { text-decoration: underline; cursor: pointer; }
+        a { color: #09f; text-decoration: none; }
+        a:hover { text-decoration: underline; }
         h1 { margin: 0; }
     </style>
 </head>
 <body>
     <h1>Redirigiendo...</h1>
-    <p>Si no se le redirige, haga <span class="link" onclick="window.location.replace('../among-us-hack')">click aquí</span></p>
+    <p>Si no se le redirige, haga <a class="link" href="../among-us-hack/">click aquí</a></p>
 
     <script>
         setTimeout(function() {
             window.location.replace("../among-us-hack");
-        }, 1000); // 5000 milisegundos = 5 segundos
+        }, 1000);
     </script>
 </body>
 </html>
