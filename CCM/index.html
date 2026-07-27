@@ -1,322 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <title>Inicio &mdash; ElmichiYT Posts</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClassiCube Messenger</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        :root {
-            --primary: #b07ecf; 
-            --bg: #121212;
-            --card: #1e1e1e;
-            --text: #e0e0e0;
-            --msg-other: #2c2c2c;
-            --radius: 20px;
-        }
-        body.light {
-            --bg: #f4f4f9;
-            --card: #ffffff;
-            --text: #202020;
-            --msg-other: #e8e8e8;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* --- PANTALLA DE CARGA --- */
-        #splash-screen {
-            position: fixed; inset: 0; background: var(--bg);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 3000; transition: 0.5s;
-        }
-        #splash-screen img.logo { width: 100px; margin-bottom: 20px; }
-        #splash-screen img.loader { width: 40px; margin-bottom: 15px; }
-        #loading-msg { color: var(--primary); font-size: 0.9rem; font-style: italic; text-align: center; max-width: 80%; }
-
-        /* --- HEADER --- */
-        header {
-            background: var(--card);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 10;
-        }
-
-        /* --- CHAT AREA --- */
-        #chat {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .msg {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-        }
-        .msg.own { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 4px; }
-        .msg.other { align-self: flex-start; background: var(--msg-other); border-bottom-left-radius: 4px; }
-        
-        .msg-info { font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; color: var(--primary); display: block; }
-        .msg.own .msg-info { color: #eee; }
-        .msg-time { font-size: 0.6rem; opacity: 0.7; margin-top: 6px; display: block; text-align: right; }
-
-        .msg img, .msg video { max-width: 512px; width: 100%; border-radius: 12px; margin-top: 8px; display: block; }
-
-        /* --- INPUT & MEDIA --- */
-        #input-container { background: var(--card); padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .input-bar { display: flex; gap: 12px; align-items: center; max-width: 1000px; margin: auto; }
-        
-        textarea {
-            flex: 1;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #333;
-            border-radius: 25px;
-            padding: 10px 20px;
-            color: var(--text);
-            resize: none;
-            outline: none;
-        }
-
-        #media-bar {
-            max-height: 0; overflow: hidden; transition: 0.3s;
-            display: flex; gap: 10px; align-items: center;
-        }
-        #media-bar.active { max-height: 60px; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; }
-        #media-bar input { flex: 1; background: transparent; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 8px; }
-
-        .btn-icon { background: none; border: none; color: var(--text); font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
-        .btn-icon:hover { color: var(--primary); }
-        .btn-send { color: var(--primary); font-size: 1.5rem; }
-
-        /* --- MODALES --- */
-        #modal-releases {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            display: none; align-items: center; justify-content: center; z-index: 2000;
-        }
-        .modal-content { background: var(--card); padding: 30px; border-radius: var(--radius); width: 90%; max-width: 550px; position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 20px; cursor: pointer; color: var(--primary); font-size: 1.5rem; }
-
-        .hidden { display: none !important; }
-        #loading-status { text-align: center; color: var(--primary); font-size: 0.8rem; padding: 10px; font-weight: bold; }
-    </style>
+    <link rel="icon" type="image/svg-xml" href="https://media.base44.com/images/public/6a65775dd1ecabcf5ae4f751/a53e4c977_generated_image.png">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark">
+<body>
+    <div class="headbar">
+        <div class="title">
+            <h1>ClassiCube Messenger</h1>
+        </div>
 
-    <audio id="notif-sound" src="noti.mp3" preload="auto"></audio>
-
-    <!-- Splash Screen -->
-    <div id="splash-screen">
-        <img src="logo.png" class="logo">
-        <img src="loader.gif" class="loader">
-        <div id="loading-msg">Iniciando sistema...</div>
-    </div>
-
-    <!-- Modal Releases -->
-    <div id="modal-releases" onclick="this.style.display='none'">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="document.getElementById('modal-releases').style.display='none'">&times;</span>
-            <div id="release-body">Cargando novedades...</div>
+        <div class="barlinks">
+            <a href="#">Inicio</a>
+            <a href="#">Footer</a>
         </div>
     </div>
 
-    <header>
-        <div style="font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-cube"></i> ClassiCube Messenger
-        </div>
-        <div style="display:flex; gap:15px; align-items:center;">
-            <button class="btn-icon" onclick="openReleases()"><i class="fa-solid fa-rocket"></i></button>
-            <select id="theme-selector" onchange="document.body.className = this.value">
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-            </select>
-            <button id="btnSalir" class="btn-icon"><i class="fa-solid fa-right-from-bracket"></i></button>
-        </div>
-    </header>
+    <br><br>
 
-    <main id="chat">
-        <div id="loading-status" class="hidden"></div>
-    </main>
+    <div class="content">
+        <h1>ClassiCube Messenger</h1>
+        <p class="blocktxt">
+            ClassiCube Messenger es una aplicación web alojada en <strong>Base44</strong> para ser la aplicación
+            <em>"oficial"</em> de ClassiCube para mensajería. Los lenguajes disponibles son:
 
-    <div id="input-container" class="hidden">
-        <div id="media-bar">
-            <input type="text" id="media-url" placeholder="Enlace de imagen, video o audio...">
-            <button class="btn-icon" id="btnSendMedia" style="color: var(--primary);"><i class="fa-solid fa-check"></i></button>
-        </div>
-        <div class="input-bar">
-            <button class="btn-icon" onclick="document.getElementById('media-bar').classList.toggle('active')"><i class="fa-solid fa-paperclip"></i></button>
-            <textarea id="mensaje" placeholder="Escribe un mensaje..." rows="1"></textarea>
-            <button id="btnEnviar" class="btn-icon btn-send"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
+            <ul>
+                <li><img src="https://static.classicube.net/img/flags/es.png" alt="ES"> Español</li>
+                <li><img src="https://static.classicube.net/img/flags/us.png" alt="US"> Inglés</li>
+                <li><img src="https://static.classicube.net/img/flags/br.png" alt="BR"> Portugues</li>
+            </ul>
+        </p>
     </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onChildAdded, query, limitToLast, orderByKey, get, endBefore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = { 
-            apiKey: "AIzaSyCUpLsYkBaAkLSZpDwkx-GnWykZec-Oh-o", 
-            authDomain: "classicube-messenger.firebaseapp.com", 
-            projectId: "classicube-messenger", 
-            databaseURL: "https://classicube-messenger-default-rtdb.firebaseio.com",
-            appId: "1:113987340884:web:81d8a03a9ac557f4897bc1" 
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
-        const chatRef = ref(db, 'mensajes_cc');
-
-        const chat = document.getElementById('chat');
-        const inputMsg = document.getElementById('mensaje');
-        let oldestKey = null;
-        let isBatchLoading = false;
-        let allLoaded = false;
-
-        marked.setOptions({ breaks: true });
-
-        // --- SPLASH MESSAGES ---
-        async function initSplash() {
-            try {
-                const res = await fetch('messages.txt');
-                if(res.ok) {
-                    const lines = (await res.text()).split('\n').filter(l => l.trim());
-                    document.getElementById('loading-msg').textContent = lines[Math.floor(Math.random() * lines.length)];
-                }
-            } catch(e) {}
-        }
-        initSplash();
-
-        // --- RELEASES ---
-        window.openReleases = async () => {
-            document.getElementById('modal-releases').style.display = 'flex';
-            const res = await fetch('release.html');
-            document.getElementById('release-body').innerHTML = res.ok ? await res.text() : "No hay notas de versión.";
-        };
-
-        function format12h(ts) {
-            return new Date(ts).toLocaleDateString() + " - " + new Date(ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: true});
-        }
-
-        const renderMessage = (d, prepend = false) => {
-            const isOwn = d.uid === auth.currentUser?.uid;
-            const div = document.createElement('div');
-            div.className = `msg ${isOwn ? 'own' : 'other'}`;
-            
-            let content = d.texto;
-            if(content.startsWith("@@VIDEO:")) content = `<video controls src="${content.split(':')[1]}"></video>`;
-            else if(content.startsWith("@@AUDIO:")) content = `<audio controls src="${content.split(':')[1]}"></audio>`;
-            else content = marked.parse(d.texto);
-
-            div.innerHTML = `<span class="msg-info">${d.nombre}</span>${content}<span class="msg-time">${format12h(d.timestamp)}</span>`;
-            
-            if(prepend) chat.insertBefore(div, document.getElementById('loading-status').nextSibling);
-            else chat.appendChild(div);
-            return div;
-        };
-
-        const loadBatch = async () => {
-            if (allLoaded || isBatchLoading) return;
-            isBatchLoading = true;
-            const status = document.getElementById('loading-status');
-            status.classList.remove('hidden');
-            status.textContent = "Cargando mensajes anteriores...";
-
-            let q = oldestKey 
-                ? query(chatRef, orderByKey(), endBefore(oldestKey), limitToLast(15))
-                : query(chatRef, limitToLast(15));
-
-            const snap = await get(q);
-            const data = snap.val();
-
-            if (!data || Object.keys(data).length < 15) {
-                allLoaded = true;
-                status.textContent = "¡Ya no hay más mensajes qué cargar!";
-                status.classList.remove('hidden');
-            } else { status.classList.add('hidden'); }
-
-            if (data) {
-                const keys = Object.keys(data).sort();
-                const oldHeight = chat.scrollHeight;
-                keys.reverse().forEach((key, i) => {
-                    if (i === keys.length - 1) oldestKey = key;
-                    renderMessage(data[key], true);
-                });
-                chat.scrollTop = chat.scrollHeight - oldHeight;
-            }
-            isBatchLoading = false;
-            document.getElementById('splash-screen').style.opacity = '0';
-            setTimeout(() => document.getElementById('splash-screen').style.display='none', 500);
-        };
-
-        chat.onscroll = () => { if(chat.scrollTop <= 5) loadBatch(); };
-
-        onChildAdded(query(chatRef, limitToLast(1)), (snap) => {
-            if (document.getElementById(snap.key)) return;
-            const d = snap.val();
-            const atBottom = (chat.scrollHeight - chat.scrollTop - chat.clientHeight) < 100;
-            const div = renderMessage(d);
-            div.id = snap.key;
-            if (atBottom || d.uid === auth.currentUser?.uid) chat.scrollTop = chat.scrollHeight;
-        });
-
-        const enviar = (t) => {
-            const val = t || inputMsg.value.trim();
-            if(!val) return;
-            push(chatRef, { nombre: auth.currentUser.displayName, uid: auth.currentUser.uid, texto: val, timestamp: Date.now() });
-            if(!t) inputMsg.value = "";
-        };
-
-        // EVENTOS DE ENTRADA
-        inputMsg.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                enviar();
-            }
-        });
-
-        document.getElementById('btnEnviar').onclick = () => enviar();
-
-        document.getElementById('btnSendMedia').onclick = () => {
-            const url = document.getElementById('media-url').value.trim();
-            if(!url) return;
-            const ext = url.split('.').pop().toLowerCase();
-            let tag = `[Archivo](${url})`;
-            if(['jpg','png','gif','jpeg','webp'].includes(ext)) tag = `![img](${url})`;
-            else if(['mp4','webm'].includes(ext)) tag = `@@VIDEO:${url}`;
-            else if(['mp3','wav'].includes(ext)) tag = `@@AUDIO:${url}`;
-            enviar(tag);
-            document.getElementById('media-url').value = "";
-            document.getElementById('media-bar').classList.remove('active');
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            if(user) {
-                document.getElementById('input-container').classList.remove('hidden');
-                loadBatch();
-            }
-        });
-
-        document.getElementById('btnSalir').onclick = () => signOut(auth).then(() => location.reload());
-    </script>
 </body>
 </html>
