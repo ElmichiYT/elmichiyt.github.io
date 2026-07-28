@@ -15,10 +15,18 @@ body {
 	justify-content: space-between; align-items: center; border-bottom: 2px solid white;
 }
 .headbar { padding-left: 1%; }
-.barlinks a { color: white; text-decoration: none; margin: 0 32px; font-weight: bold;}
+.barlinks a { color: white; text-decoration: none; margin: 0 32px; font-weight: bold; }
 .barlinks a:hover { border-bottom: 3px solid #09f; border-bottom: 2px solid white; }
-.title { margin: 0 16px; }
+.title { display: flex; }
+.title h1 { margin: 8px 0; padding: 0; }
+.title p { margin: 0; padding: 0; padding-top: 16px; }
 /* ==================================================================================== */
+
+.btn {
+    background: #9873ac; color: white; padding: 8px 8px;
+    border-radius: 4px; text-decoration: none; transition: 250ms;
+}
+.btn:hover { background: #654d72; }
 
 .content {
     width: 95%;
@@ -27,8 +35,8 @@ body {
     margin: 0 auto;
     border-radius: 16px;
     padding: 16px;
-    backdrop-filter: blur(2px);
+    background: rgba(85, 85, 85, 0.5);
 }
 
 /* Estilos de elementos virtuales */
-::selection { background: white; color: black; }
+::selection { background: #9873ac; color: white; }
