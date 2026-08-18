@@ -2,7 +2,8 @@
 
     // 1. Inyección de CSS
     const cssStyles = `
-      vid{ display:block; width:100%; max-width:900px; }
+      @import url(https://elmichiyt.github.io/cdn/fonts/file.css);
+      vid{ display:block; width:100%; max-width:900px; font-family: 'Inter'; }
       .vidp{ position:relative; width:100%; background:#000; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px -20px rgba(0,0,0,.7); aspect-ratio:16/9; user-select:none; outline:none; }
       .vidp:focus-visible{ box-shadow:0 0 0 3px var(--accent), 0 20px 60px -20px rgba(0,0,0,.7); }
       .vidp video{ width:100%; height:100%; display:block; background:#000; object-fit:contain; }
