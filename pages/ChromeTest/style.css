@@ -1,0 +1,31 @@
+/*
+    Este código CSS solamente es escrito para una página no importante.
+    Básicamente puedo decir que este CSS puede ser copiado por cualquiera.
+
+    Será un CSS sencillo, así que no tendrá Copyright
+*/
+
+@import url(https://elmichiyt.github.io/cdn/fonts/file.css);
+
+*{
+    font-family: 'Inter';
+}
+
+body {
+    background: #222;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background: #444;
+    margin: 0 auto;
+    width: 90%;
+    margin-top: 16px;
+    padding: 8px 16px;
+    border: 2px solid gray;
+    border-radius: 16px;
+}
+.header img.icon { width: 32px; transform: translateY(6px); }
+.header span { font-size: 24px; padding-left: 6px; padding-bottom: 4px; }
