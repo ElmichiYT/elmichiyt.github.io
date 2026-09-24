@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es_MX">
+<head>
+    <title>Información básica del navegador</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main">
+        <h1 style="text-align: center; margin-bottom: 0;">Información básica del navegador</h1>
+        <p style="text-align: center; margin-top: 0;">Todo funciona localmente, nada de información se envía a terceros.</p>
+        <hr size="2px" color="black">
+        
+        <h2>Hardware</h2>
+        <p>Número de núcleos: <span id="nucleos">-</span></p>
+        <p>Cantidad de RAM: <span id="RAM">-</span></p>
+        <p style="margin-bottom: 0;">Info. de batería: <span id="bateria"></span></p>
+        <small style="padding-left: 24px;">Esto último puede no funcionar si usas computadora de escritorio.</small>
+
+        <h2>Red</h2>
+        <p>Conectado a Internet: <span id="internet">-</span></p>
+        <p>Tipo de Conexión: <span id="conexion">-</span></p>
+        <p>Latencia / Ping: <span id="ping">-</span></p>
+
+        <h2>Systema y Navegador</h2>
+        <p>Idioma preferido: <span id="idioma">-</span></p>
+        <p>User-Agent: <span id="ua">-</span></p>
+        <p>Tema oscuro activado: <span id="darktheme">-</span></p>
+        
+        <h2>Pantalla y Ventana</h2>
+        <p>Resolución de Pantalla: <span id="pantalla">-</span></p>
+        <p>Tamaño de la ventana activa: <span id="ventana-activa">-</span></p>
+        <p>Orientación de la pantalla: <span id="orienta">-</span></p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
