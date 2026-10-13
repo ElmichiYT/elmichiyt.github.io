@@ -1,0 +1,11 @@
+body {
+    background: #ddd;
+    color: #1f1f1f;
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+a { color: #09f; text-decoration: none; }
+a:hover { color: #07a; text-decoration: underline; }
+
+.hlink { color: currentColor; text-decoration: none; }
+.hlink { color: #2f2f2f; }

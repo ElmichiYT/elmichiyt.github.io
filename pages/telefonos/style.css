@@ -1,0 +1,24 @@
+body {
+    background: #ccc;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.card {
+    max-width: 800px;
+    border: 2px solid black;
+    margin: 0 auto;
+    padding: 8px;
+    margin-top: 4cm;
+    min-height: 300px;
+    border-radius: 16px;
+    background: #eee;
+}
+.tag img { border-radius: 1rem; width: 128px; height: 128px;}
+.tag { display: flex; flex-direction: column; align-items: center; font-weight: bold; text-align: center; }
+.tags { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+.vivo { border: 2px solid #090 }
+.muerto { border: 2px solid #900; }
