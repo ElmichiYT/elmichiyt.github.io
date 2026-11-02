@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Fondos de Pantalla</title>
+    <!-- Tipografía moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --card-bg: #181b22;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --border: #27272a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Vista de cuadrícula */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .card-img-container {
+            width: 100%;
+            aspect-ratio: 9/16;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-img-container img {
+            transform: scale(1.03);
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Vista de detalle (Pantalla tipo PWA) */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .detail-container {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+        }
+
+        .back-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--card-bg);
+        }
+
+        .detail-img-wrapper {
+            width: 100%;
+            aspect-ratio: 9/16;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            max-height: 70vh;
+            margin: 0 auto;
+        }
+
+        .detail-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-info h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .detail-info p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .loading, .error {
+            text-align: center;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+            padding: 4rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Wallpaper Vault</h1>
+        <p>Colección de fondos minimalistas creados por mí</p>
+    </header>
+
+    <main>
+        <!-- VISTA 1: LISTADO -->
+        <section id="home-view" class="view active">
+            <div id="wallpaper-grid" class="grid">
+                <div class="loading">Cargando fondos...</div>
+            </div>
+        </section>
+
+        <!-- VISTA 2: DETALLE -->
+        <section id="detail-view" class="view">
+            <button class="back-btn" onclick="goHome()">
+                ← Volver al catálogo
+            </button>
+            <div class="detail-container">
+                <div class="detail-img-wrapper">
+                    <img id="detail-img" src="" alt="Vista previa">
+                </div>
+                <div class="detail-info">
+                    <h2 id="detail-title"></h2>
+                    <p id="detail-desc"></p>
+                    <a id="detail-download" href="" download class="download-btn" target="_blank">Descargar Original</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let wallpapersData = [];
+
+        // Cargar el JSON al iniciar
+        async function loadWallpapers() {
+            try {
+                const response = await fetch('list.json');
+                if (!response.ok) throw new Error('No se pudo cargar el archivo list.json');
+                wallpapersData = await response.json();
+                renderGrid(wallpapersData);
+            } catch (error) {
+                console.error(error);
+                document.getElementById('wallpaper-grid').innerHTML = `
+                    <div class="error">Error al cargar los fondos. Asegúrate de abrir esto mediante un servidor local (Live Server).</div>
+                `;
+            }
+        }
+
+        // Pintar las tarjetas en la cuadrícula principal
+        function renderGrid(items) {
+            const grid = document.getElementById('wallpaper-grid');
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="error">No hay fondos disponibles.</div>`;
+                return;
+            }
+
+            grid.innerHTML = items.map(item => `
+                <div class="card" onclick="openDetail('${item.id}')">
+                    <div class="card-img-container">
+                        <img src="${item.path}" alt="${item.name}" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${item.name}</h3>
+                        <p class="card-desc">${item.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Cambiar a la vista de detalle
+        function openDetail(id) {
+            const item = wallpapersData.find(w => w.id === id);
+            if (!item) return;
+
+            document.getElementById('detail-img').src = item.path;
+            document.getElementById('detail-title').textContent = item.name;
+            document.getElementById('detail-desc').textContent = item.description;
+            
+            const downloadBtn = document.getElementById('detail-download');
+            downloadBtn.href = item.path;
+
+            // Cambiar vistas
+            document.getElementById('home-view').classList.remove('active');
+            document.getElementById('detail-view').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Volver a la vista principal
+        function goHome() {
+            document.getElementById('detail-view').classList.remove('active');
+            document.getElementById('home-view').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Inicializar
+        loadWallpapers();
+    </script>
+</body>
+</html>

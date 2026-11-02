@@ -1,0 +1,14 @@
+[
+    {
+      "id": "1",
+      "name": "Blue Sky",
+      "description": "Una foto del cielo en color azul con pequeñas nubes.",
+      "path": "images/Blue-Sky.jpg"
+    },
+    {
+      "id": "2",
+      "name": "Geometric Pine",
+      "description": "Patrones geométricos inspirados en la naturaleza profunda con paleta de colores planos.",
+      "path": "images/wallpaper2.jpg"
+    }
+  ]

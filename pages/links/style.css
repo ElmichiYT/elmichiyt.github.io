@@ -1,0 +1,23 @@
+@import url(https://elmichiyt.github.io/cdn/fonts/file.css);
+
+body { background: #223; color: white; margin: 0; padding: 0; font-family: 'Inter'; }
+.main {
+    width: 95%;
+    max-width: 765px;
+    margin: 0 auto;
+}
+
+.indexlink { color: #dfff51; text-decoration: none; }
+.indexlink:hover { text-decoration: underline; }
+.link {
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px dotted currentColor;
+    background: url(assets/newtab.svg);
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: right;
+    padding-right: 18px;
+} .link:hover { color: #999; }
+
+h3 { color: #5cc; border: 2px solid currentColor; padding: 8px 8px; }
