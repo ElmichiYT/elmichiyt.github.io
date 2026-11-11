@@ -1,44 +1,66 @@
 <!DOCTYPE html>
 <html lang="es_MX">
 <head>
-    <title>Próximamente! | ElmichiYT Tools</title>
+    <title>ElmichiYT Tools</title>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="initial-scale=1,minimum-scale=1,width=device-width,interactive-widget=resizes-content,viewport-fit=cover">
-	<style>
-	    body {
-		    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			font-size: 32px;
-			margin: 0;
-			padding: 0;
-			padding-top: 10%;
-			background: #f0f0f0;
-			text-align: center;
-		}
-
-		.main {
-			border: 4px solid black;
-			border-radius: 32px 0 32px 32px;
-			width: 700px;
-			height: auto;
-			margin: 0 auto;
-		}
-
-		.by {
-			font-weight: bold;
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			opacity: 0.5;
-			font-size: 16px;
-		}
-	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" href="icon.svg">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div class="main">
-		<h1>Próximamente</h1>
-		<p>Herramientas web</p>
+	<div class="logo">
+		<h1>ElmichiYT Tools</h1>
+		<p>Herramientas que he creado yo o los saqué de otros sitios web.</p>
 	</div>
-	<small class="by">HTML Created By ElmichiYT</small>
+
+	<div class="tools">
+
+        <a href="tool/memfill.html" target="_blank">
+			<h3>Memfill</h3>
+			<p>Una herramienta que llena la memoria RAM seleccionada de tu dispositivo.</p>
+			<small class="warn">Se recomienda utilizar esto en dispositivos con 1GB o más de memoria RAM</small>
+		</a>
+
+		<a href="tool/hash.html" target="_blank">
+			<h3>Hash</h3>
+			<p>Una herramienta para hashear texto y archivos</p>
+		</a>
+
+		<a href="tool/metatags.html" target="_blank">
+			<h3>Metatags</h3>
+			<p>¿Quieres ponerle metadatos a tu sitio web pero no sabes qué poner?<br>Utiliza esta herramienta fácil.</p>
+		</a>
+
+		<a href="tool/HTML Editor.html" target="_blank">
+			<h3>HTML Editor</h3>
+			<p>
+				Editor de HTML, CSS y JavaScript. Como los cambios no se guardan en la nube ni localmente,
+				ten ciudado al recargar la página porque perderás todo.<br>
+				Tampoco se recomienda como editor principal, esto está más hecho como editor rápido con vista previa.
+			</p>
+		</a>
+
+		<a href="tool/Color Selector.html" target="_blank">
+			<h3>Color Selector</h3>
+			<p>Selector de color con el intento de replicar el diseño del <strong>Selector de Color de Google</strong>.</p>
+		</a>
+
+		<a href="tool/Base64 File Converter.html" target="_blank">
+			<h3>Base64 File Converter</h3>
+			<p>
+				Herramienta para convertir cualquier archivo a Base64. Útil para poner archivos pequeños como imágenes de baja
+				resolución o íconos directamente en un documento HTML.
+			</p>
+		</a>
+
+		<a href="tool/miniaturas-yt.html" target="_blank">
+			<h3>Miniaturas YouTube</h3>
+			<p>
+				Una herramienta para extraer todas las resoluciones de una miniatura de YouTube, más 3 frames extra del video especificado.
+				Se puede poner la URL completa o solo poner el ID del video.
+			</p>
+		</a>
+
+	</div>
 </body>
 </html>

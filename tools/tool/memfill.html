@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Memory Filler</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #111111;
+    --muted: #666666;
+    --accent: #2563eb;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f0f10;
+      --fg: #f2f2f2;
+      --muted: #999999;
+      --accent: #60a5fa;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f0f10;
+    --fg: #f2f2f2;
+    --muted: #999999;
+    --accent: #60a5fa;
+  }
+  html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .wrap { width: min(90vw, 420px); }
+  .number {
+    text-align: center;
+    font-size: clamp(2.5rem, 10vw, 4.5rem);
+    font-variant-numeric: tabular-nums;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-bottom: 0.25rem;
+  }
+  .status {
+    text-align: center;
+    min-height: 1.2em;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+  }
+  .control { margin-bottom: 1.5rem; }
+  .control label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+  input[type="range"] { width: 100%; }
+  button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.6; cursor: default; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="number" id="number">0.0 MB</div>
+  <div class="status" id="status"></div>
+
+  <div class="control">
+    <label><span>Target memory</span><span id="targetLabel"></span></label>
+    <input type="range" id="targetSlider" min="0" max="1000" value="500" step="1">
+  </div>
+
+  <div class="control">
+    <label><span>Time to fill</span><span id="durationLabel"></span></label>
+    <input type="range" id="durationSlider" min="10" max="300" value="60" step="1">
+  </div>
+
+  <button id="startBtn">Start</button>
+</div>
+
+<script>
+(function () {
+  var MIN_MB = 512, MAX_MB = 32768;      // slider endpoints
+  var MAX_CHUNK = 256 * 1024 * 1024;     // safe per-allocation size
+  var TICK_MS = 100;                     // update rate
+
+  var targetSlider = document.getElementById('targetSlider');
+  var durationSlider = document.getElementById('durationSlider');
+  var targetLabel = document.getElementById('targetLabel');
+  var durationLabel = document.getElementById('durationLabel');
+  var numberEl = document.getElementById('number');
+  var statusEl = document.getElementById('status');
+  var startBtn = document.getElementById('startBtn');
+
+  var chunks = [];        // held references so buffers can't be GC'd
+  var allocated = 0;      // bytes we know we've allocated (ground truth)
+  var targetBytes = 0;
+  var durationMs = 0;
+  var startTime = 0;
+  var timer = null;
+  var running = false;
+  var done = false;
+
+  // log scale: raw 0-1000 -> MB, so the 512MB-32GB range is easy to pick on a slider
+  function targetMBFromRaw(raw) {
+    return MIN_MB * Math.pow(MAX_MB / MIN_MB, raw / 1000);
+  }
+
+  function formatBytes(b) {
+    if (b >= 1073741824) return (b / 1073741824).toFixed(2) + ' GB';
+    return (b / 1048576).toFixed(1) + ' MB';
+  }
+
+  function formatDuration(s) {
+    var m = Math.floor(s / 60), sec = s % 60;
+    return m ? (m + 'm ' + sec + 's') : (sec + 's');
+  }
+
+  function updateTargetLabel() {
+    var mb = Math.round(targetMBFromRaw(+targetSlider.value));
+    targetLabel.textContent = formatBytes(mb * 1048576);
+  }
+  function updateDurationLabel() {
+    durationLabel.textContent = formatDuration(+durationSlider.value);
+  }
+  targetSlider.addEventListener('input', updateTargetLabel);
+  durationSlider.addEventListener('input', updateDurationLabel);
+  updateTargetLabel();
+  updateDurationLabel();
+
+  function render() { numberEl.textContent = formatBytes(allocated); }
+
+  function tick() {
+    var elapsed = performance.now() - startTime;
+    var frac = Math.min(1, elapsed / durationMs);
+    var desired = Math.floor(targetBytes * frac);
+    var toAlloc = desired - allocated;
+    while (toAlloc > 0) {
+      var size = Math.min(toAlloc, MAX_CHUNK);
+      try {
+        var chunk = new Uint8Array(size);
+        chunk.fill(1);           // touch every byte so the OS actually commits real pages
+        chunks.push(chunk);
+        allocated += size;
+        toAlloc -= size;
+      } catch (e) {
+        finish(true);
+        return;
+      }
+    }
+    render();
+    if (frac >= 1) finish(false);
+  }
+
+  function finish(failed) {
+    clearInterval(timer);
+    timer = null;
+    running = false;
+    done = true;
+    statusEl.textContent = failed ? 'Stopped — hit the browser/OS memory limit' : 'Done';
+    startBtn.disabled = false;
+    startBtn.textContent = 'Reset';
+  }
+
+  function reset() {
+    chunks = [];              // drop references so memory can be reclaimed
+    allocated = 0;
+    done = false;
+    statusEl.textContent = '';
+    render();
+    targetSlider.disabled = false;
+    durationSlider.disabled = false;
+    startBtn.textContent = 'Start';
+  }
+
+  startBtn.addEventListener('click', function () {
+    if (done) { reset(); return; }
+    if (running) return;
+    targetBytes = Math.round(targetMBFromRaw(+targetSlider.value)) * 1048576;
+    durationMs = (+durationSlider.value) * 1000;
+    allocated = 0;
+    chunks = [];
+    startTime = performance.now();
+    running = true;
+    statusEl.textContent = '';
+    targetSlider.disabled = true;
+    durationSlider.disabled = true;
+    startBtn.disabled = true;
+    startBtn.textContent = 'Filling…';
+    timer = setInterval(tick, TICK_MS);
+    tick();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

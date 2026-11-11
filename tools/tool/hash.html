@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasher Multitool</title>
+  <!-- Librería para algoritmos hash (MD5, SHA, RIPEMD, etc.) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    h1 { text-align: center; font-size: 1.8rem; color: var(--accent); }
+    .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: -1rem; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .tab-btn { background: none; border: none; color: var(--muted); padding: 0.5rem 1rem; cursor: pointer; font-weight: 600; border-radius: 6px; }
+    .tab-btn.active { background: var(--border); color: var(--accent); }
+
+    .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    textarea { width: 100%; height: 100px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 0.75rem; font-family: monospace; resize: vertical; }
+    input[type="file"] { background: var(--bg); border: 1px dashed var(--border); padding: 1.5rem; border-radius: 8px; cursor: pointer; text-align: center; }
+
+    .results { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+    .hash-row { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; position: relative; }
+    .hash-label { font-size: 0.8rem; font-weight: bold; color: var(--accent); text-transform: uppercase; }
+    .hash-value { font-family: monospace; font-size: 0.85rem; color: var(--text); word-break: break-all; }
+    .copy-btn { position: absolute; right: 0.75rem; top: 0.75rem; background: var(--border); border: none; color: var(--text); font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; }
+    .copy-btn:hover { background: var(--accent); color: var(--bg); }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Hasher Multitool ⚡</h1>
+  <p class="subtitle">Calcula múltiples hashes instantáneamente en tu navegador</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchMode('text')">Texto</button>
+      <button class="tab-btn" onclick="switchMode('file')">Archivo</button>
+    </div>
+
+    <!-- Modo Texto -->
+    <div id="text-mode" class="input-group">
+      <label for="text-input">Escribe o pega tu texto:</label>
+      <textarea id="text-input" placeholder="Escribe algo aquí..." oninput="processText()"></textarea>
+    </div>
+
+    <!-- Modo Archivo -->
+    <div id="file-mode" class="input-group hidden">
+      <label for="file-input">Selecciona un archivo:</label>
+      <input type="file" id="file-input" onchange="processFile()">
+    </div>
+  </div>
+
+  <!-- Contenedor de Resultados -->
+  <div class="card">
+    <h3>Hashes Generados</h3>
+    <div class="results" id="results-container">
+      <!-- Se llenará dinámicamente -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const algorithms = ['MD5', 'SHA1', 'SHA256', 'SHA512', 'SHA3', 'RIPEMD160'];
+  let currentMode = 'text';
+
+  // Inicializar contenedores de resultados
+  function initResults() {
+    const container = document.getElementById('results-container');
+    container.innerHTML = '';
+    algorithms.forEach(algo => {
+      container.innerHTML += `
+        <div class="hash-row">
+          <span class="hash-label">${algo}</span>
+          <span class="hash-value" id="hash-${algo}">-</span>
+          <button class="copy-btn" onclick="copyHash('hash-${algo}')">Copiar</button>
+        </div>
+      `;
+    });
+  }
+
+  function switchMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    
+    if (mode === 'text') {
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('text-mode').classList.remove('hidden');
+      document.getElementById('file-mode').classList.add('hidden');
+      processText();
+    } else {
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('text-mode').classList.add('hidden');
+      document.getElementById('file-mode').classList.remove('hidden');
+      processFile();
+    }
+  }
+
+  // Procesar Texto
+  function processText() {
+    const text = document.getElementById('text-input').value;
+    if (!text) {
+      clearResults();
+      return;
+    }
+
+    algorithms.forEach(algo => {
+      const hash = CryptoJS[algo](text).toString();
+      document.getElementById(`hash-${algo}`).innerText = hash;
+    });
+  }
+
+  // Procesar Archivo (vía FileReader)
+  function processFile() {
+    const fileInput = document.getElementById('file-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      clearResults();
+      return;
+    }
+
+    // Mostrar estado de carga
+    algorithms.forEach(algo => {
+      document.getElementById(`hash-${algo}`).innerText = 'Calculando...';
+    });
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const arrayBuffer = e.target.result;
+      const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+
+      algorithms.forEach(algo => {
+        const hash = CryptoJS[algo](wordArray).toString();
+        document.getElementById(`hash-${algo}`).innerText = hash;
+      });
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  function clearResults() {
+    algorithms.forEach(algo => {
+      document.getElementById(`hash-${algo}`).innerText = '-';
+    });
+  }
+
+  function copyHash(elementId) {
+    const text = document.getElementById(elementId).innerText;
+    if (text !== '-' && text !== 'Calculando...') {
+      navigator.clipboard.writeText(text);
+      alert('¡Hash copiado al portapapeles!');
+    }
+  }
+
+  // Arrancar app
+  initResults();
+</script>
+
+</body>
+</html>

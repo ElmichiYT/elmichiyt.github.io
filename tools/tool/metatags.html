@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador Absoluto de Meta Tags (Filtro Dinámico)</title>
+  <style>
+    :root { --bg: #0b0f19; --card: #151d2a; --border: #232d3f; --accent: #2563eb; --text: #e2e8f0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 8px; max-height: 90vh; overflow-y: auto; }
+    h2 { margin-top: 0; font-size: 1.2rem; color: #60a5fa; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    h3 { font-size: 0.9rem; color: #94a3b8; margin-top: 15px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .field { margin-bottom: 10px; }
+    label { display: block; font-size: 0.8rem; margin-bottom: 3px; color: #cbd5e1; }
+    input, select, textarea { width: 100%; padding: 7px; background: #0b0f19; border: 1px solid var(--border); color: #fff; border-radius: 4px; box-sizing: border-box; font-size: 0.85rem; }
+    textarea { height: 50px; resize: vertical; }
+    pre { background: #0b0f19; padding: 15px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; font-size: 0.75rem; color: #38bdf8; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+    button { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+    button:hover { opacity: 0.9; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="card">
+    <h2>Formulario de Meta Tags</h2>
+    
+    <h3>1. Contenido y SEO</h3>
+    <div class="field"><label>Title (OG/Twitter)</label><input id="title" value="Mi Sitio Web Completo" oninput="gen()"></div>
+    <div class="field"><label>Description</label><textarea id="desc" oninput="gen()">Descripción detallada optimizada para buscadores y redes sociales.</textarea></div>
+    <div class="field"><label>Keywords</label><input id="keywords" value="web, seo, html, meta tags" oninput="gen()"></div>
+    <div class="field"><label>Author</label><input id="author" value="Juan Pérez" oninput="gen()"></div>
+    <div class="field"><label>Copyright</label><input id="copyright" value="© 2026 Mi Empresa" oninput="gen()"></div>
+    <div class="field"><label>Designer</label><input id="designer" value="Estudio Creativo" oninput="gen()"></div>
+    <div class="field"><label>Publisher</label><input id="publisher" value="Editorial Digital" oninput="gen()"></div>
+    <div class="field"><label>Generator</label><input id="generator" value="VS Code" oninput="gen()"></div>
+
+    <h3>2. Robots e Indexación</h3>
+    <div class="field"><label>Robots General</label><input id="robots" value="index, follow, max-image-preview:large" oninput="gen()"></div>
+    <div class="field"><label>Googlebot</label><input id="googlebot" value="index, follow, max-snippet:-1" oninput="gen()"></div>
+    <div class="field"><label>Bingbot</label><input id="bingbot" value="index, follow" oninput="gen()"></div>
+
+    <h3>3. Geo y Lenguaje</h3>
+    <div class="field"><label>Language</label><input id="lang" value="Spanish" oninput="gen()"></div>
+    <div class="field"><label>Geo Position (Lat;Long)</label><input id="geopos" value="40.416775;-3.703790" oninput="gen()"></div>
+    <div class="field"><label>Geo Region</label><input id="georeg" value="ES-MD" oninput="gen()"></div>
+    <div class="field"><label>Geo Placename</label><input id="geoplace" value="Madrid" oninput="gen()"></div>
+
+    <h3>4. Verificaciones de Webmaster</h3>
+    <div class="field"><label>Google Verification</label><input id="v_google" value="GOOGLE_CODE_123" oninput="gen()"></div>
+    <div class="field"><label>Bing Verification</label><input id="v_bing" value="BING_CODE_123" oninput="gen()"></div>
+    <div class="field"><label>Yandex Verification</label><input id="v_yandex" value="YANDEX_CODE_123" oninput="gen()"></div>
+    <div class="field"><label>Pinterest Verification</label><input id="v_pinterest" value="PINTEREST_CODE_123" oninput="gen()"></div>
+    <div class="field"><label>Facebook Domain Verification</label><input id="v_fb" value="FB_CODE_123" oninput="gen()"></div>
+
+    <h3>5. Open Graph (Facebook / WhatsApp)</h3>
+    <div class="field"><label>OG Type</label><input id="ogtype" value="website" oninput="gen()"></div>
+    <div class="field"><label>OG URL</label><input id="ogurl" value="https://misitio.com" oninput="gen()"></div>
+    <div class="field"><label>OG Site Name</label><input id="ogsitename" value="MiSitioWeb" oninput="gen()"></div>
+    <div class="field"><label>OG Locale</label><input id="oglocale" value="es_ES" oninput="gen()"></div>
+    <div class="field"><label>OG Image URL</label><input id="ogimg" value="https://misitio.com/og.jpg" oninput="gen()"></div>
+    <div class="field"><label>OG Image Alt</label><input id="ogimgalt" value="Portada del sitio" oninput="gen()"></div>
+
+    <h3>6. Twitter Cards</h3>
+    <div class="field"><label>Twitter Card Type</label><input id="twcard" value="summary_large_image" oninput="gen()"></div>
+    <div class="field"><label>Twitter Site (@)</label><input id="twsite" value="@miempresa" oninput="gen()"></div>
+    <div class="field"><label>Twitter Creator (@)</label><input id="twcreator" value="@autor" oninput="gen()"></div>
+
+    <h3>7. Mobile & PWA</h3>
+    <div class="field"><label>Application Name</label><input id="appname" value="Mi App" oninput="gen()"></div>
+    <div class="field"><label>Theme Color</label><input id="themecolor" value="#2563eb" placeholder="#2563eb" oninput="gen()"></div>
+    <div class="field"><label>Apple Mobile Web App Title</label><input id="appletitle" value="Mi App iOS" oninput="gen()"></div>
+
+    <h3>8. Seguridad & Privacidad</h3>
+    <div class="field"><label>Referrer Policy</label><input id="referrer" value="strict-origin-when-cross-origin" oninput="gen()"></div>
+    <div class="field"><label>Format Detection</label><input id="formatdet" value="telephone=no, date=no, address=no, email=no" oninput="gen()"></div>
+  </div>
+
+  <div class="card">
+    <h2>Meta Tags Generados</h2>
+    <pre id="code"></pre>
+    <button onclick="copyToClipboard()">Copiar Meta Tags Filtrados</button>
+  </div>
+</div>
+
+<script>
+function val(id) { 
+  return document.getElementById(id) ? document.getElementById(id).value.trim() : ''; 
+}
+
+function tag(attr, attrName, valId) {
+  const content = val(valId);
+  return content ? `<meta ${attr}="${attrName}" content="${content}">\n` : '';
+}
+
+function gen() {
+  let output = '';
+
+  // 1. Contenido y SEO
+  let seo = '';
+  seo += tag('name', 'description', 'desc');
+  seo += tag('name', 'keywords', 'keywords');
+  seo += tag('name', 'author', 'author');
+  seo += tag('name', 'copyright', 'copyright');
+  seo += tag('name', 'designer', 'designer');
+  seo += tag('name', 'publisher', 'publisher');
+  seo += tag('name', 'generator', 'generator');
+  if (seo) output += `<!-- SEO & Información General -->\n${seo}\n`;
+
+  // 2. Robots
+  let robots = '';
+  robots += tag('name', 'robots', 'robots');
+  robots += tag('name', 'googlebot', 'googlebot');
+  robots += tag('name', 'bingbot', 'bingbot');
+  if (robots) output += `<!-- Robots & Indexación -->\n${robots}\n`;
+
+  // 3. Geo
+  let geo = '';
+  geo += tag('name', 'language', 'lang');
+  geo += tag('name', 'geo.position', 'geopos');
+  geo += tag('name', 'geo.region', 'georeg');
+  geo += tag('name', 'geo.placename', 'geoplace');
+  if (geo) output += `<!-- Idioma & Geo-Localización -->\n${geo}\n`;
+
+  // 4. Verificaciones
+  let verif = '';
+  verif += tag('name', 'google-site-verification', 'v_google');
+  verif += tag('name', 'msvalidate.01', 'v_bing');
+  verif += tag('name', 'yandex-verification', 'v_yandex');
+  verif += tag('name', 'p:domain_verify', 'v_pinterest');
+  verif += tag('name', 'facebook-domain-verification', 'v_fb');
+  if (verif) output += `<!-- Verificaciones Webmaster -->\n${verif}\n`;
+
+  // 5. Open Graph
+  let og = '';
+  og += tag('property', 'og:type', 'ogtype');
+  og += tag('property', 'og:title', 'title');
+  og += tag('property', 'og:description', 'desc');
+  og += tag('property', 'og:url', 'ogurl');
+  og += tag('property', 'og:site_name', 'ogsitename');
+  og += tag('property', 'og:locale', 'oglocale');
+  og += tag('property', 'og:image', 'ogimg');
+  og += tag('property', 'og:image:alt', 'ogimgalt');
+  if (og) output += `<!-- Open Graph (Facebook / WhatsApp) -->\n${og}\n`;
+
+  // 6. Twitter
+  let tw = '';
+  tw += tag('name', 'twitter:card', 'twcard');
+  tw += tag('name', 'twitter:site', 'twsite');
+  tw += tag('name', 'twitter:creator', 'twcreator');
+  tw += tag('name', 'twitter:title', 'title');
+  tw += tag('name', 'twitter:description', 'desc');
+  tw += tag('name', 'twitter:image', 'ogimg');
+  tw += tag('name', 'twitter:image:alt', 'ogimgalt');
+  if (tw) output += `<!-- Twitter Cards -->\n${tw}\n`;
+
+  // 7. Mobile & PWA
+  let pwa = '';
+  pwa += tag('name', 'application-name', 'appname');
+  pwa += tag('name', 'theme-color', 'themecolor');
+  pwa += tag('name', 'apple-mobile-web-app-title', 'appletitle');
+  if (pwa) output += `<!-- Mobile & PWA -->\n${pwa}\n`;
+
+  // 8. Seguridad
+  let sec = '';
+  sec += tag('name', 'referrer', 'referrer');
+  sec += tag('name', 'format-detection', 'formatdet');
+  if (sec) output += `<!-- Seguridad & Comportamiento -->\n${sec}\n`;
+
+  document.getElementById('code').innerText = output.trim();
+}
+
+function copyToClipboard() {
+  const text = document.getElementById('code').innerText;
+  if(!text) {
+    alert('No hay etiquetas para copiar.');
+    return;
+  }
+  navigator.clipboard.writeText(text);
+  alert('¡Etiquetas copiadas al portapapeles!');
+}
+
+gen();
+</script>
+
+</body>
+</html>

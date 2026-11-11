@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="D:\YouTube_SVG.svg"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT Thumbnail Gallery Pro</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #fff; text-align: center; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        
+        input { width: 50%; padding: 12px; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; outline: none; }
+        input:focus { border-color: #ff0000; }
+        button { padding: 12px 25px; background: #ff0000; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #cc0000; }
+
+        /* Mensaje de carga */
+        #statusMsg { margin-top: 20px; font-weight: bold; color: #ff0000; min-height: 24px; }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+        
+        .card { background: #1e1e1e; padding: 10px; border-radius: 8px; border: 1px solid #333; transition: 0.2s; }
+        .card:hover { border-color: #ff0000; transform: translateY(-3px); }
+        
+        .thumb-container { cursor: pointer; border-radius: 4px; overflow: hidden; background: #000; }
+        .thumb-container img { width: 100%; height: auto; display: block; }
+        
+        h3 { font-size: 13px; margin: 10px 0 5px; color: #aaa; }
+        small { font-family: monospace; color: #666; font-size: 11px; }
+
+        /* Visor tipo Discord */
+        #lightbox {
+            display: none; position: fixed; z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center; align-items: center; cursor: pointer;
+        }
+        #imgGrande { max-width: 95%; max-height: 95%; object-fit: contain; cursor: default; }
+
+        .disclaimer { margin-top: 50px; color: #444; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Galería de Miniaturas 📺</h1>
+    <input type="text" id="videoInput" placeholder="Pega el enlace o ID del video...">
+    <button onclick="procesarVideo()">Cargar Galería</button>
+
+    <div id="statusMsg"></div>
+
+    <div class="grid" id="galeria"></div>
+
+    <div class="disclaimer">
+        <p>Si la imagen está en <img src="https://i.ytimg.com/" width="24" alt="IMG">, esa resolución no existe para este video.</p>
+    </div>
+</div>
+
+<div id="lightbox" onclick="this.style.display='none'">
+    <img id="imgGrande" src="">
+</div>
+
+<script>
+function extraerID(url) {
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[7].length == 11) ? match[7] : url.trim();
+}
+
+async function obtenerTitulo(id) {
+    try {
+        // Usamos el oEmbed de YouTube para sacar el título sin necesidad de API Key
+        const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`);
+        const data = await response.json();
+        return data.title || "Video Desconocido";
+    } catch (e) {
+        return "Video";
+    }
+}
+
+async function procesarVideo() {
+    const input = document.getElementById('videoInput').value;
+    const videoId = extraerID(input);
+    const status = document.getElementById('statusMsg');
+    const galeria = document.getElementById('galeria');
+
+    if (videoId.length !== 11) {
+        status.innerText = "❌ ID de video no válido";
+        return;
+    }
+
+    // 1. Mostrar mensaje de carga
+    status.innerText = "Buscando información...";
+    galeria.innerHTML = '';
+
+    const titulo = await obtenerTitulo(videoId);
+    status.innerText = `Cargando imágenes de: ${titulo}...`;
+
+    // 2. Generar miniaturas
+    const versiones = [
+        { t: "Máxima (HD)", f: "maxresdefault.jpg" },
+        { t: "Estándar (SD)", f: "sddefault.jpg" },
+        { t: "Alta (HQ)", f: "hqdefault.jpg" },
+        { t: "Media (MQ)", f: "mqdefault.jpg" },
+        { t: "Mínima", f: "default.jpg" },
+        { t: "Frame 1", f: "1.jpg" },
+        { t: "Frame 2", f: "2.jpg" },
+        { t: "Frame 3", f: "3.jpg" }
+    ];
+
+    setTimeout(() => {
+        versiones.forEach(v => {
+            const url = `https://i.ytimg.com/vi/${videoId}/${v.f}`;
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `
+                <h3>${v.t}</h3>
+                <div class="thumb-container" onclick="verGrande('${url}', event)">
+                    <img src="${url}">
+                </div>
+                <small>${v.f}</small>
+            `;
+            galeria.appendChild(div);
+        });
+        status.innerText = `Mostrando miniaturas de: ${titulo}`;
+    }, 500); // Un pequeño delay para que se note la carga
+}
+
+function verGrande(url, e) {
+    e.stopPropagation();
+    document.getElementById('imgGrande').src = url;
+    document.getElementById('lightbox').style.display = 'flex';
+}
+</script>
+
+</body>
+</html>

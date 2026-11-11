@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Color Picker Replica - Pro</title>
+    <style>
+        :root {
+            --bg: #202124;
+            --card: #303134;
+            --border: #5f6368;
+            --text: #e8eaed;
+            --subtext: #9aa0a6;
+            --accent: #8ab4f8;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto', arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card);
+            width: 650px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            user-select: none;
+        }
+
+        .header {
+            padding: 15px 20px;
+            font-size: 22px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .main-picker {
+            display: flex;
+            height: 240px;
+        }
+
+        #preview-block {
+            width: 30%;
+            height: 100%;
+            transition: background-color 0.1s;
+        }
+
+        .canvas-area {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+
+        .selector-cursor {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 2px black;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .controls { padding: 20px; }
+
+        .hue-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+            margin-bottom: 25px;
+            outline: none;
+        }
+
+        .hue-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .hex-container {
+            grid-column: span 4;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .hex-container::after {
+            content: 'HEX';
+            position: absolute;
+            top: -10px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--card);
+            padding: 0 8px;
+            font-size: 11px;
+            color: var(--subtext);
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .val-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .val-card label {
+            display: block;
+            color: var(--subtext);
+            font-size: 11px;
+            margin-bottom: 3px;
+            text-align: center;
+        }
+
+        .copy-btn {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            position: absolute;
+            right: 10px;
+        }
+
+        .copy-btn:hover { background: rgba(255,255,255,0.1); }
+        
+        .copy-btn svg { fill: var(--subtext); width: 18px; height: 18px; }
+
+        input:focus { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">Selector de color <span>&#x2741;</span></div>
+    
+    <div class="main-picker">
+        <div id="preview-block"></div>
+        <div class="canvas-area" id="sl-zone">
+            <canvas id="sl-canvas"></canvas>
+            <div id="cursor" class="selector-cursor"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <input type="range" id="hue-input" class="hue-slider" min="0" max="360">
+        
+        <div class="data-grid">
+            <div class="hex-container">
+                <input type="text" id="hex-out" spellcheck="false">
+                <div class="copy-btn" id="copy-hex" title="Copiar HEX">
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                </div>
+            </div>
+            
+            <div class="val-card"><label>RGB</label><input type="text" id="rgb-out"></div>
+            <div class="val-card"><label>CMYK</label><input type="text" id="cmyk-out"></div>
+            <div class="val-card"><label>HSV</label><input type="text" id="hsv-out"></div>
+            <div class="val-card"><label>HSL</label><input type="text" id="hsl-out"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const slCanvas = document.getElementById('sl-canvas');
+    const ctx = slCanvas.getContext('2d');
+    const hueInput = document.getElementById('hue-input');
+    const cursor = document.getElementById('cursor');
+    const slZone = document.getElementById('sl-zone');
+    const preview = document.getElementById('preview-block');
+    
+    // Inputs
+    const inHex = document.getElementById('hex-out');
+    const inRgb = document.getElementById('rgb-out');
+    const inCmyk = document.getElementById('cmyk-out');
+    const inHsv = document.getElementById('hsv-out');
+    const inHsl = document.getElementById('hsl-out');
+
+    let h, s, v;
+
+    function init() {
+        h = Math.floor(Math.random() * 360);
+        s = Math.floor(Math.random() * 101);
+        v = Math.floor(Math.random() * 101);
+        hueInput.value = h;
+        updateUI();
+        syncCursor();
+    }
+
+    function drawCanvas() {
+        const w = slCanvas.width = slZone.clientWidth;
+        const h_canvas = slCanvas.height = slZone.clientHeight;
+        ctx.fillStyle = `hsl(${h}, 100%, 50%)`;
+        ctx.fillRect(0, 0, w, h_canvas);
+        let whiteGrad = ctx.createLinearGradient(0, 0, w, 0);
+        whiteGrad.addColorStop(0, '#fff');
+        whiteGrad.addColorStop(1, 'transparent');
+        ctx.fillStyle = whiteGrad;
+        ctx.fillRect(0, 0, w, h_canvas);
+        let blackGrad = ctx.createLinearGradient(0, 0, 0, h_canvas);
+        blackGrad.addColorStop(0, 'transparent');
+        blackGrad.addColorStop(1, '#000');
+        ctx.fillStyle = blackGrad;
+        ctx.fillRect(0, 0, w, h_canvas);
+    }
+
+    // --- CONVERSIONES ---
+    function hsvToRgb(h, s, v) {
+        s /= 100; v /= 100;
+        let f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+        return [Math.round(f(5) * 255), Math.round(f(3) * 255), Math.round(f(1) * 255)];
+    }
+
+    function rgbToHsv(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, v = max;
+        const d = max - min;
+        s = max === 0 ? 0 : d / max;
+        if (max === min) h = 0;
+        else {
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+        return [Math.round(h * 360), Math.round(s * 100), Math.round(v * 100)];
+    }
+
+    function rgbToCmyk(r, g, b) {
+        let r1 = r/255, g1 = g/255, b1 = b/255;
+        let k = 1 - Math.max(r1, g1, b1);
+        if (k === 1) return [0, 0, 0, 100];
+        let c = Math.round((1 - r1 - k) / (1 - k) * 100);
+        let m = Math.round((1 - g1 - k) / (1 - k) * 100);
+        let y = Math.round((1 - b1 - k) / (1 - k) * 100);
+        return [c, m, y, Math.round(k * 100)];
+    }
+
+    function updateUI() {
+        drawCanvas();
+        const [r, g, b] = hsvToRgb(h, s, v);
+        const hex = "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+        
+        preview.style.backgroundColor = hex;
+        inHex.value = hex;
+        inRgb.value = `${r}, ${g}, ${b}`;
+        
+        const [c,m,y,k] = rgbToCmyk(r,g,b);
+        inCmyk.value = `${c}%, ${m}%, ${y}%, ${k}%`;
+        inHsv.value = `${h}°, ${s}%, ${v}%`;
+        
+        // HSL simplificado para la UI
+        let l = (2 - s/100) * (v/100) / 2;
+        let sl = s * v / (l < 0.5 ? l * 200 : 200 - l * 200) || 0;
+        inHsl.value = `${h}°, ${Math.round(sl)}%, ${Math.round(l*100)}%`;
+    }
+
+    function syncCursor() {
+        cursor.style.left = s + '%';
+        cursor.style.top = (100 - v) + '%';
+    }
+
+    // --- EVENTOS ---
+    function handleMove(e) {
+        const rect = slZone.getBoundingClientRect();
+        let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+        let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+        cursor.style.left = x + 'px';
+        cursor.style.top = y + 'px';
+        s = Math.round((x / rect.width) * 100);
+        v = Math.round(100 - (y / rect.height) * 100);
+        updateUI();
+    }
+
+    slZone.addEventListener('mousedown', (e) => {
+        handleMove(e);
+        const onMove = (ev) => handleMove(ev);
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', () => window.removeEventListener('mousemove', onMove), {once:true});
+    });
+
+    hueInput.addEventListener('input', () => {
+        h = parseInt(hueInput.value);
+        updateUI();
+    });
+
+    // --- EDICIÓN MANUAL ---
+    inHex.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            let val = inHex.value.replace('#', '');
+            if(val.length === 6) {
+                let r = parseInt(val.substring(0,2), 16);
+                let g = parseInt(val.substring(2,4), 16);
+                let b = parseInt(val.substring(4,6), 16);
+                [h, s, v] = rgbToHsv(r, g, b);
+                hueInput.value = h;
+                updateUI();
+                syncCursor();
+            }
+        }
+    });
+
+    inRgb.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            let parts = inRgb.value.split(',').map(x => parseInt(x.trim()));
+            if(parts.length === 3 && parts.every(x => !isNaN(x) && x >= 0 && x <= 255)) {
+                [h, s, v] = rgbToHsv(...parts);
+                hueInput.value = h;
+                updateUI();
+                syncCursor();
+            }
+        }
+    });
+
+    document.getElementById('copy-hex').addEventListener('click', () => {
+        navigator.clipboard.writeText(inHex.value);
+        const icon = document.querySelector('.copy-btn svg');
+        icon.style.fill = '#8ab4f8';
+        setTimeout(() => icon.style.fill = '', 1000);
+    });
+
+    window.addEventListener('resize', () => { drawCanvas(); syncCursor(); });
+    init();
+</script>
+</body>
+</html>
