@@ -7,29 +7,40 @@
 
 @font-face {
     font-family: 'ClassiCube';
-    src: url("ClassiCube.otf");
+    src: url("files/ClassiCube.otf");
 }
+
 @font-face {
     font-family: 'Minecraft PE';
-    src: url("Mojangles.ttf");
+    src: url("files/Mojangles.ttf");
 }
+
 @font-face {
     font-family: 'Pou';
-    src: url("Pou.ttf");
+    src: url("files/Pou.ttf");
 }
+
 @font-face {
     font-family: '5x5';
-    src: url("5x5.ttf");
+    src: url("files/5x5.ttf");
 }
+
 @font-face {
     font-family: 'GeistPixel';
-    src: url("GeistPixel.ttf");
+    src: url("files/GeistPixel.ttf");
 }
+
 @font-face {
     font-family: 'Inter';
-    src: url("Inter.ttf");
+    src: url("files/Inter.ttf");
 }
+
 @font-face {
     font-family: 'VT323';
-    src: url("VT323.ttf");
+    src: url("files/VT323.ttf");
+}
+
+@font-face {
+    font-family: "GTA";
+    src: url(files/GTA.ttf);
 }
